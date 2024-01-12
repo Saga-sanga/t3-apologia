@@ -1,18 +1,97 @@
-import {
-  timestamp,
-  pgTable,
-  text,
-  primaryKey,
-  integer,
-} from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
+import { relations } from "drizzle-orm";
+import {
+  boolean,
+  integer,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
+import { v4 as uuidv4 } from "uuid";
+
+const roleEnum = pgEnum("role", ["user, writer, admin"]);
+const statusEnum = pgEnum("status", ["draft, published"]);
 
 export const users = pgTable("user", {
   id: text("id").notNull().primaryKey(),
-  name: text("name"),
+  fullName: text("fullName"),
+  username: text("username"),
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  role: roleEnum("role"),
+});
+
+export const follows = pgTable("follows", {
+  followerId: text("followerId").references(() => users.id),
+  followingId: text("followigId").references(() => users.id),
+});
+
+export const questions = pgTable("questions", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  answerId: text("answerId").unique(),
+  userId: text("id").references(() => users.id, { onDelete: "cascade" }),
+  content: text("content"),
+  createdAt: timestamp("createdAt").defaultNow(),
+  public: boolean("public").default(false),
+});
+
+export const questionsRelations = relations(questions, ({ one }) => ({
+  answer: one(posts, {
+    fields: [questions.answerId],
+    references: [posts.id],
+  }),
+}));
+
+export const posts = pgTable("posts", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  slug: text("slug").unique(),
+  questionId: text("questionId").references(() => questions.id),
+  userId: text("userId").references(() => users.id),
+  title: text("title"),
+  body: text("body"),
+  status: statusEnum("status"),
+  image: text("image"),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export const categories = pgTable("categories", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  name: text("name"),
+});
+
+export const postCategories = pgTable("postCategories", {
+  postId: text("postId").references(() => posts.id),
+  categoryId: text("categoryId").references(() => categories.id),
+});
+
+export const comments = pgTable("comments", {
+  id: text("id")
+    .$defaultFn(() => uuidv4())
+    .primaryKey(),
+  userId: text("userId").references(() => users.id),
+  content: text("content"),
+  postId: text("postId").references(() => posts.id),
+  questionId: text("questionId").references(() => questions.id),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export const likes = pgTable("likes", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  userId: text("userId").references(() => users.id, { onDelete: "cascade" }),
+  postId: text("postId").references(() => posts.id),
+  questionId: text("questionId").references(() => questions.id),
+  commentId: text("commentId").references(() => comments.id),
 });
 
 export const accounts = pgTable(
