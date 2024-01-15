@@ -1,6 +1,7 @@
 import type { AdapterAccount } from "@auth/core/adapters";
 import { relations } from "drizzle-orm";
 import {
+  AnyPgColumn,
   boolean,
   integer,
   pgEnum,
@@ -11,8 +12,8 @@ import {
 } from "drizzle-orm/pg-core";
 import { v4 as uuidv4 } from "uuid";
 
-const roleEnum = pgEnum("role", ["user, writer, admin"]);
-const statusEnum = pgEnum("status", ["draft, published"]);
+export const roleEnum = pgEnum("role", ["user, writer, admin"]);
+export const stateEnum = pgEnum("state", ["draft, published"]);
 
 export const users = pgTable("user", {
   id: text("id").notNull().primaryKey(),
@@ -56,7 +57,7 @@ export const posts = pgTable("posts", {
   userId: text("userId").references(() => users.id),
   title: text("title"),
   body: text("body"),
-  status: statusEnum("status"),
+  state: stateEnum("state"),
   image: text("image"),
   createdAt: timestamp("createdAt").defaultNow(),
 });
@@ -77,10 +78,16 @@ export const comments = pgTable("comments", {
   id: text("id")
     .$defaultFn(() => uuidv4())
     .primaryKey(),
+  parentCommentId: text("parentCommentId").references(
+    (): AnyPgColumn => comments.id,
+    { onDelete: "cascade" },
+  ),
   userId: text("userId").references(() => users.id),
   content: text("content"),
   postId: text("postId").references(() => posts.id),
-  questionId: text("questionId").references(() => questions.id),
+  questionId: text("questionId").references(() => questions.id, {
+    onDelete: "cascade",
+  }),
   createdAt: timestamp("createdAt").defaultNow(),
 });
 

@@ -4,9 +4,10 @@ import { env } from "@/env";
 
 export default {
   schema: "./src/server/db/schema.ts",
-  driver: "mysql2",
+  driver: "pg",
+  out: "drizzle",
   dbCredentials: {
-    uri: env.DATABASE_URL,
+    connectionString: env.DATABASE_URL,
   },
   tablesFilter: ["t3-apologia_*"],
 } satisfies Config;
