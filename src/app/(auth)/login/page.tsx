@@ -1,11 +1,9 @@
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { ChevronLeft, ListTodo } from "lucide-react";
 import UserAuthForm from "@/components/user-auth-form";
-import { redirect } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { ChevronLeft, ListTodo } from "lucide-react";
 import { Metadata } from "next";
-import { getServerAuthSession } from "@/server/auth";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Login",

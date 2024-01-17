@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
-  // @ts-ignore
+  // @ts-expect-error
   adapter: DrizzleAdapter(db),
   providers: [
     GoogleProvider({
