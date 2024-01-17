@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
+import { Toaster } from "@/components/ui/sonner";
 
 import { TRPCReactProvider } from "@/trpc/react";
 
@@ -27,6 +28,7 @@ export default function RootLayout({
         <TRPCReactProvider cookies={cookies().toString()}>
           {children}
         </TRPCReactProvider>
+        <Toaster />
       </body>
     </html>
   );
