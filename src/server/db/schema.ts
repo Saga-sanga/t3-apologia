@@ -9,6 +9,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  json,
 } from "drizzle-orm/pg-core";
 import { v4 as uuidv4 } from "uuid";
 
@@ -56,8 +57,8 @@ export const posts = pgTable("posts", {
   questionId: text("questionId").references(() => questions.id),
   userId: text("userId").references(() => users.id),
   title: text("title"),
-  body: text("body"),
   state: stateEnum("state"),
+  content: json("content"),
   image: text("image"),
   createdAt: timestamp("createdAt").defaultNow(),
 });

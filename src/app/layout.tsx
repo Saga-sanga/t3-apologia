@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { Toaster } from "@/components/ui/sonner";
 
 import { TRPCReactProvider } from "@/trpc/react";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,6 +30,7 @@ export default function RootLayout({
           {children}
         </TRPCReactProvider>
         <Toaster />
+        <TailwindIndicator />
       </body>
     </html>
   );
