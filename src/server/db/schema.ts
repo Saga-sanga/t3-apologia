@@ -17,7 +17,7 @@ export const stateEnum = pgEnum("state", ["draft, published"]);
 
 export const users = pgTable("user", {
   id: text("id").notNull().primaryKey(),
-  fullName: text("fullName"),
+  name: text("name"),
   username: text("username"),
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
@@ -32,8 +32,8 @@ export const follows = pgTable("follows", {
 
 export const questions = pgTable("questions", {
   id: text("id")
-    .primaryKey()
-    .$defaultFn(() => uuidv4()),
+    .$defaultFn(() => uuidv4())
+    .primaryKey(),
   answerId: text("answerId").unique(),
   userId: text("id").references(() => users.id, { onDelete: "cascade" }),
   content: text("content"),

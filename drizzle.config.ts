@@ -9,5 +9,5 @@ export default {
   dbCredentials: {
     connectionString: env.DATABASE_URL,
   },
-  tablesFilter: ["t3-apologia_*"],
+  // tablesFilter: ["t3-apologia_*"],
 } satisfies Config;

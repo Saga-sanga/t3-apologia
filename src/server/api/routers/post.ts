@@ -23,8 +23,8 @@ export const postRouter = createTRPCRouter({
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       await ctx.db.insert(posts).values({
-        name: input.name,
-        createdById: ctx.session.user.id,
+        // name: input.name,
+        // createdById: ctx.session.user.id,
       });
     }),
 
