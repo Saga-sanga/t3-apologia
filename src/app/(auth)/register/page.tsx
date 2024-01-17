@@ -1,17 +1,10 @@
 import { buttonVariants } from "@/components/ui/button";
 import UserAuthForm from "@/components/user-auth-form";
 import { cn } from "@/lib/utils";
-import { getServerAuthSession } from "@/server/auth";
 import { ListTodo } from "lucide-react";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 
 export default async function Page() {
-  const session = await getServerAuthSession();
-
-  if (session) {
-    redirect("/");
-  }
   return (
     <main className="grid min-h-screen lg:grid-cols-2">
       <div className="col-span-1 hidden flex-col bg-primary p-10 text-background lg:flex">

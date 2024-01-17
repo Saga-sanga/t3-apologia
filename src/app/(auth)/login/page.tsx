@@ -13,11 +13,11 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const session = await getServerAuthSession();
+  // const session = await getServerAuthSession();
 
-  if (session) {
-    redirect("/");
-  }
+  // if (session) {
+  //   redirect("/");
+  // }
 
   return (
     <main className="relative grid min-h-screen place-content-center space-y-6">
