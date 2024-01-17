@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
-  // @ts-expect-error
+  // @ts-expect-error - This is probably an error from the T3 config itself, nothing to do with me
   adapter: DrizzleAdapter(db),
   providers: [
     GoogleProvider({

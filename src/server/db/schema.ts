@@ -1,7 +1,7 @@
 import type { AdapterAccount } from "@auth/core/adapters";
 import { relations } from "drizzle-orm";
 import {
-  AnyPgColumn,
+  type AnyPgColumn,
   boolean,
   integer,
   pgEnum,
