@@ -75,3 +75,12 @@ export const authOptions: NextAuthOptions = {
  * @see https://next-auth.js.org/configuration/nextjs
  */
 export const getServerAuthSession = () => getServerSession(authOptions);
+
+/**
+ * Wrapper for `getServerSession` so that you can get the current user without importing `authOptions` all the time.
+ */
+export const getCurrentUser = async () => {
+  const session = await getServerAuthSession();
+
+  return session?.user;
+};
