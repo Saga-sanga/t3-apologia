@@ -23,22 +23,24 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
   console.log(user.image ?? undefined);
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className="rounded-full">
         <UserAvatar
           user={{ name: user.name || null, image: user.image || null }}
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <div className="flex items-center justify-start gap-2 p-2">
-          <div className="flex flex-col space-y-1 leading-none">
-            {user.name && <p className="font-medium">{user.name}</p>}
-            {user.email && (
-              <p className="w-[200px] truncate text-sm text-muted-foreground">
-                {user.email}
-              </p>
-            )}
+        <DropdownMenuItem asChild>
+          <div className="flex cursor-pointer items-center justify-start gap-2 p-2">
+            <div className="flex flex-col space-y-1 leading-none">
+              {user.name && <p className="truncate font-medium">{user.name}</p>}
+              {user.email && (
+                <p className="w-[200px] truncate text-sm text-muted-foreground">
+                  {user.email}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link className="cursor-pointer" href="/settings">

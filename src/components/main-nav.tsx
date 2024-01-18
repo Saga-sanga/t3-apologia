@@ -1,10 +1,10 @@
+import { cn } from "@/lib/utils";
+import { getCurrentUser } from "@/server/auth";
+import { FeatherIcon } from "lucide-react";
 import Link from "next/link";
 import { AskDialog } from "./ask-dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { UserAccountNav } from "./user-account-nav";
-import { getCurrentUser } from "@/server/auth";
 import { buttonVariants } from "./ui/button";
-import { cn } from "@/lib/utils";
+import { UserAccountNav } from "./user-account-nav";
 
 export async function MainNav() {
   const user = await getCurrentUser();
@@ -12,7 +12,9 @@ export async function MainNav() {
   return (
     <div className="container flex h-16 items-center justify-between py-4">
       <Link href="/">
-        <p className="text-2xl font-bold">Mizo Apologia</p>
+        <p className="flex items-center text-2xl font-bold">
+          <FeatherIcon className="mr-2 h-8 w-8" /> <span className="hidden md:block">Mizo Apologia</span>
+        </p>
       </Link>
       <div className="flex items-center justify-center space-x-6">
         {user ? (

@@ -11,13 +11,13 @@ export default function Layout({ children }: LayoutProps) {
       <header className="sticky top-0 z-40 border-b bg-background">
         <MainNav />
       </header>
-      <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
-        <aside className="hidden w-[200px] flex-col md:flex">
-          {/* <DashboardNav items={dashboardConfig.sidebarNav} /> */}
-        </aside>
-        <main className="flex w-full flex-1 flex-col overflow-hidden">
+      <div className="mx-auto flex lg:grid max-w-7xl flex-1 gap-12 px-6 lg:grid-cols-12 xl:px-20">
+        <main className="flex w-full flex-1 flex-col overflow-hidden md:w-[726px] lg:col-span-8">
           {children}
         </main>
+        <aside className="hidden flex-col lg:flex lg:col-span-4">
+          {/* <DashboardNav items={dashboardConfig.sidebarNav} /> */}
+        </aside>
       </div>
     </div>
   );

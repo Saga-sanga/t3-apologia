@@ -1,16 +1,16 @@
 import { buttonVariants } from "@/components/ui/button";
 import UserAuthForm from "@/components/user-auth-form";
 import { cn } from "@/lib/utils";
-import { ListTodo } from "lucide-react";
+import { FeatherIcon, ListTodo } from "lucide-react";
 import Link from "next/link";
 
 export default async function Page() {
   return (
     <main className="grid min-h-screen lg:grid-cols-2">
       <div className="col-span-1 hidden flex-col bg-primary p-10 text-background lg:flex">
-        <Link href="/" className=" flex items-center text-lg font-medium">
-          <ListTodo className="mr-2 h-10 w-10 stroke-background" />
-          TODO App
+        <Link href="/" className=" flex items-center text-2xl font-bold">
+          <FeatherIcon className="mr-2 h-10 w-10 stroke-background" />
+          Mizo Apologia
         </Link>
         <div className="mt-auto">
           <blockquote className="space-y-2">

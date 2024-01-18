@@ -1,3 +1,4 @@
+import { PostCard } from "@/components/post-card";
 import { DashboardShell } from "@/components/shell";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
@@ -9,8 +10,8 @@ export default async function Home() {
 
   return (
     <DashboardShell>
-      <h1>{data.greeting}</h1>
       {session && <p>Welcome {session.user.name}</p>}
+      <PostCard />
     </DashboardShell>
   );
 }

@@ -1,7 +1,7 @@
 import { buttonVariants } from "@/components/ui/button";
 import UserAuthForm from "@/components/user-auth-form";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ListTodo } from "lucide-react";
+import { ChevronLeft, FeatherIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -30,7 +30,7 @@ export default async function Page() {
         Back
       </Link>
       <div className="flex flex-col items-center space-y-2 text-center">
-        <ListTodo className="h-12 w-12" />
+        <FeatherIcon className="h-12 w-12" />
         <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
         <p className="text-sm text-muted-foreground">
           Enter your email below to login
