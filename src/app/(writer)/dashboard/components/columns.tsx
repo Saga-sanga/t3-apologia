@@ -49,7 +49,16 @@ export const columns: ColumnDef<ColumnDataType>[] = [
   // },
   {
     accessorKey: "createdAt",
-    header: "Created",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created <ArrowUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     // id: "who",
     cell: ({ row }) => (
       <div>
