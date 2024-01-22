@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1705391778654,
-      "tag": "0000_mushy_franklin_storm",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1705503741678,
-      "tag": "0001_nervous_wilson_fisk",
+      "when": 1705904760921,
+      "tag": "0000_simple_banshee",
       "breakpoints": true
     }
   ]

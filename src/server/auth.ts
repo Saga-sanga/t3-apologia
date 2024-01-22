@@ -20,6 +20,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      role: string;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -38,13 +39,20 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: async ({ session, user }) => {
+      const userDbInfo = await db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.id, user.id),
+      });
+
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
+          role: userDbInfo?.role,
+        },
+      };
+    },
   },
   // @ts-expect-error - This is probably an error from the T3 config itself, nothing to do with me
   adapter: DrizzleAdapter(db),

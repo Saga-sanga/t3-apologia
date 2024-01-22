@@ -1,6 +1,10 @@
 "use client";
 
-import { PencilLineIcon } from "lucide-react";
+import { api } from "@/trpc/react";
+import { MessageCircleQuestionIcon } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Icons } from "./icons";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -14,11 +18,39 @@ import {
 import { Textarea } from "./ui/textarea";
 
 export function AskDialog() {
+  const [open, setOpen] = useState(false);
+
+  const ask = api.question.create.useMutation();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const rawFormData = Object.fromEntries(formData.entries());
+
+    ask.mutate(
+      { question: rawFormData.question as string },
+      {
+        onSuccess: () => {
+          toast.success("Success!", {
+            description: "I zawhna chu tluang takin submit ani e!",
+          });
+          setOpen(false);
+        },
+        onError: () => {
+          toast.error("Error!", {
+            description: "Failed to submit question. Please try again!",
+          });
+        },
+      },
+    );
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
-          <PencilLineIcon className="mr-2 h-4 w-4" /> Zawt Rawh
+          <MessageCircleQuestionIcon className="mr-2 h-5 w-5" />
+          Zawt Rawh
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
@@ -28,10 +60,23 @@ export function AskDialog() {
             A hnuaiah hian i zawhna zawh duh chu chipchiar takin zawt rawh le
           </DialogDescription>
         </DialogHeader>
-        <Textarea />
-        <DialogFooter>
-          <Button>Submit</Button>
-        </DialogFooter>
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+        >
+          <Textarea
+            rows={5}
+            name="question"
+          />
+          <DialogFooter>
+            <Button disabled={ask.isLoading}>
+              {ask.isLoading && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}{" "}
+              Submit
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

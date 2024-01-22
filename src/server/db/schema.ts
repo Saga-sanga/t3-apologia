@@ -10,11 +10,17 @@ import {
   text,
   timestamp,
   json,
+  serial,
 } from "drizzle-orm/pg-core";
 import { v4 as uuidv4 } from "uuid";
 
-export const roleEnum = pgEnum("role", ["user, writer, admin"]);
-export const stateEnum = pgEnum("state", ["draft, published"]);
+export const roleEnum = pgEnum("role", ["user", "writer", "admin"]);
+export const stateEnum = pgEnum("state", ["draft", "published"]);
+export const questionStatusEnum = pgEnum("questionStatus", [
+  "unanswered",
+  "answered",
+  "duplicate",
+]);
 
 export const users = pgTable("user", {
   id: text("id").notNull().primaryKey(),
@@ -23,59 +29,81 @@ export const users = pgTable("user", {
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
-  role: roleEnum("role"),
+  role: roleEnum("role").default("user").notNull(),
 });
 
-export const follows = pgTable("follows", {
+export const follows = pgTable("follow", {
   followerId: text("followerId").references(() => users.id),
   followingId: text("followigId").references(() => users.id),
 });
 
-export const questions = pgTable("questions", {
+// export const question = pgTable("question", {
+//   id: serial("id").primaryKey(),
+//   answerId: text("answerId").references((): AnyPgColumn => posts.id),
+//   userId: text("id").references(() => users.id, { onDelete: "cascade" }),
+//   content: text("content"),
+//   createdAt: timestamp("createdAt").defaultNow(),
+//   public: boolean("public").default(false),
+//   status: questionStatusEnum("status").default("unanswered").notNull(),
+// });
+
+export const zawhna = pgTable("zawhna", {
   id: text("id")
-    .$defaultFn(() => uuidv4())
+    .$default(() => uuidv4())
     .primaryKey(),
-  answerId: text("answerId").unique(),
-  userId: text("id").references(() => users.id, { onDelete: "cascade" }),
+  answerId: text("answerId").references((): AnyPgColumn => posts.id),
   content: text("content"),
+  userId: text("userId").references(() => users.id, { onDelete: "cascade" }),
   createdAt: timestamp("createdAt").defaultNow(),
   public: boolean("public").default(false),
+  status: questionStatusEnum("status").default("unanswered").notNull(),
 });
 
-export const questionsRelations = relations(questions, ({ one }) => ({
-  answer: one(posts, {
-    fields: [questions.answerId],
-    references: [posts.id],
+export const zawhnaRelations = relations(zawhna, ({ one }) => ({
+  users: one(users, {
+    fields: [zawhna.userId],
+    references: [users.id],
   }),
 }));
 
-export const posts = pgTable("posts", {
+// export const questionsRelations = relations(questions, ({ one }) => ({
+//   answer: one(posts, {
+//     fields: [questions.answerId],
+//     references: [posts.id],
+//   }),
+//   users: one(users, {
+//     fields: [questions.userId],
+//     references: [users.id],
+//   }),
+// }));
+
+export const posts = pgTable("post", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => uuidv4()),
   slug: text("slug").unique(),
-  questionId: text("questionId").references(() => questions.id),
+  zawhnaId: text("zawhnaId").references(() => zawhna.id),
   userId: text("userId").references(() => users.id),
   title: text("title"),
-  state: stateEnum("state"),
+  state: stateEnum("state").default("draft").notNull(),
   content: json("content"),
   image: text("image"),
   createdAt: timestamp("createdAt").defaultNow(),
 });
 
-export const categories = pgTable("categories", {
+export const categories = pgTable("category", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => uuidv4()),
   name: text("name"),
 });
 
-export const postCategories = pgTable("postCategories", {
+export const postCategories = pgTable("postCategory", {
   postId: text("postId").references(() => posts.id),
   categoryId: text("categoryId").references(() => categories.id),
 });
 
-export const comments = pgTable("comments", {
+export const comments = pgTable("comment", {
   id: text("id")
     .$defaultFn(() => uuidv4())
     .primaryKey(),
@@ -86,19 +114,19 @@ export const comments = pgTable("comments", {
   userId: text("userId").references(() => users.id),
   content: text("content"),
   postId: text("postId").references(() => posts.id),
-  questionId: text("questionId").references(() => questions.id, {
+  zawhnaId: text("zawhnaId").references(() => zawhna.id, {
     onDelete: "cascade",
   }),
   createdAt: timestamp("createdAt").defaultNow(),
 });
 
-export const likes = pgTable("likes", {
+export const likes = pgTable("like", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => uuidv4()),
   userId: text("userId").references(() => users.id, { onDelete: "cascade" }),
   postId: text("postId").references(() => posts.id),
-  questionId: text("questionId").references(() => questions.id),
+  zawhnaId: text("zawhnaId").references(() => zawhna.id),
   commentId: text("commentId").references(() => comments.id),
 });
 
@@ -148,3 +176,5 @@ export const verificationTokens = pgTable(
 );
 
 export type SelectUser = typeof users.$inferSelect;
+export type SelectZawhna = typeof zawhna.$inferSelect;
+// export type InputQuestions = typeof questions.$inferInsert;

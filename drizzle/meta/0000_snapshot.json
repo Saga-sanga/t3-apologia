@@ -1,5 +1,5 @@
 {
-  "id": "7ccb4f14-b315-478d-acd3-dd6420fd6053",
+  "id": "f52a7d81-a8ba-4b02-af81-0a4d5fd85c3f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -87,7 +87,6 @@
           "name": "account_userId_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "schemaTo": "public",
           "columnsFrom": [
             "userId"
           ],
@@ -109,8 +108,8 @@
       },
       "uniqueConstraints": {}
     },
-    "categories": {
-      "name": "categories",
+    "category": {
+      "name": "category",
       "schema": "",
       "columns": {
         "id": {
@@ -131,8 +130,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "comments": {
-      "name": "comments",
+    "comment": {
+      "name": "comment",
       "schema": "",
       "columns": {
         "id": {
@@ -165,8 +164,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "questionId": {
-          "name": "questionId",
+        "zawhnaId": {
+          "name": "zawhnaId",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -181,11 +180,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "comments_parentCommentId_comments_id_fk": {
-          "name": "comments_parentCommentId_comments_id_fk",
-          "tableFrom": "comments",
-          "tableTo": "comments",
-          "schemaTo": "public",
+        "comment_parentCommentId_comment_id_fk": {
+          "name": "comment_parentCommentId_comment_id_fk",
+          "tableFrom": "comment",
+          "tableTo": "comment",
           "columnsFrom": [
             "parentCommentId"
           ],
@@ -195,11 +193,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "comments_userId_user_id_fk": {
-          "name": "comments_userId_user_id_fk",
-          "tableFrom": "comments",
+        "comment_userId_user_id_fk": {
+          "name": "comment_userId_user_id_fk",
+          "tableFrom": "comment",
           "tableTo": "user",
-          "schemaTo": "public",
           "columnsFrom": [
             "userId"
           ],
@@ -209,11 +206,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "comments_postId_posts_id_fk": {
-          "name": "comments_postId_posts_id_fk",
-          "tableFrom": "comments",
-          "tableTo": "posts",
-          "schemaTo": "public",
+        "comment_postId_post_id_fk": {
+          "name": "comment_postId_post_id_fk",
+          "tableFrom": "comment",
+          "tableTo": "post",
           "columnsFrom": [
             "postId"
           ],
@@ -223,13 +219,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "comments_questionId_questions_id_fk": {
-          "name": "comments_questionId_questions_id_fk",
-          "tableFrom": "comments",
-          "tableTo": "questions",
-          "schemaTo": "public",
+        "comment_zawhnaId_zawhna_id_fk": {
+          "name": "comment_zawhnaId_zawhna_id_fk",
+          "tableFrom": "comment",
+          "tableTo": "zawhna",
           "columnsFrom": [
-            "questionId"
+            "zawhnaId"
           ],
           "columnsTo": [
             "id"
@@ -241,8 +236,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "follows": {
-      "name": "follows",
+    "follow": {
+      "name": "follow",
       "schema": "",
       "columns": {
         "followerId": {
@@ -260,11 +255,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "follows_followerId_user_id_fk": {
-          "name": "follows_followerId_user_id_fk",
-          "tableFrom": "follows",
+        "follow_followerId_user_id_fk": {
+          "name": "follow_followerId_user_id_fk",
+          "tableFrom": "follow",
           "tableTo": "user",
-          "schemaTo": "public",
           "columnsFrom": [
             "followerId"
           ],
@@ -274,11 +268,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "follows_followigId_user_id_fk": {
-          "name": "follows_followigId_user_id_fk",
-          "tableFrom": "follows",
+        "follow_followigId_user_id_fk": {
+          "name": "follow_followigId_user_id_fk",
+          "tableFrom": "follow",
           "tableTo": "user",
-          "schemaTo": "public",
           "columnsFrom": [
             "followigId"
           ],
@@ -292,8 +285,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "likes": {
-      "name": "likes",
+    "like": {
+      "name": "like",
       "schema": "",
       "columns": {
         "id": {
@@ -314,8 +307,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "questionId": {
-          "name": "questionId",
+        "zawhnaId": {
+          "name": "zawhnaId",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -329,11 +322,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "likes_userId_user_id_fk": {
-          "name": "likes_userId_user_id_fk",
-          "tableFrom": "likes",
+        "like_userId_user_id_fk": {
+          "name": "like_userId_user_id_fk",
+          "tableFrom": "like",
           "tableTo": "user",
-          "schemaTo": "public",
           "columnsFrom": [
             "userId"
           ],
@@ -343,11 +335,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "likes_postId_posts_id_fk": {
-          "name": "likes_postId_posts_id_fk",
-          "tableFrom": "likes",
-          "tableTo": "posts",
-          "schemaTo": "public",
+        "like_postId_post_id_fk": {
+          "name": "like_postId_post_id_fk",
+          "tableFrom": "like",
+          "tableTo": "post",
           "columnsFrom": [
             "postId"
           ],
@@ -357,13 +348,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "likes_questionId_questions_id_fk": {
-          "name": "likes_questionId_questions_id_fk",
-          "tableFrom": "likes",
-          "tableTo": "questions",
-          "schemaTo": "public",
+        "like_zawhnaId_zawhna_id_fk": {
+          "name": "like_zawhnaId_zawhna_id_fk",
+          "tableFrom": "like",
+          "tableTo": "zawhna",
           "columnsFrom": [
-            "questionId"
+            "zawhnaId"
           ],
           "columnsTo": [
             "id"
@@ -371,11 +361,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "likes_commentId_comments_id_fk": {
-          "name": "likes_commentId_comments_id_fk",
-          "tableFrom": "likes",
-          "tableTo": "comments",
-          "schemaTo": "public",
+        "like_commentId_comment_id_fk": {
+          "name": "like_commentId_comment_id_fk",
+          "tableFrom": "like",
+          "tableTo": "comment",
           "columnsFrom": [
             "commentId"
           ],
@@ -389,8 +378,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "postCategories": {
-      "name": "postCategories",
+    "postCategory": {
+      "name": "postCategory",
       "schema": "",
       "columns": {
         "postId": {
@@ -408,11 +397,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "postCategories_postId_posts_id_fk": {
-          "name": "postCategories_postId_posts_id_fk",
-          "tableFrom": "postCategories",
-          "tableTo": "posts",
-          "schemaTo": "public",
+        "postCategory_postId_post_id_fk": {
+          "name": "postCategory_postId_post_id_fk",
+          "tableFrom": "postCategory",
+          "tableTo": "post",
           "columnsFrom": [
             "postId"
           ],
@@ -422,11 +410,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "postCategories_categoryId_categories_id_fk": {
-          "name": "postCategories_categoryId_categories_id_fk",
-          "tableFrom": "postCategories",
-          "tableTo": "categories",
-          "schemaTo": "public",
+        "postCategory_categoryId_category_id_fk": {
+          "name": "postCategory_categoryId_category_id_fk",
+          "tableFrom": "postCategory",
+          "tableTo": "category",
           "columnsFrom": [
             "categoryId"
           ],
@@ -440,8 +427,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "posts": {
-      "name": "posts",
+    "post": {
+      "name": "post",
       "schema": "",
       "columns": {
         "id": {
@@ -456,8 +443,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "questionId": {
-          "name": "questionId",
+        "zawhnaId": {
+          "name": "zawhnaId",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -474,15 +461,16 @@
           "primaryKey": false,
           "notNull": false
         },
-        "body": {
-          "name": "body",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "state": {
           "name": "state",
           "type": "state",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "content": {
+          "name": "content",
+          "type": "json",
           "primaryKey": false,
           "notNull": false
         },
@@ -502,13 +490,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "posts_questionId_questions_id_fk": {
-          "name": "posts_questionId_questions_id_fk",
-          "tableFrom": "posts",
-          "tableTo": "questions",
-          "schemaTo": "public",
+        "post_zawhnaId_zawhna_id_fk": {
+          "name": "post_zawhnaId_zawhna_id_fk",
+          "tableFrom": "post",
+          "tableTo": "zawhna",
           "columnsFrom": [
-            "questionId"
+            "zawhnaId"
           ],
           "columnsTo": [
             "id"
@@ -516,11 +503,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "posts_userId_user_id_fk": {
-          "name": "posts_userId_user_id_fk",
-          "tableFrom": "posts",
+        "post_userId_user_id_fk": {
+          "name": "post_userId_user_id_fk",
+          "tableFrom": "post",
           "tableTo": "user",
-          "schemaTo": "public",
           "columnsFrom": [
             "userId"
           ],
@@ -533,76 +519,11 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "posts_slug_unique": {
-          "name": "posts_slug_unique",
+        "post_slug_unique": {
+          "name": "post_slug_unique",
           "nullsNotDistinct": false,
           "columns": [
             "slug"
-          ]
-        }
-      }
-    },
-    "questions": {
-      "name": "questions",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "answerId": {
-          "name": "answerId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "content": {
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "public": {
-          "name": "public",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "questions_id_user_id_fk": {
-          "name": "questions_id_user_id_fk",
-          "tableFrom": "questions",
-          "tableTo": "user",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "questions_answerId_unique": {
-          "name": "questions_answerId_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "answerId"
           ]
         }
       }
@@ -636,7 +557,6 @@
           "name": "session_userId_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "schemaTo": "public",
           "columnsFrom": [
             "userId"
           ],
@@ -694,7 +614,8 @@
           "name": "role",
           "type": "role",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "'user'"
         }
       },
       "indexes": {},
@@ -737,19 +658,112 @@
         }
       },
       "uniqueConstraints": {}
+    },
+    "zawhna": {
+      "name": "zawhna",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "answerId": {
+          "name": "answerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "public": {
+          "name": "public",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "status": {
+          "name": "status",
+          "type": "questionStatus",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'unanswered'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "zawhna_answerId_post_id_fk": {
+          "name": "zawhna_answerId_post_id_fk",
+          "tableFrom": "zawhna",
+          "tableTo": "post",
+          "columnsFrom": [
+            "answerId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "zawhna_userId_user_id_fk": {
+          "name": "zawhna_userId_user_id_fk",
+          "tableFrom": "zawhna",
+          "tableTo": "user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
     }
   },
   "enums": {
+    "questionStatus": {
+      "name": "questionStatus",
+      "values": {
+        "unanswered": "unanswered",
+        "answered": "answered",
+        "duplicate": "duplicate"
+      }
+    },
     "role": {
       "name": "role",
       "values": {
-        "user, writer, admin": "user, writer, admin"
+        "user": "user",
+        "writer": "writer",
+        "admin": "admin"
       }
     },
     "state": {
       "name": "state",
       "values": {
-        "draft, published": "draft, published"
+        "draft": "draft",
+        "published": "published"
       }
     }
   },
