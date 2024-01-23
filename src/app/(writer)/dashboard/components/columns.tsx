@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DataTableColumnHeader } from "@/components/data-table-column-header";
 
 type ColumnDataType = SelectZawhna & {
   users: SelectUser | null;
@@ -31,34 +32,22 @@ export const columns: ColumnDef<ColumnDataType>[] = [
     },
   },
   {
+    // id: "Questions",
     accessorKey: "content",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Questions <ArrowUpDownIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Content" />
+    ),
   },
   // {
   //   accessorFn: (row) => `${row.users?.name}`,
   //   header: "Name",
   // },
   {
+    // id: "Created",
     accessorKey: "createdAt",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Created <ArrowUpDownIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Created At" />
+    ),
     // id: "who",
     cell: ({ row }) => (
       <div>
@@ -96,5 +85,7 @@ export const columns: ColumnDef<ColumnDataType>[] = [
         </DropdownMenu>
       );
     },
+    enableHiding: false,
+    enableSorting: false,
   },
 ];

@@ -3,6 +3,8 @@ import { db } from "@/server/db";
 import { redirect } from "next/navigation";
 import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
+import { zawhna } from "@/server/db/schema";
+import { desc } from "drizzle-orm";
 
 export default async function Page() {
   const currentUser = await getCurrentUser();
@@ -15,6 +17,7 @@ export default async function Page() {
     with: {
       users: true,
     },
+    orderBy: [desc(zawhna.createdAt)],
   });
 
   console.log("Data: ", { data });
