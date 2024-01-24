@@ -21,7 +21,7 @@ export function PageNav({ user }: PageNavProps) {
           className={cn(
             buttonVariants({ variant: "ghost" }),
             "text-sm font-semibold",
-            path === "/dashboard" && "text-primary hover:text-primary",
+            path.includes("/dashboard") && "text-primary hover:text-primary",
           )}
           href="/dashboard"
         >

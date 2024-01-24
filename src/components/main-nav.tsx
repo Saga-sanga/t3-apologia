@@ -6,6 +6,7 @@ import { NavButtons } from "./nav-buttons";
 import { PageNav } from "./page-nav";
 import { buttonVariants } from "./ui/button";
 import { UserAccountNav } from "./user-account-nav";
+import { AskDialog } from "./ask-dialog";
 
 export async function MainNav() {
   const user = await getCurrentUser();
@@ -21,7 +22,8 @@ export async function MainNav() {
       <PageNav user={user} />
       <div className="flex items-center justify-center space-x-6">
         {user ? (
-          <NavButtons>
+          <>
+            <AskDialog />
             <UserAccountNav
               user={{
                 name: user?.name ?? null,
@@ -29,7 +31,7 @@ export async function MainNav() {
                 email: user?.email ?? "",
               }}
             />
-          </NavButtons>
+          </>
         ) : (
           <>
             <Link

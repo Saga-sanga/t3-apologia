@@ -1,7 +1,6 @@
 "use client";
 
 import { DataTableColumnHeader } from "@/app/(writer)/dashboard/components/data-table-column-header";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,7 +22,7 @@ type ColumnDataType = SelectZawhna & {
   users: SelectUser | null;
 };
 
-export const columns: ColumnDef<ColumnDataType>[] = [
+export const questionColumns: ColumnDef<ColumnDataType>[] = [
   {
     accessorKey: "status",
     header: () => <div className="">Status</div>,
@@ -83,7 +82,7 @@ export const columns: ColumnDef<ColumnDataType>[] = [
       <DataTableColumnHeader column={column} title="Created At" />
     ),
     cell: ({ row }) => (
-      <div>
+      <div className="max-w-60 truncate">
         {format(row.getValue("createdAt"))} by{" "}
         <Link className="underline-offset-4 hover:underline" href="/user">
           {row.original.users?.name}

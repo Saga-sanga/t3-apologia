@@ -10,10 +10,12 @@ import { statuses } from "../../../../lib/data";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
+  columnFilterName: string;
 }
 
 export function DataTableToolbar<TData>({
   table,
+  columnFilterName,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -21,12 +23,15 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="Filter questions..."
+          placeholder={`Filter ${columnFilterName}s...`}
           value={
-            (table.getColumn("question")?.getFilterValue() as string) ?? ""
+            (table.getColumn(columnFilterName)?.getFilterValue() as string) ??
+            ""
           }
           onChange={(event) =>
-            table.getColumn("question")?.setFilterValue(event.target.value)
+            table
+              .getColumn(columnFilterName)
+              ?.setFilterValue(event.target.value)
           }
           className="h-9 max-w-sm"
         />
