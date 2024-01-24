@@ -5,8 +5,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Button } from "./ui/button";
+} from "../../../../components/ui/select";
+import { Button } from "../../../../components/ui/button";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,

@@ -1,8 +1,6 @@
 "use client";
 
-import { DataTablePagination } from "@/components/data-table-pagination";
-import { DataTableViewOptions } from "@/components/data-table-view-options";
-import { Input } from "@/components/ui/input";
+import { DataTablePagination } from "@/app/(writer)/dashboard/components/data-table-pagination";
 import {
   Table,
   TableBody,
@@ -19,6 +17,8 @@ import {
   VisibilityState,
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -26,6 +26,7 @@ import {
 } from "@tanstack/react-table";
 
 import { useState } from "react";
+import { DataTableToolbar } from "./data-table-toolbar";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -50,6 +51,8 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     state: {
       sorting,
       columnFilters,
@@ -59,17 +62,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center">
-        <Input
-          placeholder="Filter questions..."
-          value={(table.getColumn("content")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("content")?.setFilterValue(event.target.value)
-          }
-          className="h-9 max-w-sm"
-        />
-        <DataTableViewOptions table={table} />
-      </div>
+      <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -89,7 +82,7 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows.length ? (
+            {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -119,24 +112,6 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <DataTablePagination table={table} />
-      {/* <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div> */}
     </div>
   );
 }

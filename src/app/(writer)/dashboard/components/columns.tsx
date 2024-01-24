@@ -1,11 +1,7 @@
 "use client";
 
+import { DataTableColumnHeader } from "@/app/(writer)/dashboard/components/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
-import { SelectUser, SelectZawhna } from "@/server/db/schema";
-import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
-import { format } from "timeago.js";
-import { ArrowUpDownIcon, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,7 +11,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DataTableColumnHeader } from "@/components/data-table-column-header";
+import { SelectUser, SelectZawhna } from "@/server/db/schema";
+import { ColumnDef } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import { format } from "timeago.js";
 
 type ColumnDataType = SelectZawhna & {
   users: SelectUser | null;
@@ -30,25 +30,22 @@ export const columns: ColumnDef<ColumnDataType>[] = [
 
       return <Badge>{status as string}</Badge>;
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
-    // id: "Questions",
+    id: "question",
     accessorKey: "content",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Content" />
+      <DataTableColumnHeader column={column} title="Question" />
     ),
   },
-  // {
-  //   accessorFn: (row) => `${row.users?.name}`,
-  //   header: "Name",
-  // },
   {
-    // id: "Created",
     accessorKey: "createdAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Created At" />
     ),
-    // id: "who",
     cell: ({ row }) => (
       <div>
         {format(row.getValue("createdAt"))} by{" "}

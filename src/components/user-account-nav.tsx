@@ -1,6 +1,9 @@
 "use client";
 
 import { SelectUser } from "@/server/db/schema";
+import { LogOutIcon, UserRoundCogIcon } from "lucide-react";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,18 +12,12 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { UserAvatar } from "./user-avatar";
-import Link from "next/link";
-import { LogOutIcon, UserRound, UserRoundCogIcon } from "lucide-react";
-import { Button } from "./ui/button";
-import { signOut } from "next-auth/react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 interface UserAccountNavProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
   user: Pick<SelectUser, "name" | "email" | "image">;
 }
 
 export function UserAccountNav({ user }: UserAccountNavProps) {
-  console.log(user.image ?? undefined);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="rounded-full">

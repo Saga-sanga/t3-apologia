@@ -20,8 +20,6 @@ export default async function Page() {
     orderBy: [desc(zawhna.createdAt)],
   });
 
-  console.log("Data: ", { data });
-
   return (
     <>
       <div className="flex items-center justify-between space-y-2">
