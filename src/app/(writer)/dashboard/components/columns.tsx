@@ -11,6 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { statuses } from "@/lib/data";
+import { cn } from "@/lib/utils";
 import { SelectUser, SelectZawhna } from "@/server/db/schema";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
@@ -26,9 +28,34 @@ export const columns: ColumnDef<ColumnDataType>[] = [
     accessorKey: "status",
     header: () => <div className="">Status</div>,
     cell: ({ row }) => {
-      const status = row.getValue("status");
+      const status = statuses.find(
+        (status) => status.value === row.getValue("status"),
+      );
 
-      return <Badge>{status as string}</Badge>;
+      if (!status) {
+        return null;
+      }
+
+      return (
+        <div
+          className={cn(
+            "flex w-[110px] items-center",
+            status.value === "unanswered" && "text-destructive",
+            status.value === "answered" && "text-primary",
+          )}
+        >
+          {status.icon && (
+            <status.icon
+              className={cn(
+                "mr-2 h-4 w-4 text-muted-foreground",
+                status.value === "unanswered" && "text-destructive",
+                status.value === "answered" && "text-primary",
+              )}
+            />
+          )}
+          <span>{status.label}</span>
+        </div>
+      );
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
@@ -40,6 +67,15 @@ export const columns: ColumnDef<ColumnDataType>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Question" />
     ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex">
+          <span className="max-w-[700px] truncate font-medium">
+            {row.getValue("question")}
+          </span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "createdAt",
