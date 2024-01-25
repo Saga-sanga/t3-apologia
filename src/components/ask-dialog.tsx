@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { MessageCircleQuestionIcon } from "lucide-react";
+import { PencilLineIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Icons } from "./icons";
@@ -49,7 +49,7 @@ export function AskDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
-          <MessageCircleQuestionIcon className="mr-2 h-5 w-5" />
+          <PencilLineIcon className="mr-2 h-5 w-5" />
           Zawt Rawh
         </Button>
       </DialogTrigger>
@@ -60,14 +60,8 @@ export function AskDialog() {
             A hnuaiah hian i zawhna zawh duh chu chipchiar takin zawt rawh le
           </DialogDescription>
         </DialogHeader>
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4"
-        >
-          <Textarea
-            rows={5}
-            name="question"
-          />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Textarea rows={5} name="question" />
           <DialogFooter>
             <Button disabled={ask.isLoading}>
               {ask.isLoading && (

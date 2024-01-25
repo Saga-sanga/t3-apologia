@@ -177,4 +177,4 @@ export const verificationTokens = pgTable(
 
 export type SelectUser = typeof users.$inferSelect;
 export type SelectZawhna = typeof zawhna.$inferSelect;
-// export type InputQuestions = typeof questions.$inferInsert;
+export type SelectPost = typeof posts.$inferSelect;

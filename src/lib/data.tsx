@@ -1,6 +1,12 @@
-import { CheckCircle2, HelpCircleIcon, Layers3Icon } from "lucide-react";
+import {
+  CheckCircle2,
+  FileTextIcon,
+  FileUpIcon,
+  HelpCircleIcon,
+  Layers3Icon,
+} from "lucide-react";
 
-export const statuses = [
+export const questionStatuses = [
   {
     value: "unanswered",
     label: "Unanswered",
@@ -15,5 +21,18 @@ export const statuses = [
     value: "duplicate",
     label: "Duplicate",
     icon: Layers3Icon,
+  },
+];
+
+export const postStatuses = [
+  {
+    value: "draft",
+    label: "Draft",
+    icon: FileTextIcon,
+  },
+  {
+    value: "published",
+    label: "Published",
+    icon: FileUpIcon,
   },
 ];

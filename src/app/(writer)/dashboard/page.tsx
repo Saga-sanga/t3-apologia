@@ -1,18 +1,12 @@
-import { getCurrentUser } from "@/server/auth";
 import { db } from "@/server/db";
 import { zawhna } from "@/server/db/schema";
 import { desc } from "drizzle-orm";
-import { redirect } from "next/navigation";
-import { DataTable } from "./components/data-table";
-import { questionColumns } from "./components/question-columns";
+import { QuestionDataTable } from "./components/question-data-table";
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
+import { DashboardHeader } from "./components/dashboard-header";
 
 export default async function Page() {
-  const currentUser = await getCurrentUser();
-
-  if (currentUser?.role === "writer" || currentUser?.role !== "admin") {
-    redirect("/");
-  }
-
   const data = await db.query.zawhna.findMany({
     with: {
       users: true,
@@ -22,15 +16,17 @@ export default async function Page() {
 
   return (
     <>
-      <div className="flex items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Questions</h2>
-          <p className="text-muted-foreground">
-            Here&apos;s a list of all the user submitted questions
-          </p>
-        </div>
-      </div>
-      <DataTable columnFilterName="question" columns={questionColumns} data={data} />
+      <DashboardHeader
+        heading="Questions"
+        description="Here's a list of all the user submitted questions"
+      >
+        <Button>
+          <PlusIcon className="mr-2 h-4 w-4" />
+          New post
+        </Button>
+      </DashboardHeader>
+
+      <QuestionDataTable data={data} />
     </>
   );
 }

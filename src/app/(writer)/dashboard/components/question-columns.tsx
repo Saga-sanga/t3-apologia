@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { statuses } from "@/lib/data";
+import { questionStatuses } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { SelectUser, SelectZawhna } from "@/server/db/schema";
 import { ColumnDef } from "@tanstack/react-table";
@@ -18,16 +18,16 @@ import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { format } from "timeago.js";
 
-type ColumnDataType = SelectZawhna & {
+export type QuestionColumnDataType = SelectZawhna & {
   users: SelectUser | null;
 };
 
-export const questionColumns: ColumnDef<ColumnDataType>[] = [
+export const questionColumns: ColumnDef<QuestionColumnDataType>[] = [
   {
     accessorKey: "status",
     header: () => <div className="">Status</div>,
     cell: ({ row }) => {
-      const status = statuses.find(
+      const status = questionStatuses.find(
         (status) => status.value === row.getValue("status"),
       );
 

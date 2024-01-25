@@ -1,21 +1,28 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table } from "@tanstack/react-table";
-import { DataTableViewOptions } from "./data-table-view-options";
-import { DataTableFacetedFilter } from "./data-table-faceted-filter";
-import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
-import { statuses } from "../../../../lib/data";
+import { DataTableFacetedFilter } from "./data-table-faceted-filter";
+import { DataTableViewOptions } from "./data-table-view-options";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   columnFilterName: string;
+  facetedFilterColumn?: string;
+  facetedFilterOptions?: {
+    label: string;
+    value: string;
+    icon?: React.ComponentType<{ className?: string }>;
+  }[];
 }
 
 export function DataTableToolbar<TData>({
   table,
   columnFilterName,
+  facetedFilterColumn,
+  facetedFilterOptions,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -35,13 +42,14 @@ export function DataTableToolbar<TData>({
           }
           className="h-9 max-w-sm"
         />
-        {table.getColumn("status") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("status")}
-            title="Status"
-            options={statuses}
-          />
-        )}
+        {table.getColumn(facetedFilterColumn as string) &&
+          facetedFilterOptions && (
+            <DataTableFacetedFilter
+              column={table.getColumn(facetedFilterColumn as string)}
+              title={facetedFilterColumn}
+              options={facetedFilterOptions}
+            />
+          )}
         {isFiltered && (
           <Button
             variant="ghost"
