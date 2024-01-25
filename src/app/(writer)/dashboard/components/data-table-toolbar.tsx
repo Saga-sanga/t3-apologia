@@ -42,10 +42,10 @@ export function DataTableToolbar<TData>({
           }
           className="h-9 max-w-sm"
         />
-        {table.getColumn(facetedFilterColumn as string) &&
+        {table.getColumn(facetedFilterColumn!) &&
           facetedFilterOptions && (
             <DataTableFacetedFilter
-              column={table.getColumn(facetedFilterColumn as string)}
+              column={table.getColumn(facetedFilterColumn!)}
               title={facetedFilterColumn}
               options={facetedFilterOptions}
             />
