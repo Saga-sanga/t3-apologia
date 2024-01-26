@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useEffect, useState } from "react";
 import { Icons } from "@/components/icons";
+import Link from "next/link";
 
 // TODO: Build out column for posts
 export const postColumns: ColumnDef<SelectPost>[] = [
@@ -79,9 +80,12 @@ export const postColumns: ColumnDef<SelectPost>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex">
-          <span className="max-w-[700px] truncate font-medium">
+          <Link
+            href={`/editor/${row.original.id}`}
+            className="max-w-[700px] truncate font-medium underline-offset-4 hover:underline"
+          >
             {row.getValue("title")}
-          </span>
+          </Link>
         </div>
       );
     },
@@ -100,9 +104,7 @@ export const postColumns: ColumnDef<SelectPost>[] = [
       }, []);
 
       return (
-        <span suppressHydrationWarning>
-          {isClient && row.original.createdAt?.toLocaleString()}
-        </span>
+        <span>{isClient && row.original.createdAt?.toLocaleString()}</span>
       );
     },
   },
