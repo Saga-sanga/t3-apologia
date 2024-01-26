@@ -17,15 +17,19 @@ export const postRouter = createTRPCRouter({
     }),
 
   create: protectedProcedure
-    .input(z.object({ name: z.string().min(1) }))
-    .mutation(async ({ ctx, input }) => {
-      // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      await ctx.db.insert(posts).values({
-        // name: input.name,
-        // createdById: ctx.session.user.id,
-      });
+    .input(
+      z.object({
+        title: z.string(),
+        content: z.string().optional(),
+        image: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { title, content, image } }) => {
+      const [data] = await ctx.db
+        .insert(posts)
+        .values({ title, content, image, authorId: ctx.session.user.id })
+        .returning({ postId: posts.id });
+      return data;
     }),
 
   getLatest: publicProcedure.query(({ ctx }) => {

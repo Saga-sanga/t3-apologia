@@ -1,22 +1,15 @@
-import { Button } from "@/components/ui/button";
-import { DashboardHeader } from "../components/dashboard-header";
-import { PlusIcon } from "lucide-react";
-import { PostDataTable } from "../components/post-data-table";
+import { PostCreateButton } from "@/components/post-create-button";
 import { db } from "@/server/db";
+import { DashboardHeader } from "../components/dashboard-header";
+import { PostDataTable } from "../components/post-data-table";
 
 export default async function PostsPage() {
   const data = await db.query.posts.findMany();
 
   return (
     <>
-      <DashboardHeader
-        heading="Posts"
-        description="Create and manage posts"
-      >
-        <Button>
-          <PlusIcon className="mr-2 h-4 w-4" />
-          New post
-        </Button>
+      <DashboardHeader heading="Posts" description="Create and manage posts">
+        <PostCreateButton />
       </DashboardHeader>
       <PostDataTable data={data} />
     </>

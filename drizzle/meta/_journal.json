@@ -8,6 +8,20 @@
       "when": 1705904760921,
       "tag": "0000_simple_banshee",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1706248460515,
+      "tag": "0001_silly_agent_brand",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1706248728084,
+      "tag": "0002_broad_mongu",
+      "breakpoints": true
     }
   ]
 }

@@ -1,16 +1,15 @@
 import type { AdapterAccount } from "@auth/core/adapters";
 import { relations } from "drizzle-orm";
 import {
-  type AnyPgColumn,
   boolean,
   integer,
+  json,
   pgEnum,
   pgTable,
   primaryKey,
   text,
   timestamp,
-  json,
-  serial,
+  type AnyPgColumn,
 } from "drizzle-orm/pg-core";
 import { v4 as uuidv4 } from "uuid";
 
@@ -37,16 +36,6 @@ export const follows = pgTable("follow", {
   followingId: text("followigId").references(() => users.id),
 });
 
-// export const question = pgTable("question", {
-//   id: serial("id").primaryKey(),
-//   answerId: text("answerId").references((): AnyPgColumn => posts.id),
-//   userId: text("id").references(() => users.id, { onDelete: "cascade" }),
-//   content: text("content"),
-//   createdAt: timestamp("createdAt").defaultNow(),
-//   public: boolean("public").default(false),
-//   status: questionStatusEnum("status").default("unanswered").notNull(),
-// });
-
 export const zawhna = pgTable("zawhna", {
   id: text("id")
     .$default(() => uuidv4())
@@ -66,24 +55,13 @@ export const zawhnaRelations = relations(zawhna, ({ one }) => ({
   }),
 }));
 
-// export const questionsRelations = relations(questions, ({ one }) => ({
-//   answer: one(posts, {
-//     fields: [questions.answerId],
-//     references: [posts.id],
-//   }),
-//   users: one(users, {
-//     fields: [questions.userId],
-//     references: [users.id],
-//   }),
-// }));
-
 export const posts = pgTable("post", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => uuidv4()),
   slug: text("slug").unique(),
-  zawhnaId: text("zawhnaId").references(() => zawhna.id),
-  userId: text("userId").references(() => users.id),
+  authorId: text("authorId").references(() => users.id),
+  hideAuthor: boolean("hideAuthor").default(true).notNull(),
   title: text("title"),
   state: stateEnum("state").default("draft").notNull(),
   content: json("content"),

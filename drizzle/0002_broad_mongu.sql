@@ -1,0 +1,1 @@
+ALTER TABLE "post" ADD COLUMN "hideAuthor" boolean DEFAULT true NOT NULL;

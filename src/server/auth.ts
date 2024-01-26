@@ -54,6 +54,9 @@ export const authOptions: NextAuthOptions = {
       };
     },
   },
+  pages: {
+    signIn: "/login",
+  },
   // @ts-expect-error - This is probably an error from the T3 config itself, nothing to do with me
   adapter: DrizzleAdapter(db),
   providers: [
