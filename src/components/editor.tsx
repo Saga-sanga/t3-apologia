@@ -1,19 +1,20 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import type EditorJS from "@editorjs/editorjs";
-import { SelectPost } from "@/server/db/schema";
-import TextareaAutosize from "react-textarea-autosize";
-import { postPatchSchema } from "@/lib/validators";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "./ui/button";
+import { postPatchSchema } from "@/lib/validators";
+import { SelectPost } from "@/server/db/schema";
+import type EditorJS from "@editorjs/editorjs";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import TextareaAutosize from "react-textarea-autosize";
+import { toast } from "sonner";
+import { z } from "zod";
 import { Icons } from "./icons";
+import { buttonVariants } from "./ui/button";
 
 interface EditorProps {
   post: Pick<SelectPost, "id" | "title" | "content" | "state">;
@@ -22,7 +23,11 @@ interface EditorProps {
 type FormData = z.infer<typeof postPatchSchema>;
 
 export function Editor({ post }: EditorProps) {
-  const { register, handleSubmit } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: zodResolver(postPatchSchema),
   });
   const router = useRouter();
@@ -48,6 +53,16 @@ export function Editor({ post }: EditorProps) {
         onReady() {
           ref.current = editor;
         },
+        onChange(api, event) {
+          // console.log({ api, event });
+
+          const autoSave = async () => {
+            const blocks = await api.saver.save();
+            console.log(blocks);
+          };
+
+          autoSave();
+        },
         placeholder: "Type here to start writing your post...",
         inlineToolbar: true,
         // @ts-expect-error: Json object type is dynamic plus we let the Editor handle it
@@ -57,11 +72,27 @@ export function Editor({ post }: EditorProps) {
           linkTool: LinkTool,
           nestedList: NestedList,
           embed: Embed,
-          imageTool: ImageTool,
+          imageTool: {
+            class: ImageTool,
+            config: {
+              endpoints: {
+                // Add trpc post input endpoint for presignedurl
+                byFile: ""
+              }
+            }
+          },
         },
       });
     }
   }, []);
+
+  useEffect(() => {
+    if (errors.title) {
+      toast.error("Check your Title", {
+        description: errors.title?.message,
+      });
+    }
+  }, [errors.title]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -84,12 +115,13 @@ export function Editor({ post }: EditorProps) {
     return null;
   }
 
-  const handleFormSubmit = (data: FormData) => {
-    console.log(data);
+  const onPublish = async (data: FormData) => {
+    const blocks = await ref.current?.save();
+    console.log({ data, blocks });
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
+    <form>
       <div className="grid w-full gap-10">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center space-x-10">
@@ -106,12 +138,28 @@ export function Editor({ post }: EditorProps) {
               {post.state}
             </p>
           </div>
-          <button type="submit" className={cn(buttonVariants())}>
-            {isSaving && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            <span>Save</span>
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              type="submit"
+              className={cn(buttonVariants({ variant: "outline" }))}
+              // onClick={handleSubmit(onSave)}
+            >
+              {isSaving && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              <span>Save</span>
+            </button>
+            <button
+              type="submit"
+              className={cn(buttonVariants())}
+              onClick={handleSubmit(onPublish)}
+            >
+              {isSaving && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              <span>Publish</span>
+            </button>
+          </div>
         </div>
         <div className="prose prose-stone dark:prose-invert mx-auto w-[800px]">
           <TextareaAutosize
@@ -119,6 +167,7 @@ export function Editor({ post }: EditorProps) {
             id="title"
             defaultValue={post.title ?? "Untitled Post"}
             placeholder="Post title"
+            {...register("title")}
             className="w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none"
           />
           <div id="editor"></div>

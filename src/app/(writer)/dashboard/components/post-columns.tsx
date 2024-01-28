@@ -11,7 +11,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SelectPost } from "@/server/db/schema";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, Trash2Icon } from "lucide-react";
+import {
+  LucideCopy,
+  MoreHorizontal,
+  PenSquare,
+  Trash2Icon,
+} from "lucide-react";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { postStatuses } from "@/lib/data";
 import { cn } from "@/lib/utils";
@@ -150,15 +155,17 @@ export const postColumns: ColumnDef<SelectPost>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(obj.id)}
               >
                 Copy payment ID
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
+              <DropdownMenuItem>
+                <PenSquare className="mr-3 h-4 w-4" /> Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <LucideCopy className="mr-3 h-4 w-4" /> Make a copy
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => setShowDeleteAlert(true)}

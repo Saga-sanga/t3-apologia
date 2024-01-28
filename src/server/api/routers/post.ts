@@ -21,16 +21,30 @@ export const postRouter = createTRPCRouter({
     .input(
       z.object({
         title: z.string(),
-        content: z.string().optional(),
-        image: z.string().optional(),
       }),
     )
-    .mutation(async ({ ctx, input: { title, content, image } }) => {
+    .mutation(async ({ ctx, input: { title } }) => {
       const [data] = await ctx.db
         .insert(posts)
-        .values({ title, content, image, authorId: ctx.session.user.id })
+        .values({ title, authorId: ctx.session.user.id })
         .returning({ postId: posts.id });
       return data;
+    }),
+
+  update: protectedProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        content: z.string().optional(),
+        image: z.string().optional(),
+        state: z.enum(["published", "draft"]).optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { title, content, image, state } }) => {
+      if (title === "") {
+        title = "Untitled";
+      }
+      await ctx.db.insert(posts).values({ title, content, image, state });
     }),
 
   delete: protectedProcedure

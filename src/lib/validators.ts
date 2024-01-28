@@ -6,6 +6,6 @@ export const formSchema = z.object({
 
 export const postPatchSchema = z.object({
   image: z.string().optional(),
-  title: z.string().min(3).max(128).optional(),
+  title: z.string().max(128),
   content: z.any().optional(),
 });
