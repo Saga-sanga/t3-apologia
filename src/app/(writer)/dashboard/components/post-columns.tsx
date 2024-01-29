@@ -1,28 +1,6 @@
 "use client";
 
-import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { SelectPost } from "@/server/db/schema";
-import { ColumnDef } from "@tanstack/react-table";
-import {
-  LucideCopy,
-  MoreHorizontal,
-  PenSquare,
-  Trash2Icon,
-} from "lucide-react";
-import { DataTableColumnHeader } from "./data-table-column-header";
-import { postStatuses } from "@/lib/data";
-import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { Icons } from "@/components/icons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,9 +12,30 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useEffect, useState } from "react";
-import { Icons } from "@/components/icons";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import { postStatuses } from "@/lib/data";
+import { cn } from "@/lib/utils";
+import { SelectPost } from "@/server/db/schema";
+import { api } from "@/trpc/react";
+import { ColumnDef } from "@tanstack/react-table";
+import {
+  LucideCopy,
+  MoreHorizontal,
+  PenSquare,
+  Trash2Icon,
+} from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { DataTableColumnHeader } from "./data-table-column-header";
 
 // TODO: Build out column for posts
 export const postColumns: ColumnDef<SelectPost>[] = [

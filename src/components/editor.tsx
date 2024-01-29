@@ -5,7 +5,7 @@ import { postPatchSchema } from "@/lib/validators";
 import { SelectPost } from "@/server/db/schema";
 import type EditorJS from "@editorjs/editorjs";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ImageIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -14,7 +14,10 @@ import TextareaAutosize from "react-textarea-autosize";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Icons } from "./icons";
-import { buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import Image from "next/image";
 
 interface EditorProps {
   post: Pick<SelectPost, "id" | "title" | "content" | "state">;
@@ -34,6 +37,8 @@ export function Editor({ post }: EditorProps) {
   const ref = useRef<EditorJS>();
   const [isMounted, setIsMounted] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [image, setImage] = useState<File>();
+  const [imageUrl, setImageUrl] = useState<string>();
 
   const initializeEditor = useCallback(async () => {
     const EditorJS = (await import("@editorjs/editorjs")).default;
@@ -75,11 +80,41 @@ export function Editor({ post }: EditorProps) {
           imageTool: {
             class: ImageTool,
             config: {
-              endpoints: {
-                // Add trpc post input endpoint for presignedurl
-                byFile: ""
-              }
-            }
+              uploader: {
+                async uploadByFile(file: File) {
+                  // Get presigned url
+                  const presignedResponse = await fetch(
+                    `/api/getPresignedUrl?fileName=${file.name}`,
+                  );
+                  const presignedUrl = (await presignedResponse.json()) as {
+                    url: string;
+                  };
+
+                  const uploadResponse = await fetch(presignedUrl.url, {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": file.type,
+                    },
+                    body: file,
+                  });
+
+                  const url = presignedUrl.url.split("?")[0];
+
+                  if (uploadResponse.ok) {
+                    return {
+                      success: 1,
+                      file: {
+                        url,
+                      },
+                    };
+                  }
+
+                  return {
+                    success: 0,
+                  };
+                },
+              },
+            },
           },
         },
       });
@@ -99,6 +134,12 @@ export function Editor({ post }: EditorProps) {
       setIsMounted(true);
     }
   }, [post]);
+
+  useEffect(() => {
+    if (image) {
+      setImageUrl(URL.createObjectURL(image));
+    }
+  }, [image]);
 
   useEffect(() => {
     if (isMounted) {
@@ -122,7 +163,7 @@ export function Editor({ post }: EditorProps) {
 
   return (
     <form>
-      <div className="grid w-full gap-10">
+      <div className="grid w-full">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center space-x-10">
             <Link
@@ -161,7 +202,44 @@ export function Editor({ post }: EditorProps) {
             </button>
           </div>
         </div>
-        <div className="prose prose-stone dark:prose-invert mx-auto w-[800px]">
+        <div className="prose prose-stone dark:prose-invert mx-auto w-[56rem] pt-6">
+          <div className="mb-8">
+            <Label htmlFor="image">
+              {!!imageUrl ? (
+                <img
+                  // fill
+                  className="object-cover"
+                  src={imageUrl}
+                  alt="Cover Image"
+                />
+              ) : (
+                <div
+                  className={cn(
+                    buttonVariants({ variant: "outline" }),
+                    "h-8 cursor-pointer",
+                  )}
+                >
+                  <ImageIcon className="mr-2 h-5 w-5" /> Add Cover
+                </div>
+              )}
+              <Input
+                onChange={(e) => {
+                  console.log("Hit outside", e.currentTarget.files);
+                  if (
+                    e.currentTarget.files &&
+                    e.currentTarget.files.length > 0
+                  ) {
+                    console.log("Hit onclick");
+                    setImage(e.currentTarget.files[0]);
+                  }
+                }}
+                id="image"
+                type="file"
+                className="hidden"
+                accept="image/*"
+              />
+            </Label>
+          </div>
           <TextareaAutosize
             autoFocus
             id="title"
