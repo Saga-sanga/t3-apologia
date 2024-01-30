@@ -5,7 +5,7 @@ import { postPatchSchema } from "@/lib/validators";
 import { SelectPost } from "@/server/db/schema";
 import type EditorJS from "@editorjs/editorjs";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, ImageIcon } from "lucide-react";
+import { ChevronLeft, ImageIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -18,6 +18,9 @@ import { Button, buttonVariants } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import Image from "next/image";
+import { ImageInput } from "./image-input";
+import { EditorNav } from "./editor-nav";
+import { useEdgeStore } from "@/lib/edgestore";
 
 interface EditorProps {
   post: Pick<SelectPost, "id" | "title" | "content" | "state">;
@@ -34,11 +37,17 @@ export function Editor({ post }: EditorProps) {
     resolver: zodResolver(postPatchSchema),
   });
   const router = useRouter();
+  const { edgestore } = useEdgeStore();
+
   const ref = useRef<EditorJS>();
+
   const [isMounted, setIsMounted] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [image, setImage] = useState<File>();
   const [imageUrl, setImageUrl] = useState<string>();
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [contentImageUrls, setContentImageUrls] = useState<string[]>([]);
 
   const initializeEditor = useCallback(async () => {
     const EditorJS = (await import("@editorjs/editorjs")).default;
@@ -48,9 +57,13 @@ export function Editor({ post }: EditorProps) {
     // @ts-expect-error: Type package cannot be found
     const NestedList = (await import("@editorjs/nested-list")).default;
     // @ts-expect-error: Type package cannot be found
-    const LinkTool = (await import("@editorjs/link")).default;
-    // @ts-expect-error: Type package cannot be found
     const ImageTool = (await import("@editorjs/image")).default;
+    // @ts-expect-error: Type package cannot be found
+    const Quote = (await import("@editorjs/quote")).default;
+    // @ts-expect-error: Type package cannot be found
+    const Delimiter = (await import("@editorjs/delimiter")).default;
+    // @ts-expect-error: Type package cannot be found
+    const Table = (await import("@editorjs/table")).default;
 
     if (!ref.current) {
       const editor = new EditorJS({
@@ -58,15 +71,9 @@ export function Editor({ post }: EditorProps) {
         onReady() {
           ref.current = editor;
         },
-        onChange(api, event) {
-          // console.log({ api, event });
-
-          const autoSave = async () => {
-            const blocks = await api.saver.save();
-            console.log(blocks);
-          };
-
-          autoSave();
+        async onChange(api, event) {
+          const blocks = await api.saver.save();
+          console.log(blocks);
         },
         placeholder: "Type here to start writing your post...",
         inlineToolbar: true,
@@ -74,44 +81,56 @@ export function Editor({ post }: EditorProps) {
         data: post.content,
         tools: {
           header: Header,
-          linkTool: LinkTool,
           nestedList: NestedList,
+          delimiter: Delimiter,
+          table: {
+            class: Table,
+            inlineToolbar: true,
+            config: {
+              rows: 2,
+              cols: 3,
+            },
+          },
+          quote: {
+            class: Quote,
+            inlineToolbar: true,
+            // shortcut: "CMD+SHIFT+O",
+            config: {
+              quotePlaceholder: "Enter a quote",
+              captionPlaceholder: "Quote's author",
+            },
+          },
           embed: Embed,
           imageTool: {
             class: ImageTool,
             config: {
               uploader: {
                 async uploadByFile(file: File) {
-                  // Get presigned url
-                  const presignedResponse = await fetch(
-                    `/api/getPresignedUrl?fileName=${file.name}`,
-                  );
-                  const presignedUrl = (await presignedResponse.json()) as {
-                    url: string;
-                  };
+                  try {
+                    const res = await edgestore.publicFiles.upload({
+                      file,
+                      options: {
+                        temporary: true,
+                      },
+                    });
 
-                  const uploadResponse = await fetch(presignedUrl.url, {
-                    method: "PUT",
-                    headers: {
-                      "Content-Type": file.type,
-                    },
-                    body: file,
-                  });
+                    setContentImageUrls((prevState) => [...prevState, res.url]);
 
-                  const url = presignedUrl.url.split("?")[0];
-
-                  if (uploadResponse.ok) {
                     return {
                       success: 1,
                       file: {
-                        url,
+                        url: res.url,
                       },
                     };
+                  } catch (error) {
+                    console.log(error);
+                    return {
+                      success: 0,
+                    };
                   }
-
-                  return {
-                    success: 0,
-                  };
+                },
+                async uploadByUrl(url: string) {
+                  console.log({ url });
                 },
               },
             },
@@ -136,9 +155,19 @@ export function Editor({ post }: EditorProps) {
   }, [post]);
 
   useEffect(() => {
-    if (image) {
-      setImageUrl(URL.createObjectURL(image));
+    async function uploadToEdgeStore() {
+      if (image) {
+        // upload image to edgestore
+        setIsLoadingImage(true);
+        const res = await edgestore.publicFiles.upload({
+          file: image,
+        });
+        setImageUrl(res.url);
+        setIsLoadingImage(false);
+      }
     }
+
+    uploadToEdgeStore();
   }, [image]);
 
   useEffect(() => {
@@ -165,20 +194,7 @@ export function Editor({ post }: EditorProps) {
     <form>
       <div className="grid w-full">
         <div className="flex w-full items-center justify-between">
-          <div className="flex items-center space-x-10">
-            <Link
-              href="/dashboard/posts"
-              className={cn(buttonVariants({ variant: "ghost" }))}
-            >
-              <>
-                <ChevronLeft className="mr-2 h-4 w-4" />
-                Back
-              </>
-            </Link>
-            <p className="text-sm capitalize text-muted-foreground">
-              {post.state}
-            </p>
-          </div>
+          <EditorNav state={post.state} />
           <div className="flex items-center gap-4">
             <button
               type="submit"
@@ -204,41 +220,62 @@ export function Editor({ post }: EditorProps) {
         </div>
         <div className="prose prose-stone dark:prose-invert mx-auto w-[56rem] pt-6">
           <div className="mb-8">
-            <Label htmlFor="image">
-              {!!imageUrl ? (
+            {!!imageUrl ? (
+              <div className="group relative w-full">
+                <div className="absolute bottom-4 right-4 hidden space-x-2 group-hover:flex">
+                  <ImageInput disabled={isRemoving} setImage={setImage}>
+                    <ImageIcon className="mr-2 h-5 w-5" />
+                    Change Image
+                  </ImageInput>
+                  <Button
+                    disabled={isRemoving}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsRemoving(true);
+
+                      edgestore.publicFiles
+                        .delete({ url: imageUrl })
+                        .then(() => {
+                          setIsRemoving(false);
+                          setImageUrl(undefined);
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                          setIsRemoving(false);
+                        });
+                    }}
+                    className="h-8"
+                    variant="secondary"
+                  >
+                    {isRemoving ? (
+                      <Icons.spinner className="mr-2 h-5 w-5 animate-spin" />
+                    ) : (
+                      <XIcon className="mr-2 h-5 w-5" />
+                    )}{" "}
+                    Remove
+                  </Button>
+                </div>
                 <img
                   // fill
                   className="object-cover"
                   src={imageUrl}
                   alt="Cover Image"
                 />
-              ) : (
-                <div
-                  className={cn(
-                    buttonVariants({ variant: "outline" }),
-                    "h-8 cursor-pointer",
-                  )}
-                >
-                  <ImageIcon className="mr-2 h-5 w-5" /> Add Cover
-                </div>
-              )}
-              <Input
-                onChange={(e) => {
-                  console.log("Hit outside", e.currentTarget.files);
-                  if (
-                    e.currentTarget.files &&
-                    e.currentTarget.files.length > 0
-                  ) {
-                    console.log("Hit onclick");
-                    setImage(e.currentTarget.files[0]);
-                  }
-                }}
-                id="image"
-                type="file"
-                className="hidden"
-                accept="image/*"
-              />
-            </Label>
+              </div>
+            ) : (
+              <>
+                {isLoadingImage ? (
+                  <div className="flex items-center">
+                    <Icons.spinner className="mr-2 h-5 w-5 animate-spin" />
+                    Loading...
+                  </div>
+                ) : (
+                  <ImageInput setImage={setImage}>
+                    <ImageIcon className="mr-2 h-5 w-5" /> Add Cover
+                  </ImageInput>
+                )}
+              </>
+            )}
           </div>
           <TextareaAutosize
             autoFocus

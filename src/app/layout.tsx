@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,7 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <TRPCReactProvider cookies={cookies().toString()}>
-          {children}
+          <EdgeStoreProvider>{children}</EdgeStoreProvider>
         </TRPCReactProvider>
         <Toaster />
         <TailwindIndicator />
