@@ -154,11 +154,11 @@ export const postColumns: ColumnDef<SelectPost>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem
+              {/* <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(obj.id)}
               >
                 Copy payment ID
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuItem>
                 <PenSquare className="mr-3 h-4 w-4" /> Edit
               </DropdownMenuItem>

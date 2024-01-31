@@ -264,12 +264,7 @@ export function Editor({ post }: EditorProps) {
                   className="h-8"
                   variant="secondary"
                 >
-                  {isRemoving ? (
-                    <Icons.spinner className="mr-2 h-5 w-5 animate-spin" />
-                  ) : (
-                    <XIcon className="mr-2 h-5 w-5" />
-                  )}{" "}
-                  Remove
+                  <XIcon className="mr-2 h-5 w-5" /> Remove
                 </Button>
               </div>
               <img
@@ -305,6 +300,13 @@ export function Editor({ post }: EditorProps) {
           className="w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none"
         />
         <div id="editor"></div>
+        <p className="text-sm text-gray-500">
+          Use{" "}
+          <kbd className="rounded-md border bg-muted px-1 text-xs uppercase">
+            Tab
+          </kbd>{" "}
+          to open the command menu.
+        </p>
       </form>
     </div>
   );
