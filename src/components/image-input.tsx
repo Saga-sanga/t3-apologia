@@ -7,11 +7,11 @@ import { Input } from "./ui/input";
 
 interface ImageInputProps {
   children: React.ReactNode;
-  setImage: React.Dispatch<React.SetStateAction<File | undefined>>;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
 }
 
-export function ImageInput({ children, setImage, disabled }: ImageInputProps) {
+export function ImageInput({ children, onChange, disabled }: ImageInputProps) {
   return (
     <Label htmlFor="image">
       <div
@@ -27,11 +27,7 @@ export function ImageInput({ children, setImage, disabled }: ImageInputProps) {
       </div>
       <Input
         disabled={disabled}
-        onChange={(e) => {
-          if (e.currentTarget.files && e.currentTarget.files.length > 0) {
-            setImage(e.currentTarget.files[0]);
-          }
-        }}
+        onChange={onChange}
         id="image"
         type="file"
         className="hidden"

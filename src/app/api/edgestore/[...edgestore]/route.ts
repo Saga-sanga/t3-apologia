@@ -5,10 +5,15 @@ const es = initEdgeStore.create();
  * This is the main router for the Edge Store buckets.
  */
 const edgeStoreRouter = es.router({
-  publicFiles: es.fileBucket().beforeDelete(({ ctx, fileInfo }) => {
-    console.log('beforeDelete', ctx, fileInfo);
-    return true; // allow delete
-  }),
+  publicFiles: es
+    .fileBucket({
+      maxSize: 1024 * 1024 * 1, // 1MB
+      accept: ["image/*"],
+    })
+    .beforeDelete(({ ctx, fileInfo }) => {
+      console.log("beforeDelete", ctx, fileInfo);
+      return true; // allow delete
+    }),
 });
 
 const handler = createEdgeStoreNextHandler({

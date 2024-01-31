@@ -34,17 +34,27 @@ export const postRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
+        id: z.string(),
         title: z.string(),
-        content: z.string().optional(),
+        content: z.record(z.any()).optional(),
         image: z.string().optional(),
-        state: z.enum(["published", "draft"]).optional(),
       }),
     )
-    .mutation(async ({ ctx, input: { title, content, image, state } }) => {
+    .mutation(async ({ ctx, input: { title, content, image, id } }) => {
       if (title === "") {
         title = "Untitled";
       }
-      await ctx.db.insert(posts).values({ title, content, image, state });
+
+      await ctx.db
+        .update(posts)
+        .set({ title, content, image: image ?? null })
+        .where(eq(posts.id, id));
+    }),
+
+  changeState: protectedProcedure
+    .input(z.object({ id: z.string(), state: z.enum(["published", "draft"]) }))
+    .mutation(async ({ ctx, input: { state, id } }) => {
+      await ctx.db.update(posts).set({ state }).where(eq(posts.id, id));
     }),
 
   delete: protectedProcedure
