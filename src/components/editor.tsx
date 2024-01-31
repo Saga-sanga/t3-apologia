@@ -6,7 +6,14 @@ import { cn } from "@/lib/utils";
 import { SelectPost } from "@/server/db/schema";
 import { api } from "@/trpc/react";
 import type EditorJS from "@editorjs/editorjs";
-import { ImageIcon, LoaderIcon, XIcon } from "lucide-react";
+import {
+  CloudIcon,
+  CloudOffIcon,
+  ImageIcon,
+  Loader2Icon,
+  LoaderIcon,
+  XIcon,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
@@ -15,6 +22,8 @@ import { EditorNav } from "./editor-nav";
 import { Icons } from "./icons";
 import { ImageInput } from "./image-input";
 import { Button, buttonVariants } from "./ui/button";
+import { useDebounce } from "use-debounce";
+import { OutputData } from "@editorjs/editorjs";
 
 export interface EditorProps {
   post: Pick<SelectPost, "id" | "title" | "content" | "state" | "image">;
@@ -32,6 +41,7 @@ export function Editor({ post }: EditorProps) {
 
   const [isMounted, setIsMounted] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [savingError, setSavingError] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | undefined>(
     post.image ?? undefined,
@@ -39,6 +49,41 @@ export function Editor({ post }: EditorProps) {
   const [title, setTitle] = useState(post.title);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
+
+  const [debouncedTitle] = useDebounce(title, 750);
+
+  useEffect(() => {
+    // console.log({ debouncedTitle, imageUrl });
+    const autoSaveTitleAndImage = () => {
+      setIsSaving(true);
+      console.log(imageUrl);
+      postMutation.mutate(
+        {
+          id: post.id,
+          title: debouncedTitle as string,
+          image: imageUrl,
+        },
+        {
+          onSuccess: () => {
+            setIsSaving(false);
+            router.refresh();
+            // toast.success("Post Saved", {
+            //   description: "Your post has been saved successfully",
+            // });
+          },
+          onError: () => {
+            setIsSaving(false);
+            setSavingError(true);
+            toast.error("Can't Save Post", {
+              description:
+                "Your post could not be saved. Please check your network status.",
+            });
+          },
+        },
+      );
+    };
+    autoSaveTitleAndImage();
+  }, [debouncedTitle, imageUrl]);
 
   const initializeEditor = useEditorJS();
 
@@ -48,9 +93,35 @@ export function Editor({ post }: EditorProps) {
     }
   }, [post]);
 
+  const saveBlocks = (blocks: OutputData) => {
+    setIsSaving(true);
+    postMutation.mutate(
+      {
+        id: post.id,
+        content: blocks,
+      },
+      {
+        onSuccess: () => {
+          setIsSaving(false);
+          router.refresh();
+          // toast.success("Post Saved", {
+          //   description: "Your post has been saved successfully",
+          // });
+        },
+        onError: () => {
+          setIsSaving(false);
+          setSavingError(true);
+          toast.error("Can't Save Post", {
+            description: "Please check your network status",
+          });
+        },
+      },
+    );
+  };
+
   useEffect(() => {
     if (isMounted) {
-      initializeEditor(post, ref);
+      initializeEditor(post, ref, saveBlocks);
 
       return () => {
         ref.current?.destroy();
@@ -130,54 +201,39 @@ export function Editor({ post }: EditorProps) {
     );
   };
 
-  const onSave = async () => {
-    setIsSaving(true);
-    const blocks = await ref.current?.save();
-    console.log(imageUrl);
-    postMutation.mutate(
-      {
-        id: post.id,
-        title: title as string,
-        image: imageUrl,
-        content: blocks,
-      },
-      {
-        onSuccess: () => {
-          setIsSaving(false);
-          router.refresh();
-          toast.success("Post Saved", {
-            description: "Your post has been saved successfully",
-          });
-        },
-        onError: () => {
-          setIsSaving(false);
-          toast.error("Can't Save Post", {
-            description: "Your post could not be saved. Please try again",
-          });
-        },
-      },
-    );
-  };
-
   return (
     <div className="grid w-full">
       <div className="flex w-full items-center justify-between">
         <EditorNav state={post.state} />
-        <div className="flex items-center gap-2">
-          <button
+        <div className="flex items-center gap-4">
+          {/* <button
             type="submit"
             disabled={isSaving || isPublishing}
             className={cn(buttonVariants({ variant: "outline" }))}
-            onClick={onSave}
+            // onClick={onSave}
           >
             {isSaving && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
             <span>Save</span>
-          </button>
+          </button> */}
+          {isSaving ? (
+            <div className="flex items-center text-muted-foreground">
+              <Loader2Icon className="mr-2 h-5 w-5 animate-spin" /> Saving
+            </div>
+          ) : savingError ? (
+            <div className="flex items-center text-destructive">
+              <CloudOffIcon className="mr-2 h-5 w-5" /> Saving failed
+            </div>
+          ) : (
+            <div className="flex items-center text-primary">
+              <CloudIcon className="mr-2 h-5 w-5 text-primary" /> Saved
+            </div>
+          )}
+          <div className="h-10 border-l border-border"></div>
           <button
             type="submit"
-            disabled={isSaving || isPublishing}
+            disabled={isPublishing}
             className={cn(buttonVariants())}
             onClick={onPublishChange}
           >

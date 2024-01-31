@@ -18,7 +18,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { postStatuses } from "@/lib/data";
 import { cn } from "@/lib/utils";
@@ -129,7 +129,7 @@ export const postColumns: ColumnDef<SelectPost>[] = [
               setIsLoading(false);
               setShowDeleteAlert(false);
               router.refresh();
-              toast.success("Success!", {
+              toast.success("Post Deleted", {
                 description: "The post has been deleted successfully.",
               });
             },
