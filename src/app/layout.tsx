@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "@/trpc/react";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { EdgeStoreProvider } from "@/lib/edgestore";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout({
           <EdgeStoreProvider>{children}</EdgeStoreProvider>
         </TRPCReactProvider>
         <Toaster />
+        <Analytics />
         <TailwindIndicator />
       </body>
     </html>

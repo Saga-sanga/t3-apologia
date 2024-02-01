@@ -203,7 +203,7 @@ export function Editor({ post }: EditorProps) {
 
   return (
     <div className="grid w-full">
-      <div className="flex w-full items-center justify-between">
+      <div className="sticky top-4 flex w-full items-center justify-between">
         <EditorNav state={post.state} />
         <div className="flex items-center gap-4">
           {/* <button

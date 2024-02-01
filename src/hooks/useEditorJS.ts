@@ -1,20 +1,17 @@
 import { EditorProps } from "@/components/editor";
 import { useEdgeStore } from "@/lib/edgestore";
-import { api } from "@/trpc/react";
 import type EditorJS from "@editorjs/editorjs";
 import { OutputData } from "@editorjs/editorjs";
 import { useCallback } from "react";
 
 export function useEditorJS() {
-// ref: React.MutableRefObject<EditorJS | undefined>,
-  const postMutation = api.post.update.useMutation();
   const { edgestore } = useEdgeStore();
 
   return useCallback(
     async (
       post: EditorProps["post"],
       ref: React.MutableRefObject<EditorJS | undefined>,
-      saveBlocks: (blocks: OutputData) => void
+      saveBlocks: (blocks: OutputData) => void,
     ) => {
       const EditorJS = (await import("@editorjs/editorjs")).default;
       const Header = (await import("@editorjs/header")).default;
@@ -40,12 +37,7 @@ export function useEditorJS() {
           async onChange(api, event) {
             const blocks = await api.saver.save();
 
-            saveBlocks(blocks)
-            // console.log(blocks);
-            // postMutation.mutate({
-            //   id: post.id,
-            //   content: blocks,
-            // });
+            saveBlocks(blocks);
           },
           placeholder: "Type here to start writing your post...",
           inlineToolbar: true,
@@ -85,8 +77,6 @@ export function useEditorJS() {
                           temporary: true,
                         },
                       });
-
-                      // setContentImageUrls((prevState) => [...prevState, res.url]);
 
                       return {
                         success: 1,

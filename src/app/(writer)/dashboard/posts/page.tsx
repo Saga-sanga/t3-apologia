@@ -4,7 +4,7 @@ import { DashboardHeader } from "../components/dashboard-header";
 import { PostDataTable } from "../components/post-data-table";
 import { desc } from "drizzle-orm";
 import { posts } from "@/server/db/schema";
-// export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";
 
 export default async function PostsPage() {
   const data = await db.query.posts.findMany({
