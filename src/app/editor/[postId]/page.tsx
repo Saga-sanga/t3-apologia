@@ -13,7 +13,7 @@ export default async function EditorPage({ params }: EditorPageProps) {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect(authOptions.pages?.signIn || "/login");
+    redirect(authOptions.pages?.signIn ?? "/login");
   }
 
   const post = await db.query.posts.findFirst({

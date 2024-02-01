@@ -60,7 +60,7 @@ export function Editor({ post }: EditorProps) {
       postMutation.mutate(
         {
           id: post.id,
-          title: debouncedTitle as string,
+          title: debouncedTitle!,
           image: imageUrl,
         },
         {
