@@ -74,7 +74,7 @@ export function useEditorJS() {
                       const res = await edgestore.publicFiles.upload({
                         file,
                         options: {
-                          temporary: true,
+                          temporary: false,
                         },
                       });
 

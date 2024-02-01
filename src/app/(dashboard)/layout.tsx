@@ -1,5 +1,4 @@
 import { MainNav } from "@/components/main-nav";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type LayoutProps = {
   children?: React.ReactNode;

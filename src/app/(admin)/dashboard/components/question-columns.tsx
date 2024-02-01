@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTableColumnHeader } from "@/app/(writer)/dashboard/components/data-table-column-header";
+import { DataTableColumnHeader } from "@/app/(admin)/dashboard/components/data-table-column-header";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,

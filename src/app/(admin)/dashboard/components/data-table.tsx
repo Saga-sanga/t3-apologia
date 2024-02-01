@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTablePagination } from "@/app/(writer)/dashboard/components/data-table-pagination";
+import { DataTablePagination } from "@/app/(admin)/dashboard/components/data-table-pagination";
 import {
   Table,
   TableBody,
