@@ -21,12 +21,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import { Row } from "@tanstack/react-table";
 import {
   LucideCopy,
   MoreHorizontal,
   PenSquare,
   Trash2Icon,
+  ViewIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -79,7 +79,11 @@ export function PostTableRowAction({ postId }: PostTableRowActionProps) {
               >
                 Copy payment ID
               </DropdownMenuItem> */}
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push(`/post/${postId}`)}>
+            <ViewIcon className="mr-3 h-4 w-4" /> View post
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => router.push(`/editor/${postId}`)}>
             <PenSquare className="mr-3 h-4 w-4" /> Edit
           </DropdownMenuItem>
           <DropdownMenuItem>
