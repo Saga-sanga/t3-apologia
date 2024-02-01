@@ -15,20 +15,20 @@ const bucketName = env.S3_BUCKET;
 const accessKeyId = env.S3_ACCESS_KEY_ID;
 const secretAccessKey = env.S3_SECRET_ACCESS_KEY;
 
-if (!accessKeyId) {
-  throw new Error("Missing _ACCESS_KEY_ID variable");
-}
+// if (!accessKeyId) {
+//   throw new Error("Missing S3_ACCESS_KEY_ID variable");
+// }
 
-if (!secretAccessKey) {
-  throw new Error("Missing _SECRET_ACCESS_KEY variable");
-}
+// if (!secretAccessKey) {
+//   throw new Error("Missing _SECRET_ACCESS_KEY variable");
+// }
 
 // Setup s3 client
 const client = new S3Client({
   region,
   credentials: {
-    accessKeyId,
-    secretAccessKey,
+    accessKeyId: accessKeyId!,
+    secretAccessKey: secretAccessKey!,
   },
 });
 
