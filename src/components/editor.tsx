@@ -29,20 +29,16 @@ export interface EditorProps {
   post: Pick<SelectPost, "id" | "title" | "content" | "state" | "image">;
 }
 
-//TODO: Implement autosave
+//TODO: Add category manager
 export function Editor({ post }: EditorProps) {
   const router = useRouter();
+  const ref = useRef<EditorJS>();
   const { edgestore } = useEdgeStore();
 
   const postMutation = api.post.update.useMutation();
   const publishMutation = api.post.changeState.useMutation();
 
-  const ref = useRef<EditorJS>();
-
   const [isMounted, setIsMounted] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [savingError, setSavingError] = useState(false);
-  const [isPublishing, setIsPublishing] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | undefined>(
     post.image ?? undefined,
   );
@@ -55,7 +51,6 @@ export function Editor({ post }: EditorProps) {
   useEffect(() => {
     // console.log({ debouncedTitle, imageUrl });
     const autoSaveTitleAndImage = () => {
-      setIsSaving(true);
       console.log(imageUrl);
       postMutation.mutate(
         {
@@ -65,15 +60,9 @@ export function Editor({ post }: EditorProps) {
         },
         {
           onSuccess: () => {
-            setIsSaving(false);
             router.refresh();
-            // toast.success("Post Saved", {
-            //   description: "Your post has been saved successfully",
-            // });
           },
           onError: () => {
-            setIsSaving(false);
-            setSavingError(true);
             toast.error("Can't Save Post", {
               description:
                 "Your post could not be saved. Please check your network status.",
@@ -85,16 +74,7 @@ export function Editor({ post }: EditorProps) {
     autoSaveTitleAndImage();
   }, [debouncedTitle, imageUrl]);
 
-  const initializeEditor = useEditorJS();
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsMounted(true);
-    }
-  }, [post]);
-
   const saveBlocks = (blocks: OutputData) => {
-    setIsSaving(true);
     postMutation.mutate(
       {
         id: post.id,
@@ -102,15 +82,9 @@ export function Editor({ post }: EditorProps) {
       },
       {
         onSuccess: () => {
-          setIsSaving(false);
           router.refresh();
-          // toast.success("Post Saved", {
-          //   description: "Your post has been saved successfully",
-          // });
         },
         onError: () => {
-          setIsSaving(false);
-          setSavingError(true);
           toast.error("Can't Save Post", {
             description: "Please check your network status",
           });
@@ -119,9 +93,17 @@ export function Editor({ post }: EditorProps) {
     );
   };
 
+  const initializeEditor = useEditorJS(post, ref, saveBlocks);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsMounted(true);
+    }
+  }, [post]);
+
   useEffect(() => {
     if (isMounted) {
-      initializeEditor(post, ref, saveBlocks);
+      initializeEditor();
 
       return () => {
         ref.current?.destroy();
@@ -176,7 +158,6 @@ export function Editor({ post }: EditorProps) {
   };
 
   const onPublishChange = async () => {
-    setIsPublishing(true);
     const postState = post.state === "draft" ? "Published" : "Unpublished";
     publishMutation.mutate(
       {
@@ -185,14 +166,12 @@ export function Editor({ post }: EditorProps) {
       },
       {
         onSuccess: () => {
-          setIsPublishing(false);
           router.refresh();
           toast.success(`Post ${postState}`, {
             description: `Your post has been ${postState} successfully`,
           });
         },
         onError: () => {
-          setIsPublishing(false);
           toast.error("Can't Publish Post", {
             description: "Your post could not be published. Please try again",
           });
@@ -206,22 +185,11 @@ export function Editor({ post }: EditorProps) {
       <div className="sticky top-4 flex w-full items-center justify-between">
         <EditorNav state={post.state} />
         <div className="flex items-center gap-4">
-          {/* <button
-            type="submit"
-            disabled={isSaving || isPublishing}
-            className={cn(buttonVariants({ variant: "outline" }))}
-            // onClick={onSave}
-          >
-            {isSaving && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            <span>Save</span>
-          </button> */}
-          {isSaving ? (
+          {postMutation.isLoading ? (
             <div className="flex items-center text-muted-foreground">
               <Loader2Icon className="mr-2 h-5 w-5 animate-spin" /> Saving
             </div>
-          ) : savingError ? (
+          ) : postMutation.isError ? (
             <div className="flex items-center text-destructive">
               <CloudOffIcon className="mr-2 h-5 w-5" /> Saving failed
             </div>
@@ -233,11 +201,11 @@ export function Editor({ post }: EditorProps) {
           <div className="h-10 border-l border-border"></div>
           <button
             type="submit"
-            disabled={isPublishing}
+            disabled={publishMutation.isLoading}
             className={cn(buttonVariants())}
             onClick={onPublishChange}
           >
-            {isPublishing && (
+            {publishMutation.isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
             <span>{post.state === "draft" ? "Publish" : "Unpublish"}</span>

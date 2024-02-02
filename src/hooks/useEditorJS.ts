@@ -4,14 +4,18 @@ import type EditorJS from "@editorjs/editorjs";
 import { OutputData } from "@editorjs/editorjs";
 import { useCallback } from "react";
 
-export function useEditorJS() {
+export function useEditorJS(
+  post: EditorProps["post"],
+  ref: React.MutableRefObject<EditorJS | undefined>,
+  saveBlocks: (blocks: OutputData) => void,
+) {
   const { edgestore } = useEdgeStore();
 
   return useCallback(
     async (
-      post: EditorProps["post"],
-      ref: React.MutableRefObject<EditorJS | undefined>,
-      saveBlocks: (blocks: OutputData) => void,
+      // post: EditorProps["post"],
+      // ref: React.MutableRefObject<EditorJS | undefined>,
+      // saveBlocks: (blocks: OutputData) => void,
     ) => {
       const EditorJS = (await import("@editorjs/editorjs")).default;
       const Header = (await import("@editorjs/header")).default;
@@ -101,6 +105,6 @@ export function useEditorJS() {
         });
       }
     },
-    [],
+    [post],
   );
 }
