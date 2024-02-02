@@ -301,9 +301,9 @@ export function Editor({ post }: EditorProps) {
         />
         <div id="editor"></div>
         <p className="text-sm text-gray-500">
-          Use{" "}
+          Press{" "}
           <kbd className="rounded-md border bg-muted px-1 text-xs uppercase">
-            Tab
+            /
           </kbd>{" "}
           to open the command menu.
         </p>

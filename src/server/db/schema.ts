@@ -62,12 +62,24 @@ export const posts = pgTable("post", {
   slug: text("slug").unique(),
   authorId: text("authorId").references(() => users.id),
   hideAuthor: boolean("hideAuthor").default(true).notNull(),
+  categoryId: text("categoryId").references(() => categories.id),
   title: text("title"),
   state: stateEnum("state").default("draft").notNull(),
   content: json("content"),
   image: text("image"),
   createdAt: timestamp("createdAt").defaultNow(),
 });
+
+export const postRelations = relations(posts, ({ one }) => ({
+  category: one(categories, {
+    fields: [posts.categoryId],
+    references: [categories.id],
+  }),
+  author: one(users, {
+    fields: [posts.authorId],
+    references: [users.id],
+  }),
+}));
 
 export const categories = pgTable("category", {
   id: text("id")
@@ -76,10 +88,10 @@ export const categories = pgTable("category", {
   name: text("name"),
 });
 
-export const postCategories = pgTable("postCategory", {
-  postId: text("postId").references(() => posts.id),
-  categoryId: text("categoryId").references(() => categories.id),
-});
+// export const postCategories = pgTable("postCategory", {
+//   postId: text("postId").references(() => posts.id),
+//   categoryId: text("categoryId").references(() => categories.id),
+// });
 
 export const comments = pgTable("comment", {
   id: text("id")
@@ -156,3 +168,4 @@ export const verificationTokens = pgTable(
 export type SelectUser = typeof users.$inferSelect;
 export type SelectZawhna = typeof zawhna.$inferSelect;
 export type SelectPost = typeof posts.$inferSelect;
+export type SelectCategory = typeof categories.$inferSelect;
