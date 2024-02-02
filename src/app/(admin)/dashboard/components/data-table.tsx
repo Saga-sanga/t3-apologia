@@ -28,25 +28,27 @@ import {
 import { useState } from "react";
 import { DataTableToolbar } from "./data-table-toolbar";
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData, TValue, TOpt extends string> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   columnFilterName: string;
-  facetedFilterColumn?: string;
+  facetedFilterColumns?: TOpt[];
   facetedFilterOptions?: {
-    label: string;
-    value: string;
-    icon?: React.ComponentType<{ className?: string }>;
-  }[];
+    [K in TOpt]: {
+      label: string;
+      value: string;
+      icon?: React.ComponentType<{ className?: string }>;
+    }[];
+  };
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData, TValue, TOpt extends string>({
   columns,
   data,
   columnFilterName,
-  facetedFilterColumn,
+  facetedFilterColumns,
   facetedFilterOptions,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData, TValue, TOpt>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -73,7 +75,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-4">
       <DataTableToolbar
-        facetedFilterColumn={facetedFilterColumn}
+        facetedFilterColumns={facetedFilterColumns}
         facetedFilterOptions={facetedFilterOptions}
         columnFilterName={columnFilterName}
         table={table}

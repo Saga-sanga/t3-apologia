@@ -10,18 +10,20 @@ import { DataTableViewOptions } from "./data-table-view-options";
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   columnFilterName: string;
-  facetedFilterColumn?: string;
+  facetedFilterColumns?: string[];
   facetedFilterOptions?: {
-    label: string;
-    value: string;
-    icon?: React.ComponentType<{ className?: string }>;
-  }[];
+    [x: string]: {
+      label: string;
+      value: string;
+      icon?: React.ComponentType<{ className?: string }>;
+    }[];
+  };
 }
 
 export function DataTableToolbar<TData>({
   table,
   columnFilterName,
-  facetedFilterColumn,
+  facetedFilterColumns,
   facetedFilterOptions,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -42,14 +44,18 @@ export function DataTableToolbar<TData>({
           }
           className="h-9 max-w-sm"
         />
-        {table.getColumn(facetedFilterColumn!) &&
-          facetedFilterOptions && (
-            <DataTableFacetedFilter
-              column={table.getColumn(facetedFilterColumn!)}
-              title={facetedFilterColumn}
-              options={facetedFilterOptions}
-            />
-          )}
+        {facetedFilterColumns?.map((facetedFilterColumn) => {
+          if (table.getColumn(facetedFilterColumn!) && facetedFilterOptions) {
+            return (
+              <DataTableFacetedFilter
+                column={table.getColumn(facetedFilterColumn!)}
+                title={facetedFilterColumn}
+                options={facetedFilterOptions[facetedFilterColumn]!}
+              />
+            );
+          }
+          return null;
+        })}
         {isFiltered && (
           <Button
             variant="ghost"

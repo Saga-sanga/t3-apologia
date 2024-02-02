@@ -13,8 +13,8 @@ export function QuestionDataTable({ data }: QuestionDataTableProps) {
     <DataTable
       columns={questionColumns}
       data={data}
-      facetedFilterColumn="status"
-      facetedFilterOptions={questionStatuses}
+      facetedFilterColumns={["status"]}
+      facetedFilterOptions={{ status: questionStatuses }}
       columnFilterName="question"
     />
   );

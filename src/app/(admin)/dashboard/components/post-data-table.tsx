@@ -3,7 +3,7 @@
 import { SelectPost } from "@/server/db/schema";
 import { DataTable } from "./data-table";
 import { postColumns } from "./post-columns";
-import { postStatuses } from "@/lib/data";
+import { postStatuses, questionStatuses } from "@/lib/data";
 
 type PostDataTableProps = {
   data: SelectPost[];
@@ -15,8 +15,8 @@ export function PostDataTable({ data }: PostDataTableProps) {
       columns={postColumns}
       data={data}
       columnFilterName="title"
-      facetedFilterColumn="state"
-      facetedFilterOptions={postStatuses}
+      facetedFilterColumns={["state"]}
+      facetedFilterOptions={{ state: postStatuses }}
     />
   );
 }
