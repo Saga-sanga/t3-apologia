@@ -105,6 +105,6 @@ export function useEditorJS(
         });
       }
     },
-    [post],
+    [],
   );
 }
