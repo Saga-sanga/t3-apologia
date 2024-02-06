@@ -23,6 +23,7 @@ const config = {
     "@typescript-eslint/prefer-nullish-coalescing": "warn",
     "@typescript-eslint/non-nullable-type-assertion-style": "warn",
     "@typescript-eslint/no-unsafe-assignment": "warn",
+    "@typescript-eslint/consistent-indexed-object-style": "warn",
 
     "@typescript-eslint/consistent-type-imports": [
       "warn",

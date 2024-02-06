@@ -44,11 +44,12 @@ export function DataTableToolbar<TData>({
           }
           className="h-9 max-w-sm"
         />
-        {facetedFilterColumns?.map((facetedFilterColumn) => {
-          if (table.getColumn(facetedFilterColumn!) && facetedFilterOptions) {
+        {facetedFilterColumns?.map((facetedFilterColumn, i) => {
+          if (table.getColumn(facetedFilterColumn) && facetedFilterOptions) {
             return (
               <DataTableFacetedFilter
-                column={table.getColumn(facetedFilterColumn!)}
+                key={i}
+                column={table.getColumn(facetedFilterColumn)}
                 title={facetedFilterColumn}
                 options={facetedFilterOptions[facetedFilterColumn]!}
               />

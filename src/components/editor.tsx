@@ -138,20 +138,30 @@ export function Editor({ post }: EditorProps) {
       setImageUrl(undefined);
     } catch (error) {
       console.log(error);
+      toast.error("Cannot Remove Image", {
+        description: "Please check your network status and try again",
+      });
     }
     setIsRemoving(false);
   };
 
   const handleChangeCover = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.currentTarget.files && e.currentTarget.files.length > 0) {
-      setIsLoadingImage(true);
-      const res = await edgestore.publicFiles.upload({
-        file: e.currentTarget.files[0]!,
-        options: {
-          replaceTargetUrl: imageUrl,
-        },
+    try {
+      if (e.currentTarget.files && e.currentTarget.files.length > 0) {
+        setIsLoadingImage(true);
+        const res = await edgestore.publicFiles.upload({
+          file: e.currentTarget.files[0]!,
+          options: {
+            replaceTargetUrl: imageUrl,
+          },
+        });
+        setImageUrl(res?.url);
+        setIsLoadingImage(false);
+      }
+    } catch (error) {
+      toast.error("Upload Error", {
+        description: "Cannot upload image, please try again.",
       });
-      setImageUrl(res?.url);
       setIsLoadingImage(false);
     }
   };

@@ -49,7 +49,7 @@ export default async function PostPage({ params }: PostPageProps) {
           )}
         </div>
       </div>
-      <div className="prose prose-lg xl:prose-xl prose-stone dark:prose-invert mx-auto w-full">
+      <div className="prose prose-lg xl:prose-xl prose-stone dark:prose-invert mx-auto w-full mb-20">
         <EditorTextParser data={post.content as OutputData} />
       </div>
     </main>
