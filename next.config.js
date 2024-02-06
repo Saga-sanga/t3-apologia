@@ -5,6 +5,17 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "files.edgestore.dev",
+        port: "",
+        pathname: "/dkzjv7kwa8kb38sv/**",
+      },
+    ],
+  },
+};
 
 export default config;
