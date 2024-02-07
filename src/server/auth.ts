@@ -69,6 +69,7 @@ export const authOptions: NextAuthOptions = {
   // @ts-expect-error - This is probably an error from the T3 config itself
   adapter: DrizzleAdapter(db),
   providers: [
+    // TODO: Imporve react email template design
     EmailProvider({
       from: env.RESEND_FROM,
       sendVerificationRequest: async ({ identifier, url, provider }) => {
