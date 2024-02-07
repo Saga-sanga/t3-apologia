@@ -19,11 +19,13 @@ import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 import { Icons } from "./icons";
 import { formSchema } from "@/lib/validators";
+import { useSearchParams } from "next/navigation";
 
 type Schema = z.infer<typeof formSchema>;
 
 export default function UserAuthForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const searchParams = useSearchParams();
 
   const form = useForm<Schema>({
     resolver: zodResolver(formSchema),
@@ -38,7 +40,7 @@ export default function UserAuthForm() {
     const signInResult = await signIn("email", {
       email: data.email.toLowerCase(),
       redirect: false,
-      callbackUrl: "/",
+      callbackUrl: searchParams?.get("from") || "/dashboard",
     });
 
     setIsLoading(false);
@@ -62,7 +64,7 @@ export default function UserAuthForm() {
   }
 
   return (
-    <div className="flex sm:w-80 flex-col space-y-6">
+    <div className="flex flex-col space-y-6 sm:w-80">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

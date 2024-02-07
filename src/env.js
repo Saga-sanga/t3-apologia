@@ -38,6 +38,8 @@ export const env = createEnv({
     S3_SECRET_ACCESS_KEY: z.string().optional(),
     EDGE_STORE_ACCESS_KEY: z.string(),
     EDGE_STORE_SECRET_KEY: z.string(),
+    RESEND_API_KEY: z.string(),
+    RESEND_FROM: z.string(),
   },
 
   /**
@@ -68,6 +70,8 @@ export const env = createEnv({
     S3_SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY,
     EDGE_STORE_ACCESS_KEY: process.env.EDGE_STORE_ACCESS_KEY,
     EDGE_STORE_SECRET_KEY: process.env.EDGE_STORE_SECRET_KEY,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    RESEND_FROM: process.env.RESEND_FROM,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
