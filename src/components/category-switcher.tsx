@@ -27,18 +27,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { SelectCategory } from "@/server/db/schema";
 import { api } from "@/trpc/react";
-import {
-  CheckIcon,
-  ChevronsUpDownIcon,
-  MoreHorizontalIcon,
-  PlusCircleIcon
-} from "lucide-react";
+import { CheckIcon, ChevronsUpDownIcon, PlusCircleIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { CategoryDrowdown } from "./category-dropdown";
+import { CategorySkeleton } from "./category-skeleton";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
@@ -139,22 +135,11 @@ export function CategorySwitcher({
                         />
                         {category.name}
                       </button>
-                      <Button
-                        variant="ghost"
-                        className="h-5 border border-transparent px-2 hover:border-border"
-                      >
-                        <span className="sr-only">Open menu</span>
-                        <MoreHorizontalIcon className="h-4 w-4" />
-                      </Button>
+                      <CategoryDrowdown />
                     </CommandItem>
                   ))
                 ) : (
-                  <div className="space-y-2 py-1">
-                    <Skeleton className="h-8" />
-                    <Skeleton className="h-8" />
-                    <Skeleton className="h-8" />
-                    <Skeleton className="h-8" />
-                  </div>
+                  <CategorySkeleton />
                 )}
               </CommandGroup>
             </CommandList>
@@ -167,6 +152,7 @@ export function CategorySwitcher({
                       setOpen(false);
                       setShowCategoryDialog(true);
                     }}
+                    className="cursor-pointer"
                   >
                     <PlusCircleIcon className="mr-2 h-5 w-5" /> Create Category
                   </CommandItem>

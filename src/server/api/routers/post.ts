@@ -39,7 +39,7 @@ export const postRouter = createTRPCRouter({
 
       await ctx.db
         .update(posts)
-        .set({ title, content, image: image ?? null })
+        .set({ title, content, image })
         .where(eq(posts.id, id));
     }),
 

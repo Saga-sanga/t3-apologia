@@ -24,7 +24,7 @@ import { ImageInput } from "./image-input";
 import { Button, buttonVariants } from "./ui/button";
 import { useDebounce } from "use-debounce";
 import { OutputData } from "@editorjs/editorjs";
-import { CategorySwitcher } from "@/app/(admin)/dashboard/components/category-switcher";
+import { CategorySwitcher } from "@/components/category-switcher";
 
 export interface EditorProps {
   post: Pick<
@@ -54,7 +54,6 @@ export function Editor({ post }: EditorProps) {
 
   useEffect(() => {
     const autoSaveTitleAndImage = () => {
-      console.log(imageUrl);
       postMutation.mutate(
         {
           id: post.id,
@@ -280,7 +279,7 @@ export function Editor({ post }: EditorProps) {
         <TextareaAutosize
           autoFocus
           id="title"
-          defaultValue={post.title ?? "Untitled Post"}
+          // defaultValue={post.title ?? "Untitled Post"}
           placeholder="Post title"
           name="title"
           value={title as string}
