@@ -24,9 +24,13 @@ import { ImageInput } from "./image-input";
 import { Button, buttonVariants } from "./ui/button";
 import { useDebounce } from "use-debounce";
 import { OutputData } from "@editorjs/editorjs";
+import { CategorySwitcher } from "@/app/(admin)/dashboard/components/category-switcher";
 
 export interface EditorProps {
-  post: Pick<SelectPost, "id" | "title" | "content" | "state" | "image">;
+  post: Pick<
+    SelectPost,
+    "id" | "title" | "content" | "state" | "image" | "categoryId"
+  >;
 }
 
 //TODO: Add category manager
@@ -116,13 +120,19 @@ export function Editor({ post }: EditorProps) {
   }
 
   const handleUploadCover = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.currentTarget.files && e.currentTarget.files.length > 0) {
-      setIsLoadingImage(true);
-      const res = await edgestore.publicFiles.upload({
-        file: e.currentTarget.files[0]!,
+    try {
+      if (e.currentTarget.files && e.currentTarget.files.length > 0) {
+        setIsLoadingImage(true);
+        const res = await edgestore.publicFiles.upload({
+          file: e.currentTarget.files[0]!,
+        });
+        setImageUrl(res?.url);
+        setIsLoadingImage(false);
+      }
+    } catch (error) {
+      toast.error("Upload error", {
+        description: "Failed to upload image. Please try again.",
       });
-      setImageUrl(res?.url);
-      setIsLoadingImage(false);
     }
   };
 
@@ -221,9 +231,23 @@ export function Editor({ post }: EditorProps) {
           </button>
         </div>
       </div>
-      <form className="prose prose-stone dark:prose-invert mx-auto w-[56rem] pt-6">
-        <div className="mb-8">
-          {!!imageUrl ? (
+      <form className="prose prose-stone mx-auto w-[56rem] pt-6 dark:prose-invert">
+        <div className="mb-8 flex flex-col space-y-2">
+          <div className="flex space-x-2">
+            {!imageUrl &&
+              (isLoadingImage ? (
+                <div className="flex items-center">
+                  <Icons.spinner className="mr-2 h-5 w-5 animate-spin" />
+                  Loading...
+                </div>
+              ) : (
+                <ImageInput onChange={handleUploadCover}>
+                  <ImageIcon className="mr-2 h-5 w-5" /> Add Cover
+                </ImageInput>
+              ))}
+            <CategorySwitcher categoryId={post.categoryId} />
+          </div>
+          {!!imageUrl && (
             <div className="group relative w-full">
               {(isRemoving || isLoadingImage) && (
                 <div className="absolute z-10 flex h-full w-full items-center justify-center bg-secondary/70">
@@ -239,7 +263,7 @@ export function Editor({ post }: EditorProps) {
                   disabled={isRemoving}
                   onClick={handleRemoveCover}
                   className="h-8"
-                  variant="secondary"
+                  variant="outline"
                 >
                   <XIcon className="mr-2 h-5 w-5" /> Remove
                 </Button>
@@ -251,19 +275,6 @@ export function Editor({ post }: EditorProps) {
                 alt="Cover Image"
               />
             </div>
-          ) : (
-            <>
-              {isLoadingImage ? (
-                <div className="flex items-center">
-                  <Icons.spinner className="mr-2 h-5 w-5 animate-spin" />
-                  Loading...
-                </div>
-              ) : (
-                <ImageInput onChange={handleUploadCover}>
-                  <ImageIcon className="mr-2 h-5 w-5" /> Add Cover
-                </ImageInput>
-              )}
-            </>
           )}
         </div>
         <TextareaAutosize

@@ -16,7 +16,7 @@ export function ImageInput({ children, onChange, disabled }: ImageInputProps) {
     <Label htmlFor="image">
       <div
         className={cn(
-          buttonVariants({ variant: "secondary" }),
+          buttonVariants({ variant: "outline" }),
           "h-8 cursor-pointer",
           {
             "pointer-events-none opacity-50": disabled,
