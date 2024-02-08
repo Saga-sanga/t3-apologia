@@ -280,7 +280,7 @@ export function Editor({ post }: EditorProps) {
           autoFocus
           id="title"
           // defaultValue={post.title ?? "Untitled Post"}
-          placeholder="Post title"
+        placeholder="Post title"
           name="title"
           value={title as string}
           onChange={(e) => setTitle(e.currentTarget.value)}
