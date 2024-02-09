@@ -30,11 +30,12 @@ import {
 import { cn } from "@/lib/utils";
 import { SelectCategory } from "@/server/db/schema";
 import { api } from "@/trpc/react";
-import { CheckIcon, ChevronsUpDownIcon, PlusCircleIcon } from "lucide-react";
+import { ChevronsUpDownIcon, PlusCircleIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { CategoryDrowdown } from "./category-dropdown";
+import { CategoryItem } from "./category-item";
 import { CategorySkeleton } from "./category-skeleton";
+import { Skeleton } from "./ui/skeleton";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
@@ -44,7 +45,6 @@ interface CategorySwitcherProps extends PopoverTriggerProps {
   categoryId: string | null;
 }
 
-// Figure out how to best fetch data
 export function CategorySwitcher({
   className,
   categoryId,
@@ -60,10 +60,11 @@ export function CategorySwitcher({
   const [selectedCategory, setSelectedCategory] = useState<SelectCategory>();
   const [name, setName] = useState<string>();
 
+  useEffect(() => console.log({ name }), [name]);
+
   useEffect(() => {
     if (categories.data) {
       const category = categories.data.find((ele) => ele.id === categoryId);
-      console.log({ category });
       setSelectedCategory(category);
     }
   }, [categories.data]);
@@ -98,16 +99,20 @@ export function CategorySwitcher({
     <Dialog open={showCategoryDialog} onOpenChange={setShowCategoryDialog}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            aria-label="Select category"
-            className={cn("h-8 w-[200px] justify-between", className)}
-          >
-            {selectedCategory ? selectedCategory.name : "Select category"}
-            <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
+          {categories.isLoading ? (
+            <Skeleton className="h-8 w-[200px]" />
+          ) : (
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              aria-label="Select category"
+              className={cn("h-8 w-[200px] justify-between", className)}
+            >
+              {selectedCategory ? selectedCategory.name : "Select category"}
+              <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          )}
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0">
           <Command>
@@ -117,26 +122,11 @@ export function CategorySwitcher({
               <CommandGroup>
                 {categories.data ? (
                   categories.data.map((category) => (
-                    <CommandItem
-                      key={category.id}
-                      className="flex justify-between"
-                    >
-                      <button
-                        className="flex w-full items-center"
-                        onClick={() => setSelectedCategory(category)}
-                      >
-                        <CheckIcon
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            selectedCategory?.id === category.id
-                              ? "opacity-100"
-                              : "opacity-0",
-                          )}
-                        />
-                        {category.name}
-                      </button>
-                      <CategoryDrowdown />
-                    </CommandItem>
+                    <CategoryItem
+                      category={category}
+                      selected={selectedCategory}
+                      setSelectedCategory={setSelectedCategory}
+                    />
                   ))
                 ) : (
                   <CategorySkeleton />
@@ -189,12 +179,12 @@ export function CategorySwitcher({
           <Button
             type="submit"
             onClick={handleSubmitCategory}
-            disabled={categoryMutation.isLoading}
+            disabled={categoryMutation.isLoading || name === ""}
           >
             {categoryMutation.isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Continue
+            Create
           </Button>
         </DialogFooter>
       </DialogContent>

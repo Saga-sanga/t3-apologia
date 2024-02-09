@@ -23,6 +23,20 @@ export const postRouter = createTRPCRouter({
       return data;
     }),
 
+  updateCategory: protectedProcedure
+    .input(
+      z.object({
+        categoryId: z.string(),
+        postId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { categoryId, postId } }) => {
+      await ctx.db
+        .update(posts)
+        .set({ categoryId })
+        .where(eq(posts.id, postId));
+    }),
+
   update: protectedProcedure
     .input(
       z.object({

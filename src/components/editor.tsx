@@ -34,6 +34,7 @@ export interface EditorProps {
 }
 
 //TODO: Add category manager
+//TODO: replace nestedList with List parser
 export function Editor({ post }: EditorProps) {
   const router = useRouter();
   const ref = useRef<EditorJS>();
@@ -235,7 +236,7 @@ export function Editor({ post }: EditorProps) {
           <div className="flex space-x-2">
             {!imageUrl &&
               (isLoadingImage ? (
-                <div className="flex items-center">
+                <div className="flex items-center px-4">
                   <Icons.spinner className="mr-2 h-5 w-5 animate-spin" />
                   Loading...
                 </div>
@@ -280,11 +281,11 @@ export function Editor({ post }: EditorProps) {
           autoFocus
           id="title"
           // defaultValue={post.title ?? "Untitled Post"}
-        placeholder="Post title"
+          placeholder="Post title"
           name="title"
           value={title as string}
           onChange={(e) => setTitle(e.currentTarget.value)}
-          className="w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none"
+          className="mb-5 w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none"
         />
         <div id="editor"></div>
         <p className="text-sm text-gray-500">
