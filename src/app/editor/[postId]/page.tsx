@@ -3,6 +3,8 @@ import { authOptions, getCurrentUser } from "@/server/auth";
 import { db } from "@/server/db";
 import { notFound, redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 interface EditorPageProps {
   params: {
     postId: string;

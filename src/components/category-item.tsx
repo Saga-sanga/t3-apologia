@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Input } from "./ui/input";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 type CategoryItemProps = {
   category: SelectCategory;
@@ -33,14 +33,20 @@ export function CategoryItem({
 
   const pathname = usePathname();
   const postId = pathname.split("/")[2];
+  const router = useRouter();
 
   const utils = api.useUtils();
   const editCategory = api.category.update.useMutation({
-    onError: () =>
+    onError: (e) => {
+      console.log(e.message);
       toast.error("Update Error", {
         description: "Cannot update category name. Please try again.",
-      }),
-    onSettled: () => utils.category.invalidate(),
+      });
+    },
+    onSettled: () => {
+      utils.category.invalidate();
+      router.refresh();
+    },
   });
   const updatePostCategory = api.post.updateCategory.useMutation();
 

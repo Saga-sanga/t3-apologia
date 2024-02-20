@@ -54,6 +54,10 @@ export function Editor({ post }: EditorProps) {
   const [debouncedTitle] = useDebounce(title, 750);
 
   useEffect(() => {
+    console.log({ post });
+  }, [post]);
+
+  useEffect(() => {
     const autoSaveTitleAndImage = () => {
       postMutation.mutate(
         {
