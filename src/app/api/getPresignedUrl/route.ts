@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { grenerateUploadURL } from "./s3";
 
 export async function GET(req: NextRequest) {
