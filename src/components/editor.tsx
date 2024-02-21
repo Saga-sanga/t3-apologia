@@ -33,8 +33,6 @@ export interface EditorProps {
   >;
 }
 
-//TODO: Add category manager
-//TODO: replace nestedList with List parser
 export function Editor({ post }: EditorProps) {
   const router = useRouter();
   const ref = useRef<EditorJS>();
