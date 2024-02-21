@@ -1,12 +1,11 @@
 "use client";
 
-import { SelectPost } from "@/server/db/schema";
+import { postStatuses } from "@/lib/data";
 import { DataTable } from "./data-table";
-import { postColumns } from "./post-columns";
-import { postStatuses, questionStatuses } from "@/lib/data";
+import { PostColumnDataType, postColumns } from "./post-columns";
 
 type PostDataTableProps = {
-  data: SelectPost[];
+  data: PostColumnDataType[];
 };
 
 export function PostDataTable({ data }: PostDataTableProps) {

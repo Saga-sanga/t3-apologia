@@ -2,14 +2,18 @@
 
 import { postStatuses } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { SelectPost } from "@/server/db/schema";
+import { SelectCategory, SelectPost } from "@/server/db/schema";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DateLocale } from "./date-locale";
 import { PostTableRowAction } from "./post-table-row-actions";
 
-export const postColumns: ColumnDef<SelectPost>[] = [
+export type PostColumnDataType = SelectPost & {
+  category: SelectCategory | null;
+};
+
+export const postColumns: ColumnDef<PostColumnDataType>[] = [
   {
     accessorKey: "state",
     header: () => <div className="">State</div>,
@@ -64,6 +68,13 @@ export const postColumns: ColumnDef<SelectPost>[] = [
         </div>
       );
     },
+  },
+  {
+    id: "category",
+    accessorFn: (column) => column.category?.name,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Category" />
+    ),
   },
   {
     accessorKey: "createdAt",
