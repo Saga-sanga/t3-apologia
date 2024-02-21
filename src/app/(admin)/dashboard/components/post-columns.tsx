@@ -75,6 +75,9 @@ export const postColumns: ColumnDef<PostColumnDataType>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Category" />
     ),
+    filterFn: (row, id, value: string[]) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "createdAt",

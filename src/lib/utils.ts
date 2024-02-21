@@ -32,3 +32,11 @@ export function formatTimestamp(timestamp: Date) {
   const formattedDate = `${month} ${formattedDay} ${year}`;
   return formattedDate;
 }
+
+export function capitaliseString(str: string | null) {
+  if (typeof str !== "string" || str.length === 0) {
+    return str;
+  }
+
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

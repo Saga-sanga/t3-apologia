@@ -3,7 +3,7 @@ import { db } from "@/server/db";
 import { DashboardHeader } from "../components/dashboard-header";
 import { PostDataTable } from "../components/post-data-table";
 import { desc } from "drizzle-orm";
-import { posts } from "@/server/db/schema";
+import { categories, posts } from "@/server/db/schema";
 export const dynamic = "force-dynamic";
 
 export default async function PostsPage() {
@@ -14,12 +14,16 @@ export default async function PostsPage() {
     orderBy: [desc(posts.createdAt)],
   });
 
+  const categoryList = await db.query.categories.findMany({
+    orderBy: [desc(categories.name)],
+  });
+
   return (
     <>
       <DashboardHeader heading="Posts" description="Create and manage posts">
         <PostCreateButton />
       </DashboardHeader>
-      <PostDataTable data={data} />
+      <PostDataTable data={data} categoryList={categoryList} />
     </>
   );
 }
