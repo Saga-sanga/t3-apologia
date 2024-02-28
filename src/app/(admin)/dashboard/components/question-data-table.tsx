@@ -1,7 +1,7 @@
 "use client";
 
 import { questionStatuses } from "@/lib/data";
-import { DataTable } from "./data-table";
+import { DataTable } from "../../../../components/data-table/data-table";
 import { QuestionColumnDataType, questionColumns } from "./question-columns";
 
 interface QuestionDataTableProps {

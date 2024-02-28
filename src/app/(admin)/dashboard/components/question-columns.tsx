@@ -1,22 +1,13 @@
 "use client";
 
-import { DataTableColumnHeader } from "@/app/(admin)/dashboard/components/data-table-column-header";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { questionStatuses } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { SelectUser, SelectZawhna } from "@/server/db/schema";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { format } from "timeago.js";
+import { QuestionTableRowActions } from "./question-table-row-actions";
 
 export type QuestionColumnDataType = SelectZawhna & {
   users: SelectUser | null;
@@ -68,7 +59,8 @@ export const questionColumns: ColumnDef<QuestionColumnDataType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex">
+        <div className="flex items-center space-x-2">
+          {/* <span className="h-2 w-2 rounded-full bg-blue-400"></span> */}
           <span className="max-w-[700px] truncate font-medium">
             {row.getValue("question")}
           </span>
@@ -93,29 +85,9 @@ export const questionColumns: ColumnDef<QuestionColumnDataType>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const obj = row.original;
+      const rowData = row.original;
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(obj.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <QuestionTableRowActions rowData={rowData}/>;
     },
     enableHiding: false,
     enableSorting: false,

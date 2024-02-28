@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 import { SelectCategory, SelectPost } from "@/server/db/schema";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
-import { DataTableColumnHeader } from "./data-table-column-header";
-import { DateLocale } from "./date-locale";
+import { DataTableColumnHeader } from "../../../../components/data-table/data-table-column-header";
+import { DateLocale } from "../../../../components/date-locale";
 import { PostTableRowAction } from "./post-table-row-actions";
 
 export type PostColumnDataType = SelectPost & {

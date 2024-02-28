@@ -1,7 +1,7 @@
 "use client";
 
 import { postStatuses } from "@/lib/data";
-import { DataTable } from "./data-table";
+import { DataTable } from "../../../../components/data-table/data-table";
 import { PostColumnDataType, postColumns } from "./post-columns";
 import { SelectCategory } from "@/server/db/schema";
 import { capitaliseString } from "@/lib/utils";
