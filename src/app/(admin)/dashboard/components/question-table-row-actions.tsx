@@ -3,15 +3,20 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ArrowUpRightFromSquare, MoreHorizontal } from "lucide-react";
-import { QuestionColumnDataType } from "./question-columns";
 import { api } from "@/trpc/react";
+import {
+  ArrowUpRightFromSquare,
+  HelpCircle,
+  Layers3Icon,
+  MoreHorizontal,
+  UserIcon,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { QuestionColumnDataType } from "./question-columns";
 
 interface QuestionTableRowActionsProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -21,11 +26,17 @@ interface QuestionTableRowActionsProps
 export function QuestionTableRowActions({
   rowData,
 }: QuestionTableRowActionsProps) {
+  const utils = api.useUtils();
   const router = useRouter();
   const createPost = api.post.create.useMutation();
+  const mutateQuestion = api.question.update.useMutation({
+    onSuccess: () => {
+      utils.question.invalidate();
+      router.refresh();
+    },
+  });
 
   const handleAnswer = () => {
-    console.log({ rowData });
     const promise = createPost.mutateAsync({
       title: rowData?.content ?? "Untitled Post",
     });
@@ -40,6 +51,18 @@ export function QuestionTableRowActions({
     });
   };
 
+  const handleSetDuplicate = () => {
+    mutateQuestion.mutate({
+      id: rowData.id,
+      status:
+        rowData.status === "unanswered"
+          ? "duplicate"
+          : rowData.status === "duplicate"
+            ? "unanswered"
+            : "unanswered",
+    });
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -49,13 +72,28 @@ export function QuestionTableRowActions({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
         <DropdownMenuItem onClick={handleAnswer}>
           <ArrowUpRightFromSquare className="mr-3 h-4 w-4" /> Answer
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>View user</DropdownMenuItem>
-        <DropdownMenuItem>Delete</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => router.push(`/user/${rowData.userId}`)}
+        >
+          <UserIcon className="mr-3 h-4 w-4" />
+          View user
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleSetDuplicate}>
+          {rowData.status === "unanswered" && (
+            <>
+              <Layers3Icon className="mr-3 h-4 w-4" /> Mark duplicate
+            </>
+          )}
+          {rowData.status === "duplicate" && (
+            <>
+              <HelpCircle className="mr-3 h-4 w-4" /> Mark unanswered
+            </>
+          )}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
