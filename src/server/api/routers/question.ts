@@ -29,5 +29,7 @@ export const questionRouter = createTRPCRouter({
         .update(zawhna)
         .set({ status, content })
         .where(eq(zawhna.id, id));
+
+      revalidatePath("/dashboard");
     }),
 });

@@ -68,7 +68,7 @@ export function CategoryItem({
         <button className="flex w-full items-center" onClick={handleChange}>
           <CheckIcon
             className={cn(
-              "mr-2 h-4 w-4",
+              "mr-2 h-4 w-4 shrink-0",
               selected?.id === category.id ? "opacity-100" : "opacity-0",
             )}
           />

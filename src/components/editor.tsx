@@ -3,7 +3,7 @@
 import { useEditorJS } from "@/hooks/useEditorJS";
 import { useEdgeStore } from "@/lib/edgestore";
 import { cn } from "@/lib/utils";
-import { SelectPost } from "@/server/db/schema";
+import type { SelectPost } from "@/server/db/schema";
 import { api } from "@/trpc/react";
 import type EditorJS from "@editorjs/editorjs";
 import {
@@ -23,7 +23,7 @@ import { Icons } from "./icons";
 import { ImageInput } from "./image-input";
 import { Button, buttonVariants } from "./ui/button";
 import { useDebounce } from "use-debounce";
-import { OutputData } from "@editorjs/editorjs";
+import type { OutputData } from "@editorjs/editorjs";
 import { CategorySwitcher } from "@/components/category-switcher";
 
 export interface EditorProps {
@@ -271,7 +271,6 @@ export function Editor({ post }: EditorProps) {
                 </Button>
               </div>
               <img
-                // fill
                 className="object-cover"
                 src={imageUrl}
                 alt="Cover Image"
@@ -285,7 +284,7 @@ export function Editor({ post }: EditorProps) {
           // defaultValue={post.title ?? "Untitled Post"}
           placeholder="Post title"
           name="title"
-          value={title as string}
+          value={title!}
           onChange={(e) => setTitle(e.currentTarget.value)}
           className="mb-5 w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none"
         />

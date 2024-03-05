@@ -9,6 +9,7 @@ import {
 import { api } from "@/trpc/react";
 import {
   ArrowUpRightFromSquare,
+  FileTextIcon,
   HelpCircle,
   Layers3Icon,
   MoreHorizontal,
@@ -72,28 +73,37 @@ export function QuestionTableRowActions({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={handleAnswer}>
-          <ArrowUpRightFromSquare className="mr-3 h-4 w-4" /> Answer
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        {rowData.status === "unanswered" && (
+          <DropdownMenuItem onClick={handleAnswer}>
+            <ArrowUpRightFromSquare className="mr-2 h-4 w-4" /> Answer
+          </DropdownMenuItem>
+        )}
+        {rowData.status === "answered" && (
+          <DropdownMenuItem onClick={() => router.push("/")}>
+            <FileTextIcon className="mr-2 h-4 w-4" /> View answer
+          </DropdownMenuItem>
+        )}
+        {rowData.status !== "duplicate" && <DropdownMenuSeparator />}
         <DropdownMenuItem
           onClick={() => router.push(`/user/${rowData.userId}`)}
         >
-          <UserIcon className="mr-3 h-4 w-4" />
+          <UserIcon className="mr-2 h-4 w-4" />
           View user
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleSetDuplicate}>
-          {rowData.status === "unanswered" && (
-            <>
-              <Layers3Icon className="mr-3 h-4 w-4" /> Mark duplicate
-            </>
-          )}
-          {rowData.status === "duplicate" && (
-            <>
-              <HelpCircle className="mr-3 h-4 w-4" /> Mark unanswered
-            </>
-          )}
-        </DropdownMenuItem>
+        {rowData.status !== "answered" && (
+          <DropdownMenuItem onClick={handleSetDuplicate}>
+            {rowData.status === "unanswered" && (
+              <>
+                <Layers3Icon className="mr-2 h-4 w-4" /> Mark duplicate
+              </>
+            )}
+            {rowData.status === "duplicate" && (
+              <>
+                <HelpCircle className="mr-2 h-4 w-4" /> Mark unanswered
+              </>
+            )}
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

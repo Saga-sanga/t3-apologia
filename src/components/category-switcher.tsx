@@ -112,7 +112,9 @@ export function CategorySwitcher({
               aria-label="Select category"
               className={cn("h-8 w-[200px] justify-between", className)}
             >
-              {selectedCategory ? selectedCategory.name : "Select category"}
+              <span className="truncate">
+                {selectedCategory ? selectedCategory.name : "Select category"}
+              </span>
               <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           )}
