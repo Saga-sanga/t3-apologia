@@ -9,11 +9,12 @@ import {
 import { api } from "@/trpc/react";
 import {
   ArrowUpRightFromSquare,
-  FileTextIcon,
   HelpCircle,
   Layers3Icon,
   MoreHorizontal,
+  Trash2Icon,
   UserIcon,
+  ViewIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -27,12 +28,20 @@ interface QuestionTableRowActionsProps
 export function QuestionTableRowActions({
   rowData,
 }: QuestionTableRowActionsProps) {
-  const utils = api.useUtils();
   const router = useRouter();
   const createPost = api.post.create.useMutation();
   const mutateQuestion = api.question.update.useMutation({
     onSuccess: () => {
-      utils.question.invalidate();
+      router.refresh();
+    },
+  });
+  const setAnswer = api.question.setAnswer.useMutation({
+    onSuccess: () => {
+      router.refresh();
+    },
+  });
+  const deleteQuestion = api.question.delete.useMutation({
+    onSuccess: () => {
       router.refresh();
     },
   });
@@ -44,7 +53,11 @@ export function QuestionTableRowActions({
 
     toast.promise(promise, {
       loading: "Creating...",
-      success: (data) => {
+      success: async (data) => {
+        setAnswer.mutate({
+          id: rowData.id,
+          answerId: data?.postId!,
+        });
         router.push(`editor/${data?.postId}`);
         return "Post has been created.";
       },
@@ -52,7 +65,7 @@ export function QuestionTableRowActions({
     });
   };
 
-  const handleSetDuplicate = () => {
+  const toggleStatus = () => {
     mutateQuestion.mutate({
       id: rowData.id,
       status:
@@ -61,6 +74,18 @@ export function QuestionTableRowActions({
           : rowData.status === "duplicate"
             ? "unanswered"
             : "unanswered",
+    });
+  };
+
+  const handleDelete = () => {
+    const promise = deleteQuestion.mutateAsync({ questionId: rowData.id });
+
+    toast.promise(promise, {
+      loading: "Deleting...",
+      success: (data) => {
+        return "Question deleted";
+      },
+      error: "Cannot delete question",
     });
   };
 
@@ -74,16 +99,23 @@ export function QuestionTableRowActions({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {rowData.status === "unanswered" && (
-          <DropdownMenuItem onClick={handleAnswer}>
-            <ArrowUpRightFromSquare className="mr-2 h-4 w-4" /> Answer
-          </DropdownMenuItem>
+          <>
+            <DropdownMenuItem onClick={handleAnswer}>
+              <ArrowUpRightFromSquare className="mr-2 h-4 w-4" /> Answer
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
         )}
-        {rowData.status === "answered" && (
-          <DropdownMenuItem onClick={() => router.push("/")}>
-            <FileTextIcon className="mr-2 h-4 w-4" /> View answer
-          </DropdownMenuItem>
+        {rowData.status === "answered" && rowData.answerId && (
+          <>
+            <DropdownMenuItem
+              onClick={() => router.push(`/editor/${rowData.answerId}`)}
+            >
+              <ViewIcon className="mr-2 h-4 w-4" /> View answer
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
         )}
-        {rowData.status !== "duplicate" && <DropdownMenuSeparator />}
         <DropdownMenuItem
           onClick={() => router.push(`/user/${rowData.userId}`)}
         >
@@ -91,7 +123,7 @@ export function QuestionTableRowActions({
           View user
         </DropdownMenuItem>
         {rowData.status !== "answered" && (
-          <DropdownMenuItem onClick={handleSetDuplicate}>
+          <DropdownMenuItem onClick={toggleStatus}>
             {rowData.status === "unanswered" && (
               <>
                 <Layers3Icon className="mr-2 h-4 w-4" /> Mark duplicate
@@ -104,6 +136,12 @@ export function QuestionTableRowActions({
             )}
           </DropdownMenuItem>
         )}
+        <DropdownMenuItem
+          className="text-destructive focus:text-destructive"
+          onClick={() => deleteQuestion.mutate({ questionId: rowData.id })}
+        >
+          <Trash2Icon className="mr-2 h-4 w-4" /> Delete
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

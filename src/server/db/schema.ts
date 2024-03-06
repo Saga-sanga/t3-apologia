@@ -40,7 +40,7 @@ export const zawhna = pgTable("zawhna", {
   id: text("id")
     .$default(() => uuidv4())
     .primaryKey(),
-  answerId: text("answerId").references((): AnyPgColumn => posts.id),
+  answerId: text("answerId").references((): AnyPgColumn => posts.id, {onDelete: "set null"}),
   content: text("content"),
   userId: text("userId").references(() => users.id, { onDelete: "cascade" }),
   createdAt: timestamp("createdAt").defaultNow(),

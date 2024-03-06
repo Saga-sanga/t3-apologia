@@ -32,4 +32,25 @@ export const questionRouter = createTRPCRouter({
 
       revalidatePath("/dashboard");
     }),
+  setAnswer: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        answerId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { id, answerId } }) => {
+      await ctx.db
+        .update(zawhna)
+        .set({ status: "answered", answerId })
+        .where(eq(zawhna.id, id));
+
+      revalidatePath("/dashboard");
+    }),
+  delete: protectedProcedure
+    .input(z.object({ questionId: z.string() }))
+    .mutation(async ({ ctx, input: { questionId } }) => {
+      await ctx.db.delete(zawhna).where(eq(zawhna.id, questionId));
+      revalidatePath("/dashboard");
+    }),
 });
