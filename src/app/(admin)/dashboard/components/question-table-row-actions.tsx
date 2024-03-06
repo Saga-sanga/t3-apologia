@@ -136,6 +136,7 @@ export function QuestionTableRowActions({
             )}
           </DropdownMenuItem>
         )}
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           className="text-destructive focus:text-destructive"
           onClick={() => deleteQuestion.mutate({ questionId: rowData.id })}

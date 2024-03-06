@@ -21,12 +21,14 @@ type CategoryItemProps = {
       | undefined
     >
   >;
+  runCommand(command: () => unknown): void;
 };
 
 export function CategoryItem({
   category,
   selected,
   setSelectedCategory,
+  runCommand,
 }: CategoryItemProps) {
   const [editing, setEditing] = useState(false);
   const [content, setContent] = useState(category.name ?? undefined);
@@ -63,9 +65,12 @@ export function CategoryItem({
   };
 
   return (
-    <CommandItem key={category.id} className="flex justify-between">
+    <CommandItem className="flex justify-between">
       {!editing ? (
-        <button className="flex w-full items-center" onClick={handleChange}>
+        <button
+          className="flex w-full items-center text-left"
+          onClick={() => runCommand(handleChange)}
+        >
           <CheckIcon
             className={cn(
               "mr-2 h-4 w-4 shrink-0",

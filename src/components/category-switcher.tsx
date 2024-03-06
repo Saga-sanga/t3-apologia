@@ -31,7 +31,7 @@ import { cn } from "@/lib/utils";
 import { SelectCategory } from "@/server/db/schema";
 import { api } from "@/trpc/react";
 import { ChevronsUpDownIcon, PlusCircleIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { CategoryItem } from "./category-item";
 import { CategorySkeleton } from "./category-skeleton";
@@ -98,6 +98,11 @@ export function CategorySwitcher({
     }
   };
 
+  const runCommand = useCallback((command: () => unknown) => {
+    setOpen(false);
+    command();
+  },[])
+
   return (
     <Dialog open={showCategoryDialog} onOpenChange={setShowCategoryDialog}>
       <Popover open={open} onOpenChange={setOpen}>
@@ -119,7 +124,7 @@ export function CategorySwitcher({
             </Button>
           )}
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
+        <PopoverContent className="w-[220px] p-0">
           <Command>
             <CommandList>
               <CommandInput placeholder="Search category..." />
@@ -132,6 +137,7 @@ export function CategorySwitcher({
                       category={category}
                       selected={selectedCategory}
                       setSelectedCategory={setSelectedCategory}
+                      runCommand={runCommand}
                     />
                   ))
                 ) : (

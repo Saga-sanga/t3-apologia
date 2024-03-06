@@ -25,6 +25,7 @@ import { Button, buttonVariants } from "./ui/button";
 import { useDebounce } from "use-debounce";
 import type { OutputData } from "@editorjs/editorjs";
 import { CategorySwitcher } from "@/components/category-switcher";
+import { QuestionSelector } from "./question-selector";
 
 export interface EditorProps {
   post: Pick<
@@ -248,6 +249,7 @@ export function Editor({ post }: EditorProps) {
                 </ImageInput>
               ))}
             <CategorySwitcher categoryId={post.categoryId} />
+            <QuestionSelector />
           </div>
           {!!imageUrl && (
             <div className="group relative w-full">
@@ -270,18 +272,13 @@ export function Editor({ post }: EditorProps) {
                   <XIcon className="mr-2 h-5 w-5" /> Remove
                 </Button>
               </div>
-              <img
-                className="object-cover"
-                src={imageUrl}
-                alt="Cover Image"
-              />
+              <img className="object-cover" src={imageUrl} alt="Cover Image" />
             </div>
           )}
         </div>
         <TextareaAutosize
           autoFocus
           id="title"
-          // defaultValue={post.title ?? "Untitled Post"}
           placeholder="Post title"
           name="title"
           value={title!}
