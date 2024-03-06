@@ -40,7 +40,9 @@ export const zawhna = pgTable("zawhna", {
   id: text("id")
     .$default(() => uuidv4())
     .primaryKey(),
-  answerId: text("answerId").references((): AnyPgColumn => posts.id, {onDelete: "set null"}),
+  answerId: text("answerId").references((): AnyPgColumn => posts.id, {
+    onDelete: "set null",
+  }),
   content: text("content"),
   userId: text("userId").references(() => users.id, { onDelete: "cascade" }),
   createdAt: timestamp("createdAt").defaultNow(),
@@ -62,9 +64,14 @@ export const posts = pgTable("post", {
   slug: text("slug").unique(),
   authorId: text("authorId").references(() => users.id),
   hideAuthor: boolean("hideAuthor").default(true).notNull(),
-  categoryId: text("categoryId").references(() => categories.id),
+  categoryId: text("categoryId").references(() => categories.id, {
+    onDelete: "set null",
+  }),
   title: text("title"),
   state: stateEnum("state").default("draft").notNull(),
+  questionId: text("questionId").references(() => zawhna.id, {
+    onDelete: "set null",
+  }),
   content: json("content"),
   image: text("image"),
   createdAt: timestamp("createdAt").defaultNow(),
@@ -78,6 +85,10 @@ export const postRelations = relations(posts, ({ one }) => ({
   author: one(users, {
     fields: [posts.authorId],
     references: [users.id],
+  }),
+  zawhna: one(zawhna, {
+    fields: [posts.questionId],
+    references: [zawhna.id],
   }),
 }));
 

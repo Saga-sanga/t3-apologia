@@ -4,7 +4,7 @@ import { db } from "@/server/db";
 import { notFound, redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
-
+// TODO: Fix caching
 interface EditorPageProps {
   params: {
     postId: string;
@@ -35,6 +35,7 @@ export default async function EditorPage({ params }: EditorPageProps) {
         state: post.state,
         image: post.image,
         categoryId: post.categoryId,
+        questionId: post.questionId
       }}
     />
   );

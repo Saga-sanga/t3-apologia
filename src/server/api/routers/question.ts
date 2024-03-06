@@ -2,9 +2,20 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { zawhna } from "@/server/db/schema";
 import { revalidatePath } from "next/cache";
-import { eq } from "drizzle-orm";
+import { desc, eq, ne } from "drizzle-orm";
 
 export const questionRouter = createTRPCRouter({
+  get: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.query.zawhna.findMany({
+      orderBy: [desc(zawhna.content)],
+    });
+  }),
+  getNotDuplicate: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.query.zawhna.findMany({
+      orderBy: [desc(zawhna.content)],
+      where: ne(zawhna.status, "duplicate"),
+    });
+  }),
   create: protectedProcedure
     .input(z.object({ question: z.string() }))
     .mutation(async ({ ctx, input: { question } }) => {
@@ -20,7 +31,7 @@ export const questionRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        status: z.enum(["unanswered", "duplicate"]),
+        status: z.enum(["unanswered", "duplicate"]).optional(),
         content: z.string().optional(),
       }),
     )

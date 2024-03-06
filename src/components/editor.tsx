@@ -30,7 +30,7 @@ import { QuestionSelector } from "./question-selector";
 export interface EditorProps {
   post: Pick<
     SelectPost,
-    "id" | "title" | "content" | "state" | "image" | "categoryId"
+    "id" | "title" | "content" | "state" | "image" | "categoryId" | "questionId"
   >;
 }
 
@@ -249,7 +249,7 @@ export function Editor({ post }: EditorProps) {
                 </ImageInput>
               ))}
             <CategorySwitcher categoryId={post.categoryId} />
-            <QuestionSelector />
+            <QuestionSelector questionId={post.questionId}/>
           </div>
           {!!imageUrl && (
             <div className="group relative w-full">

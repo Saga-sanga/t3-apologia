@@ -101,7 +101,7 @@ export function CategorySwitcher({
   const runCommand = useCallback((command: () => unknown) => {
     setOpen(false);
     command();
-  },[])
+  }, []);
 
   return (
     <Dialog open={showCategoryDialog} onOpenChange={setShowCategoryDialog}>
@@ -115,7 +115,10 @@ export function CategorySwitcher({
               role="combobox"
               aria-expanded={open}
               aria-label="Select category"
-              className={cn("h-8 w-[200px] justify-between", className)}
+              className={cn(
+                "h-8 w-[200px] shrink-0 justify-between",
+                className,
+              )}
             >
               <span className="truncate">
                 {selectedCategory ? selectedCategory.name : "Select category"}

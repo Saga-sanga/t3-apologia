@@ -7,6 +7,7 @@ import {
 } from "@/server/api/trpc";
 import { posts } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export const postRouter = createTRPCRouter({
   create: protectedProcedure
@@ -44,18 +45,23 @@ export const postRouter = createTRPCRouter({
         title: z.string().optional(),
         content: z.record(z.any()).optional(),
         image: z.string().optional(),
+        questionId: z.string().optional(),
       }),
     )
-    .mutation(async ({ ctx, input: { title, content, image, id } }) => {
-      if (title === "") {
-        title = "Untitled";
-      }
+    .mutation(
+      async ({ ctx, input: { title, content, image, id, questionId } }) => {
+        if (title === "") {
+          title = "Untitled";
+        }
 
-      await ctx.db
-        .update(posts)
-        .set({ title, content, image })
-        .where(eq(posts.id, id));
-    }),
+        await ctx.db
+          .update(posts)
+          .set({ title, content, image, questionId })
+          .where(eq(posts.id, id));
+
+        revalidatePath("/dashboard/posts");
+      },
+    ),
 
   changeState: protectedProcedure
     .input(z.object({ id: z.string(), state: z.enum(["published", "draft"]) }))
