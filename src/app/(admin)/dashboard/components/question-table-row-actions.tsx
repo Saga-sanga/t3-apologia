@@ -54,12 +54,15 @@ export function QuestionTableRowActions({
     toast.promise(promise, {
       loading: "Creating...",
       success: async (data) => {
-        setAnswer.mutate({
-          id: rowData.id,
-          answerId: data?.postId!,
-        });
-        router.push(`editor/${data?.postId}`);
-        return "Post has been created.";
+        if (data) {
+          setAnswer.mutate({
+            id: rowData.id,
+            answerId: data?.postId,
+          });
+          router.push(`editor/${data?.postId}`);
+          return "Post has been created.";
+        }
+        return "Data not returned";
       },
       error: "Error creating post",
     });
