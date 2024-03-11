@@ -7,9 +7,16 @@ import { api } from "@/trpc/server";
 import { desc, eq } from "drizzle-orm";
 
 export default async function Home() {
-  const session = await getServerAuthSession();
+  // const session = await getServerAuthSession();
 
   const postsData = await db.query.posts.findMany({
+    columns: {
+      id: true,
+      title: true,
+      description: true,
+      image: true,
+      createdAt: true,
+    },
     where: eq(posts.state, "published"),
     orderBy: [desc(posts.createdAt)],
     with: {

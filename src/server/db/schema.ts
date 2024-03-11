@@ -68,6 +68,7 @@ export const posts = pgTable("post", {
     onDelete: "set null",
   }),
   title: text("title"),
+  description: text("description"),
   state: stateEnum("state").default("draft").notNull(),
   questionId: text("questionId").references(() => zawhna.id, {
     onDelete: "set null",

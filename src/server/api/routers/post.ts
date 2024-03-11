@@ -44,19 +44,24 @@ export const postRouter = createTRPCRouter({
         id: z.string(),
         title: z.string().optional(),
         content: z.record(z.any()).optional(),
+        description: z.string().optional(),
         image: z.string().optional(),
         questionId: z.string().optional(),
       }),
     )
     .mutation(
-      async ({ ctx, input: { title, content, image, id, questionId } }) => {
+      async ({
+        ctx,
+        input: { title, description, content, image, id, questionId },
+      }) => {
         if (title === "") {
           title = "Untitled";
         }
+        console.log({ description });
 
         await ctx.db
           .update(posts)
-          .set({ title, content, image, questionId })
+          .set({ title, description, content, image, questionId })
           .where(eq(posts.id, id));
 
         revalidatePath("/dashboard/posts");

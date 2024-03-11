@@ -30,7 +30,14 @@ import { QuestionSelector } from "./question-selector";
 export interface EditorProps {
   post: Pick<
     SelectPost,
-    "id" | "title" | "content" | "state" | "image" | "categoryId" | "questionId"
+    | "id"
+    | "title"
+    | "content"
+    | "state"
+    | "image"
+    | "categoryId"
+    | "questionId"
+    | "description"
   >;
 }
 
@@ -47,13 +54,15 @@ export function Editor({ post }: EditorProps) {
     post.image ?? undefined,
   );
   const [title, setTitle] = useState(post.title);
+  const [description, setDescription] = useState(post.description ?? "");
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
 
   const [debouncedTitle] = useDebounce(title, 750);
+  const [debouncedDescription] = useDebounce(description, 750)
 
   useEffect(() => {
-    console.log({ post });
+    console.log(post)
   }, [post]);
 
   useEffect(() => {
@@ -62,6 +71,7 @@ export function Editor({ post }: EditorProps) {
         {
           id: post.id,
           title: debouncedTitle!,
+          description: debouncedDescription!,
           image: imageUrl,
         },
         {
@@ -78,7 +88,7 @@ export function Editor({ post }: EditorProps) {
       );
     };
     autoSaveTitleAndImage();
-  }, [debouncedTitle, imageUrl]);
+  }, [debouncedTitle, debouncedDescription, imageUrl]);
 
   const saveBlocks = (blocks: OutputData) => {
     postMutation.mutate(
@@ -249,7 +259,7 @@ export function Editor({ post }: EditorProps) {
                 </ImageInput>
               ))}
             <CategorySwitcher categoryId={post.categoryId} />
-            <QuestionSelector questionId={post.questionId}/>
+            <QuestionSelector questionId={post.questionId} />
           </div>
           {!!imageUrl && (
             <div className="group relative w-full">
@@ -284,6 +294,14 @@ export function Editor({ post }: EditorProps) {
           value={title!}
           onChange={(e) => setTitle(e.currentTarget.value)}
           className="mb-5 w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none"
+        />
+        <TextareaAutosize
+          id="description"
+          placeholder="Add post description..."
+          name="description"
+          value={description!}
+          onChange={(e) => setDescription(e.currentTarget.value)}
+          className="w-full resize-none mb-5 appearance-none overflow-hidden text-2xl focus:outline-none"
         />
         <div id="editor"></div>
         <p className="text-sm text-gray-500">

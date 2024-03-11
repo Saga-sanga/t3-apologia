@@ -35,7 +35,8 @@ export default async function EditorPage({ params }: EditorPageProps) {
         state: post.state,
         image: post.image,
         categoryId: post.categoryId,
-        questionId: post.questionId
+        questionId: post.questionId,
+        description: post.description,
       }}
     />
   );

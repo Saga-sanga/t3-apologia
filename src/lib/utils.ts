@@ -40,3 +40,10 @@ export function capitaliseString(str: string | null) {
 
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+export function checkIfDayPast(time: Date) {
+  const currentDate = new Date();
+  const diffInMilliseconds = currentDate.getTime() - time.getTime();
+  const diffInHr = diffInMilliseconds / (1000 * 60 * 60);
+  return diffInHr >= 24;
+}
