@@ -13,15 +13,24 @@ type PageNavProps = {
 
 export function PageNav({ user }: PageNavProps) {
   const path = usePathname();
+  const active = "text-primary hover:text-primary";
 
   return (
-    <div>
+    <div className="flex items-center text-sm font-semibold">
+      <Link
+        className={cn(
+          buttonVariants({ variant: "ghost" }),
+          path === "/" && active,
+        )}
+        href="/"
+      >
+        Home
+      </Link>
       {(user?.role === "writer" || user?.role === "admin") && (
         <Link
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "text-sm font-semibold",
-            path.includes("/dashboard") && "text-primary hover:text-primary",
+            path.includes("/dashboard") && active,
           )}
           href="/dashboard"
         >

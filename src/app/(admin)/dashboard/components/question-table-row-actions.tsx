@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +19,19 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { QuestionColumnDataType } from "./question-columns";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import { cn } from "@/lib/utils";
+import { Icons } from "@/components/icons";
 
 interface QuestionTableRowActionsProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,6 +41,8 @@ interface QuestionTableRowActionsProps
 export function QuestionTableRowActions({
   rowData,
 }: QuestionTableRowActionsProps) {
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const createPost = api.post.create.useMutation();
   const mutateQuestion = api.question.update.useMutation({
@@ -81,72 +96,111 @@ export function QuestionTableRowActions({
   };
 
   const handleDelete = () => {
-    const promise = deleteQuestion.mutateAsync({ questionId: rowData.id });
-
-    toast.promise(promise, {
-      loading: "Deleting...",
-      success: (data) => {
-        return "Question deleted";
+    deleteQuestion.mutate(
+      { questionId: rowData.id },
+      {
+        onSuccess: () => {
+          setShowDeleteAlert(false);
+          router.refresh();
+          toast.success("Question deleted successfully");
+        },
+        onError: () => {
+          toast.error("Something went wrong.", {
+            description: "Your post could not be deleted. Please try again.",
+          });
+        },
       },
-      error: "Cannot delete question",
-    });
+    );
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
-          <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {rowData.status === "unanswered" && (
-          <>
-            <DropdownMenuItem onClick={handleAnswer}>
-              <ArrowUpRightFromSquare className="mr-2 h-4 w-4" /> Answer
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-          </>
-        )}
-        {rowData.status === "answered" && rowData.answerId && (
-          <>
-            <DropdownMenuItem
-              onClick={() => router.push(`/editor/${rowData.answerId}`)}
-            >
-              <ViewIcon className="mr-2 h-4 w-4" /> View answer
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-          </>
-        )}
-        <DropdownMenuItem
-          onClick={() => router.push(`/user/${rowData.userId}`)}
-        >
-          <UserIcon className="mr-2 h-4 w-4" />
-          View user
-        </DropdownMenuItem>
-        {rowData.status !== "answered" && (
-          <DropdownMenuItem onClick={toggleStatus}>
-            {rowData.status === "unanswered" && (
-              <>
-                <Layers3Icon className="mr-2 h-4 w-4" /> Mark duplicate
-              </>
-            )}
-            {rowData.status === "duplicate" && (
-              <>
-                <HelpCircle className="mr-2 h-4 w-4" /> Mark unanswered
-              </>
-            )}
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {rowData.status === "unanswered" && (
+            <>
+              <DropdownMenuItem onClick={handleAnswer}>
+                <ArrowUpRightFromSquare className="mr-2 h-4 w-4" /> Answer
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
+          {rowData.status === "answered" && rowData.answerId && (
+            <>
+              <DropdownMenuItem
+                onClick={() => router.push(`/editor/${rowData.answerId}`)}
+              >
+                <ViewIcon className="mr-2 h-4 w-4" /> View answer
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
+          <DropdownMenuItem
+            onClick={() => router.push(`/user/${rowData.userId}`)}
+          >
+            <UserIcon className="mr-2 h-4 w-4" />
+            View user
           </DropdownMenuItem>
-        )}
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="text-destructive focus:text-destructive"
-          onClick={() => deleteQuestion.mutate({ questionId: rowData.id })}
-        >
-          <Trash2Icon className="mr-2 h-4 w-4" /> Delete
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          {rowData.status !== "answered" && (
+            <DropdownMenuItem onClick={toggleStatus}>
+              {rowData.status === "unanswered" && (
+                <>
+                  <Layers3Icon className="mr-2 h-4 w-4" /> Mark duplicate
+                </>
+              )}
+              {rowData.status === "duplicate" && (
+                <>
+                  <HelpCircle className="mr-2 h-4 w-4" /> Mark unanswered
+                </>
+              )}
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="text-destructive focus:text-destructive"
+            onClick={() => setShowDeleteAlert(true)}
+          >
+            <Trash2Icon className="mr-2 h-4 w-4" /> Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Are you sure you want to delete this question?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Deleting user questions is not recommended as they can no longer
+              keep track of their questions. This action cannot be undone!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(event) => {
+                event.preventDefault();
+                handleDelete();
+              }}
+              className={cn(buttonVariants({ variant: "destructive" }))}
+              disabled={deleteQuestion.isLoading}
+            >
+              {deleteQuestion.isLoading ? (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Trash2Icon className="mr-2 h-4 w-4" />
+              )}
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
