@@ -8,26 +8,23 @@ export default async function WelcomeLayout({
 }) {
   const session = await getServerAuthSession();
 
-  console.log({ session });
-
-  // if (!session) {
-  //   redirect("/");
-  // }
+  if (!session) {
+    redirect("/");
+  }
 
   return (
     <main className="flex min-h-screen items-center bg-accent">
       <article className="mx-auto w-full space-y-12 py-16 sm:max-w-xl">
-        <div className="mx-auto w-full px-4 sm:max-w-lg">
+        <div className="mx-auto w-full px-6 sm:max-w-lg">
           <header className="w-full">
             <h1 className="mb-3 text-3xl font-semibold tracking-wide">
               Welcome to Mizo Apologia
             </h1>
             <p className="text-sm text-muted-foreground">
-              We would like to know a little more about you to setup your
-              profile.
+              I profile siam nan I chanchin tlem kanlo zawt lawk a che.
             </p>
             <p className="text-sm text-muted-foreground">
-              You'll be able to change these later.
+              Henghi nakinah i duh chuan i thlak leh vek thei.
             </p>
           </header>
           <div className="mt-6 space-y-2">
@@ -36,7 +33,7 @@ export default async function WelcomeLayout({
             </p>
             <div className="flex space-x-2">
               <div className="h-1 w-full rounded-[1px] bg-primary"></div>
-              <div className="h-1 w-full rounded-[1px] bg-muted"></div>
+              <div className="h-1 w-full rounded-[1px] bg-primary/25"></div>
             </div>
           </div>
         </div>

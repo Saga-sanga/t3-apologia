@@ -9,6 +9,7 @@ export default async function WelcomePage() {
   if (!user) {
     notFound();
   }
+
   return (
     <Card>
       <CardContent className="pt-6">
