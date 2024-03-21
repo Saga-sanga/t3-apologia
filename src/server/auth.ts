@@ -28,12 +28,13 @@ declare module "next-auth" {
     user: {
       id: string;
       role: string;
+      completedOnboarding: boolean;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
   }
 
-  // interface User {
+  // interface User extends DefaultUser {
   //   // ...other properties
   //   // role: UserRole;
   // }
@@ -48,7 +49,20 @@ const resend = new Resend(env.RESEND_API_KEY);
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
+    signIn: async ({ user }) => {
+      const userInfo = await db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.id, user.id),
+      });
+
+      // Redirect to user onboarding page `/welcome` if onboarding is not completed
+      // if (!userInfo?.completedOnboarding) {
+      //   return "/welcome";
+      // }
+
+      return true;
+    },
     session: async ({ session, user }) => {
+      // Add users id and role info in session object
       const userDbInfo = await db.query.users.findFirst({
         where: (users, { eq }) => eq(users.id, user.id),
       });
@@ -59,12 +73,14 @@ export const authOptions: NextAuthOptions = {
           ...session.user,
           id: user.id,
           role: userDbInfo?.role,
+          completedOnboarding: userDbInfo?.completedOnboarding,
         },
       };
     },
   },
   pages: {
     signIn: "/login",
+    error: "/login",
   },
   // @ts-expect-error - This is probably an error from the T3 config itself
   adapter: DrizzleAdapter(db),

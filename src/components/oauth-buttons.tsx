@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
 import { signIn } from "next-auth/react";
-import { FacebookIcon } from "lucide-react";
+import { Facebook } from "lucide-react";
 
 type OauthProps = {
   isLoading: boolean;
@@ -12,13 +12,15 @@ type OauthProps = {
 };
 
 export default function OAuthButtons({ isLoading, setIsLoading }: OauthProps) {
+  function handleOAuth(provider: "facebook" | "google") {
+    setIsLoading(true);
+    signIn(provider, { callbackUrl: "/" });
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <Button
-        onClick={() => {
-          setIsLoading(true);
-          signIn("facebook", { callbackUrl: "/" });
-        }}
+        onClick={() => handleOAuth("facebook")}
         disabled={isLoading}
         size="lg"
         variant="outline"
@@ -26,15 +28,12 @@ export default function OAuthButtons({ isLoading, setIsLoading }: OauthProps) {
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <FacebookIcon className="mr-2 h-4 w-4" />
+          <Facebook className="mr-2 h-4 w-4" />
         )}
         Facebook
       </Button>
       <Button
-        onClick={() => {
-          setIsLoading(true);
-          signIn("google", { callbackUrl: "/" });
-        }}
+        onClick={() => handleOAuth("google")}
         disabled={isLoading}
         size="lg"
         variant="outline"
