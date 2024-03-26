@@ -33,7 +33,6 @@ export const welcomeFormSchema = z.object({
           )}`,
         );
         const { result } = (await res.json()) as UserNameResponse;
-        console.log(result.data.json);
         return !result.data.json;
       },
       {

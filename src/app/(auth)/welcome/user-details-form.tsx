@@ -1,4 +1,6 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -9,12 +11,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { welcomeFormSchema } from "@/lib/validators";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -22,8 +23,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import { welcomeFormSchema } from "@/lib/validators";
 import { SelectUser } from "@/server/db/schema";
-import { api } from "@/trpc/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { ArrowRight, CalendarIcon } from "lucide-react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 type UserDetailsFormProps = {
   user: Pick<SelectUser, "id" | "name">;
@@ -35,17 +44,17 @@ export function UserDetailsForm({ user }: UserDetailsFormProps) {
     defaultValues: {
       username: "",
       name: user.name ?? "",
+      profession: "",
     },
     mode: "onBlur",
   });
 
-  const { data } = api.user.checkIfUsernameExists.useQuery({
-    username: "hello",
-  });
-
-  console.log({ data });
+  useEffect(() => {
+    console.log(form.formState.errors);
+  }, [form.formState]);
 
   function onSubmit(formData: z.infer<typeof welcomeFormSchema>) {
+    toast.success(JSON.stringify(formData));
     console.log({ formData });
   }
 
@@ -75,6 +84,46 @@ export function UserDetailsForm({ user }: UserDetailsFormProps) {
                 <FormControl>
                   <Input placeholder="Zirsangzela Khiangte" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="dob"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Date of birth</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground",
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4 opacity-50" />
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date("1900-01-01")
+                      }
+                    />
+                  </PopoverContent>
+                </Popover>
                 <FormMessage />
               </FormItem>
             )}
@@ -120,7 +169,7 @@ export function UserDetailsForm({ user }: UserDetailsFormProps) {
             )}
           />
         </div>
-        <Button className="w-full">
+        <Button type="submit" className="w-full">
           Next Step <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </form>
