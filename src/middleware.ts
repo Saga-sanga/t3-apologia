@@ -30,27 +30,29 @@ export const config = {
 };
 
 export default async function middleware(req: NextRequest) {
-  const nextAuthReq = {
-    headers: {
-      cookie: req.headers.get("cookie") ?? undefined,
-    },
-  };
-
-  const session = (await getSession({ req: nextAuthReq })) as Session;
-
-  // const resSession = await fetch(
-  //   process.env.NEXTAUTH_URL + "/api/auth/session",
-  //   {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Cookie: req.headers.get("cookie") || "",
-  //     },
-  //     method: "GET",
+  // const nextAuthReq = {
+  //   headers: {
+  //     cookie: req.headers.get("cookie") ?? undefined,
   //   },
-  // );
-  // const session = (await resSession.json()) as Session;
+  // };
 
-  if (session && !session?.user.completedOnboarding) {
+  // const session = (await getSession({ req: nextAuthReq })) as Session;
+
+  const resSession = await fetch(
+    process.env.NEXTAUTH_URL + "/api/auth/session",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: req.headers.get("cookie") || "",
+      },
+      method: "GET",
+    },
+  );
+  const session = (await resSession.json()) as Session;
+
+  console.log({ session });
+
+  if (session.user && !session?.user.completedOnboarding) {
     return NextResponse.redirect(new URL("/welcome", req.url));
   }
 }
