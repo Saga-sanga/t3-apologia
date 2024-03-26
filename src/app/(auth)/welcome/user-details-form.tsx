@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+
 import {
   Form,
   FormControl,
@@ -115,6 +116,9 @@ export function UserDetailsForm({ user }: UserDetailsFormProps) {
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
                     <Calendar
+                      captionLayout="dropdown-buttons"
+                      fromYear={1920}
+                      toYear={new Date().getFullYear()}
                       mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
