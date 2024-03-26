@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+type UserNameResponse = {
+  result: { data: { json: boolean } };
+};
+
 export const formSchema = z.object({
   email: z.string().email(),
 });
@@ -20,7 +24,22 @@ export const welcomeFormSchema = z.object({
     .max(50, {
       message: "I username a sei lutuk",
     })
-    .trim(),
+    .trim()
+    .refine(
+      async (username) => {
+        const res = await fetch(
+          `/api/trpc/user.checkIfUsernameExists?input=${encodeURIComponent(
+            JSON.stringify({ json: { username: username } }),
+          )}`,
+        );
+        const { result } = (await res.json()) as UserNameResponse;
+        console.log(result.data.json);
+        return !result.data.json;
+      },
+      {
+        message: "Username hman ani toh. A dang thlang roh",
+      },
+    ),
   name: z
     .string({
       required_error: "Khawngaihin i hming dah roh",

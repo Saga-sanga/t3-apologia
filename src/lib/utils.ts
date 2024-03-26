@@ -47,3 +47,5 @@ export function checkIfDayPast(time: Date) {
   const diffInHr = diffInMilliseconds / (1000 * 60 * 60);
   return diffInHr >= 24;
 }
+
+

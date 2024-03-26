@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SelectUser } from "@/server/db/schema";
+import { api } from "@/trpc/react";
 
 type UserDetailsFormProps = {
   user: Pick<SelectUser, "id" | "name">;
@@ -32,9 +33,17 @@ export function UserDetailsForm({ user }: UserDetailsFormProps) {
   const form = useForm<z.infer<typeof welcomeFormSchema>>({
     resolver: zodResolver(welcomeFormSchema),
     defaultValues: {
+      username: "",
       name: user.name ?? "",
     },
+    mode: "onBlur",
   });
+
+  const { data } = api.user.checkIfUsernameExists.useQuery({
+    username: "hello",
+  });
+
+  console.log({ data });
 
   function onSubmit(formData: z.infer<typeof welcomeFormSchema>) {
     console.log({ formData });

@@ -1,6 +1,7 @@
+import { getSession } from "next-auth/react";
 import { type NextRequest, NextResponse } from "next/server";
 
-type SessionT = {
+type Session = {
   user: {
     name: string;
     email: string;
@@ -24,22 +25,30 @@ export const config = {
      * 6. Static files (e.g. /favicon.ico, /sitemap.xml, /robots.txt, etc.)
      */
     // "/((?!api/|_next/|_proxy/|_static|_vercel|[\\w-]+\\.\\w+).*)",
-    "/"
+    "/",
   ],
 };
 
 export default async function middleware(req: NextRequest) {
-  const resSession = await fetch(
-    process.env.NEXTAUTH_URL + "/api/auth/session",
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: req.headers.get("cookie") || "",
-      },
-      method: "GET",
+  const nextAuthReq = {
+    headers: {
+      cookie: req.headers.get("cookie") ?? undefined,
     },
-  );
-  const session = (await resSession.json()) as SessionT;
+  };
+
+  const session = (await getSession({ req: nextAuthReq })) as Session;
+
+  // const resSession = await fetch(
+  //   process.env.NEXTAUTH_URL + "/api/auth/session",
+  //   {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Cookie: req.headers.get("cookie") || "",
+  //     },
+  //     method: "GET",
+  //   },
+  // );
+  // const session = (await resSession.json()) as Session;
 
   if (!session.user.completedOnboarding) {
     return NextResponse.redirect(new URL("/welcome", req.url));

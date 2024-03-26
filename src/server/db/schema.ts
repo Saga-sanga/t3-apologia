@@ -24,7 +24,7 @@ export const questionStatusEnum = pgEnum("questionStatus", [
 export const users = pgTable("user", {
   id: text("id").notNull().primaryKey(),
   name: text("name"),
-  username: text("username"),
+  username: text("username").unique(),
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   completedOnboarding: boolean("completedOnboarding").default(false),
