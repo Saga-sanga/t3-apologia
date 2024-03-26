@@ -8,7 +8,7 @@ export default async function WelcomeLayout({
 }) {
   const session = await getServerAuthSession();
 
-  if (!session) {
+  if (!session || session?.user.completedOnboarding) {
     redirect("/");
   }
 
