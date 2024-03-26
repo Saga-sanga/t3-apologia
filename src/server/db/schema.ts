@@ -20,6 +20,7 @@ export const questionStatusEnum = pgEnum("questionStatus", [
   "answered",
   "duplicate",
 ]);
+export const sexEnum = pgEnum("sex", ["male", "female"]);
 
 export const users = pgTable("user", {
   id: text("id").notNull().primaryKey(),
@@ -29,6 +30,9 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   completedOnboarding: boolean("completedOnboarding").default(false),
   image: text("image"),
+  dob: timestamp("dob", { mode: "date" }),
+  sex: sexEnum("sex"),
+  profession: text("profession"),
   role: roleEnum("role").default("user").notNull(),
 });
 

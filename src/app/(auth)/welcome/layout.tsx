@@ -14,7 +14,7 @@ export default async function WelcomeLayout({
 
   return (
     <main className="flex min-h-screen items-center bg-accent">
-      <article className="mx-auto w-full space-y-12 py-16 sm:max-w-xl">
+      <article className="mx-auto w-full space-y-10 py-16 sm:max-w-xl">
         <div className="mx-auto w-full px-6 sm:max-w-lg">
           <header className="w-full">
             <h1 className="mb-3 text-3xl font-semibold tracking-wide">
@@ -27,7 +27,7 @@ export default async function WelcomeLayout({
               Henghi nakinah i duh chuan i thlak leh vek thei.
             </p>
           </header>
-          <div className="mt-6 space-y-2">
+          {/* <div className="mt-6 space-y-2">
             <p className="text-xs font-medium text-muted-foreground">
               Step 1 of 2
             </p>
@@ -35,7 +35,7 @@ export default async function WelcomeLayout({
               <div className="h-1 w-full rounded-[1px] bg-primary"></div>
               <div className="h-1 w-full rounded-[1px] bg-primary/25"></div>
             </div>
-          </div>
+          </div> */}
         </div>
         {children}
       </article>

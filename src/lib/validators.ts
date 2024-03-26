@@ -33,7 +33,7 @@ export const welcomeFormSchema = z.object({
           )}`,
         );
         const { result } = (await res.json()) as UserNameResponse;
-        return !result.data.json;
+        return !result?.data.json;
       },
       {
         message: "Username hman ani toh. A dang thlang roh",

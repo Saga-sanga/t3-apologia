@@ -1,4 +1,5 @@
 "use client";
+import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 
@@ -27,10 +28,11 @@ import {
 import { cn } from "@/lib/utils";
 import { welcomeFormSchema } from "@/lib/validators";
 import { SelectUser } from "@/server/db/schema";
+import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { ArrowRight, CalendarIcon } from "lucide-react";
-import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -40,6 +42,9 @@ type UserDetailsFormProps = {
 };
 
 export function UserDetailsForm({ user }: UserDetailsFormProps) {
+  const mutateUser = api.user.update.useMutation();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof welcomeFormSchema>>({
     resolver: zodResolver(welcomeFormSchema),
     defaultValues: {
@@ -50,13 +55,12 @@ export function UserDetailsForm({ user }: UserDetailsFormProps) {
     mode: "onBlur",
   });
 
-  useEffect(() => {
-    console.log(form.formState.errors);
-  }, [form.formState]);
-
   function onSubmit(formData: z.infer<typeof welcomeFormSchema>) {
-    toast.success(JSON.stringify(formData));
-    console.log({ formData });
+    mutateUser.mutate(formData, {
+      onSuccess: () => router.push("/"),
+      onError: () =>
+        toast.error("Profile kan update theilo. Submit nawn leh roh."),
+    });
   }
 
   return (
@@ -119,6 +123,8 @@ export function UserDetailsForm({ user }: UserDetailsFormProps) {
                       captionLayout="dropdown-buttons"
                       fromYear={1920}
                       toYear={new Date().getFullYear()}
+                      fixedWeeks
+                      defaultMonth={field.value}
                       mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
@@ -173,8 +179,17 @@ export function UserDetailsForm({ user }: UserDetailsFormProps) {
             )}
           />
         </div>
-        <Button type="submit" className="w-full">
-          Next Step <ArrowRight className="ml-2 h-4 w-4" />
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={mutateUser.isLoading}
+        >
+          Submit{" "}
+          {mutateUser.isLoading ? (
+            <Icons.spinner className="ml-2 h-4 w-4 animate-spin" />
+          ) : (
+            <ArrowRight className="ml-2 h-4 w-4" />
+          )}
         </Button>
       </form>
     </Form>

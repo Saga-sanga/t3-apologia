@@ -50,7 +50,7 @@ export default async function middleware(req: NextRequest) {
   // );
   // const session = (await resSession.json()) as Session;
 
-  if (!session.user.completedOnboarding) {
+  if (!session?.user.completedOnboarding) {
     return NextResponse.redirect(new URL("/welcome", req.url));
   }
 }
