@@ -71,7 +71,7 @@ export function Editor({ post }: EditorProps) {
         {
           id: post.id,
           title: debouncedTitle!,
-          description: debouncedDescription!,
+          description: debouncedDescription,
           image: imageUrl,
         },
         {
@@ -299,7 +299,7 @@ export function Editor({ post }: EditorProps) {
           id="description"
           placeholder="Add post description..."
           name="description"
-          value={description!}
+          value={description}
           onChange={(e) => setDescription(e.currentTarget.value)}
           className="w-full resize-none mb-5 appearance-none overflow-hidden text-2xl focus:outline-none"
         />

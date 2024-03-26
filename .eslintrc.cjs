@@ -24,6 +24,7 @@ const config = {
     "@typescript-eslint/non-nullable-type-assertion-style": "warn",
     "@typescript-eslint/no-unsafe-assignment": "warn",
     "@typescript-eslint/consistent-indexed-object-style": "warn",
+    "@typescript-eslint/restrict-template-expressions": "warn",
 
     "@typescript-eslint/consistent-type-imports": [
       "warn",
