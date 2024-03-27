@@ -2,27 +2,14 @@
 import { Icons } from "@/components/icons";
 import { PostCard } from "@/components/post-card";
 import { Button } from "@/components/ui/button";
-import { SelectCategory, SelectPost } from "@/server/db/schema";
 import { api } from "@/trpc/react";
-import { Divide } from "lucide-react";
 import { Fragment } from "react";
 
-type PostData = Pick<
-  SelectPost,
-  "id" | "title" | "description" | "image" | "createdAt"
-> & {
-  category: SelectCategory | null;
-};
-
 type InfinitePostCardListProps = {
-  // postsData: PostData[];
   cursor: string | null | undefined;
 };
 
-export function InfinitePostCardList({
-  // postsData,
-  cursor,
-}: InfinitePostCardListProps) {
+export function InfinitePostCardList({ cursor }: InfinitePostCardListProps) {
   const { data, fetchNextPage, isFetchingNextPage } =
     api.post.infinitePosts.useInfiniteQuery(
       { limit: 2 },
