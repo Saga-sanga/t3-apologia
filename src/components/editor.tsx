@@ -59,11 +59,7 @@ export function Editor({ post }: EditorProps) {
   const [isRemoving, setIsRemoving] = useState(false);
 
   const [debouncedTitle] = useDebounce(title, 750);
-  const [debouncedDescription] = useDebounce(description, 750)
-
-  useEffect(() => {
-    console.log(post)
-  }, [post]);
+  const [debouncedDescription] = useDebounce(description, 750);
 
   useEffect(() => {
     const autoSaveTitleAndImage = () => {
@@ -156,7 +152,6 @@ export function Editor({ post }: EditorProps) {
     setIsRemoving(true);
 
     try {
-      console.log({ imageUrl });
       await edgestore.publicFiles.delete({ url: imageUrl! });
       setImageUrl(undefined);
     } catch (error) {
@@ -301,7 +296,7 @@ export function Editor({ post }: EditorProps) {
           name="description"
           value={description}
           onChange={(e) => setDescription(e.currentTarget.value)}
-          className="w-full resize-none mb-5 appearance-none overflow-hidden text-2xl focus:outline-none"
+          className="mb-5 w-full resize-none appearance-none overflow-hidden text-2xl focus:outline-none"
         />
         <div id="editor"></div>
         <p className="text-sm text-gray-500">

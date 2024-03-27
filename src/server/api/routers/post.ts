@@ -5,8 +5,8 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-import { posts } from "@/server/db/schema";
-import { eq } from "drizzle-orm";
+import { categories, posts } from "@/server/db/schema";
+import { and, desc, eq, lt } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export const postRouter = createTRPCRouter({
@@ -57,7 +57,6 @@ export const postRouter = createTRPCRouter({
         if (title === "") {
           title = "Untitled";
         }
-        console.log({ description });
 
         await ctx.db
           .update(posts)
@@ -85,4 +84,44 @@ export const postRouter = createTRPCRouter({
       orderBy: (posts, { desc }) => [desc(posts.createdAt)],
     });
   }),
+
+  infinitePosts: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).default(8),
+        cursor: z.string().nullish(),
+      }),
+    )
+    .query(async ({ ctx, input: { limit, cursor } }) => {
+      const items = cursor
+        ? await ctx.db
+            .select({
+              id: posts.id,
+              title: posts.title,
+              description: posts.description,
+              image: posts.image,
+              createdAt: posts.createdAt,
+              category: categories,
+            })
+            .from(posts)
+            .leftJoin(categories, eq(posts.categoryId, categories.id))
+            .where(
+              and(lt(posts.createdAt, new Date(cursor)), eq(posts.state, "published")),
+            )
+            .orderBy(desc(posts.createdAt))
+            .limit(limit)
+        : undefined;
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (items) {
+        const nextItem = items[items.length - 1];
+        nextCursor = nextItem?.createdAt?.toISOString();
+      }
+
+      return {
+        items,
+        nextCursor,
+      };
+    }),
 });
