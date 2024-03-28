@@ -22,10 +22,10 @@ export default async function Home() {
     with: {
       category: true,
     },
-    limit: 2,
+    limit: 3,
   });
 
-  const lastItem = postsData.length >= 2 ? postsData[postsData.length - 1] : undefined;
+  const lastItem = postsData.length >= 3 ? postsData[postsData.length - 1] : undefined;
 
   return (
     <DashboardShell>
