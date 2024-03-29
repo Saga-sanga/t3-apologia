@@ -31,8 +31,8 @@ export default async function Page() {
       </div>
       <div className="flex flex-wrap">
         {categoriesData.map((category) => (
-          <div className="w-1/2 p-2">
-            <CategoryItem category={category} key={category.id} />
+          <div className="w-1/2 p-2" key={category.id}>
+            <CategoryItem category={category} />
           </div>
         ))}
       </div>
