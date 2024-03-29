@@ -25,7 +25,10 @@ export default async function Home() {
     limit: 3,
   });
 
-  const lastItem = postsData.length >= 3 ? postsData[postsData.length - 1] : undefined;
+  // Take the last item of the array to use it's date as the next cursor.
+  // Return only if the posts is a certain length so as to ensure that additional data exists.
+  const lastItem =
+    postsData.length >= 3 ? postsData[postsData.length - 1] : undefined;
 
   return (
     <DashboardShell>

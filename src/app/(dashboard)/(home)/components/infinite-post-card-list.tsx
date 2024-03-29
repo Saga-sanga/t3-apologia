@@ -1,8 +1,6 @@
 "use client";
-import { Icons } from "@/components/icons";
 import { PostCard } from "@/components/post-card";
 import { CardListSkeletion } from "@/components/skeletons/card-list-skeleton";
-import { CardSkeletion } from "@/components/skeletons/card-skeleton";
 import { api } from "@/trpc/react";
 import { useIntersection } from "@mantine/hooks";
 import { Fragment, useEffect } from "react";
@@ -40,7 +38,7 @@ export function InfinitePostCardList({ cursor }: InfinitePostCardListProps) {
       {data?.pages.map((page, i) => (
         <Fragment key={i}>
           {page.items?.map((item, j) => {
-            if (j === page.items?.length! - 1 && i === data.pages.length - 1) {
+            if ((page.items && j === page.items?.length - 1) && i === data.pages.length - 1) {
               return <PostCard ref={ref} post={item} key={item.id} />;
             }
             return <PostCard post={item} key={item.id} />;

@@ -1,6 +1,11 @@
 import { checkIfDayPast, cn } from "@/lib/utils";
+import { SelectCategory, SelectPost } from "@/server/db/schema";
 import { MessageCircle } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { forwardRef } from "react";
+import { format } from "timeago.js";
+import { Badge } from "./ui/badge";
 import {
   Card,
   CardContent,
@@ -9,11 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { SelectCategory, SelectPost } from "@/server/db/schema";
-import Image from "next/image";
-import { format } from "timeago.js";
-import { ComponentPropsWithoutRef, ElementRef, forwardRef, Ref } from "react";
 
 type PostCardProps = {
   post: Pick<
@@ -27,7 +27,7 @@ type PostCardProps = {
 // TODO: update post schema to include description and auto populate it
 
 export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
-  ({ post }, ref) => {
+  function PostCard({ post }, ref) {
     let date;
     if (post.createdAt) {
       date = checkIfDayPast(post.createdAt)

@@ -1,12 +1,12 @@
 import "@/styles/globals.css";
 
+import { Toaster } from "@/components/ui/sonner";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
-import { Toaster } from "@/components/ui/sonner";
 
-import { TRPCReactProvider } from "@/trpc/react";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { EdgeStoreProvider } from "@/lib/edgestore";
+import { TRPCReactProvider } from "@/trpc/react";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
@@ -20,7 +20,7 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;

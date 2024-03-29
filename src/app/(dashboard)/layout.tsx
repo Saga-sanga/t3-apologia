@@ -7,12 +7,11 @@ type LayoutProps = {
 };
 
 export default async function Layout({ children }: LayoutProps) {
-  const user = await getCurrentUser();
+    const user = await getCurrentUser();
 
   if (user && !user?.completedOnboarding) {
     redirect("/welcome");
   }
-
   return (
     <div className="flex min-h-screen flex-col space-y-6">
       <header className="sticky top-0 z-40 border-b bg-background">
