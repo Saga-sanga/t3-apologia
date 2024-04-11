@@ -14,10 +14,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import OAuthButtons from "./oauth-buttons";
+import OAuthButtons from "../oauth-buttons";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
-import { Icons } from "./icons";
+import { Icons } from "../icons";
 import { formSchema } from "@/lib/validators";
 import { useSearchParams } from "next/navigation";
 

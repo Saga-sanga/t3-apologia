@@ -58,3 +58,7 @@ export const welcomeFormSchema = z.object({
   }),
   profession: z.string().max(50).trim().optional(),
 });
+
+export const profileFormSchema = welcomeFormSchema.extend({
+  image: z.string().trim().nullish(),
+});

@@ -1,5 +1,5 @@
 import { buttonVariants } from "@/components/ui/button";
-import UserAuthForm from "@/components/user-auth-form";
+import UserAuthForm from "@/components/forms/user-auth-form";
 import { cn } from "@/lib/utils";
 import { FeatherIcon, ListTodo } from "lucide-react";
 import Link from "next/link";
