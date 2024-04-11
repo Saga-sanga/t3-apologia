@@ -46,7 +46,7 @@ export default async function Page() {
       </div>
       <div className="flex flex-wrap">
         {categoriesWithCount.map((category) => (
-          <div className="w-1/2 p-2" key={category.id}>
+          <div className="w-full md:w-1/2 p-2" key={category.id}>
             <CategoryItem category={category} />
           </div>
         ))}
