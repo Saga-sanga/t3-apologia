@@ -1,10 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ArrowRight, CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
 
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -19,11 +19,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { profileFormSchema } from "@/lib/validators";
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
 import {
   Select,
@@ -33,22 +32,65 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { profileFormSchema } from "@/lib/validators";
 import { api } from "@/trpc/react";
+import { SelectUser } from "@/server/db/schema";
+import { toast } from "sonner";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-export function ProfileForm() {
+type ProfileFormProps = {
+  userData: Pick<
+    SelectUser,
+    "username" | "name" | "image" | "dob" | "sex" | "profession"
+  >;
+};
+
+export function ProfileForm({ userData }: ProfileFormProps) {
+  const { username, name, dob, sex, profession, image } = userData;
+
+  const [isLoading, setIsLoading] = useState(false);
   const mutateUser = api.user.update.useMutation();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      username: username ?? "",
+      name: name ?? "",
+      dob: dob ?? undefined,
+      sex: sex ?? undefined,
+      profession: profession ?? "",
+      image,
+    },
+    mode: "onBlur",
   });
 
-  function onSubmit(values: z.infer<typeof profileFormSchema>) {
-    console.log({ values });
-  }
+  const onSubmit = form.handleSubmit(
+    (values: z.infer<typeof profileFormSchema>) => {
+      console.log({ values });
+      mutateUser.mutate(values, {
+        onSuccess: () => {
+          setIsLoading(false);
+          toast.success("Profile updated successfully");
+          router.refresh();
+        },
+        onError: () => {
+          setIsLoading(false);
+          toast.error("Profile kan update theilo. Submit nawn leh roh.");
+        },
+      });
+    },
+  );
+
+  const handleClick = () => {
+    setIsLoading(true);
+    onSubmit();
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form className="space-y-8">
         <div className="space-y-6">
           <FormField
             control={form.control}
@@ -162,11 +204,9 @@ export function ProfileForm() {
             )}
           />
         </div>
-        <Button type="submit" disabled={mutateUser.isLoading}>
+        <Button onClick={handleClick} type="submit" disabled={isLoading}>
           Update profile{" "}
-          {mutateUser.isLoading && (
-            <Icons.spinner className="ml-2 h-4 w-4 animate-spin" />
-          )}
+          {isLoading && <Icons.spinner className="ml-2 h-4 w-4 animate-spin" />}
         </Button>
       </form>
     </Form>

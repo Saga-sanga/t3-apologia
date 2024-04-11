@@ -36,8 +36,6 @@ export default async function Page() {
     .groupBy(categories.id)
     .orderBy(desc(categories.name));
 
-  console.log({ categoriesWithCount });
-
   return (
     <article className="space-y-6 rounded-lg border px-4 py-6">
       <div>

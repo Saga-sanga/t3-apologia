@@ -1,8 +1,7 @@
 import { ProfileForm } from "@/components/forms/profile-form";
 import { Separator } from "@/components/ui/separator";
 import { getCurrentUser } from "@/server/auth";
-import { UserCircle2 } from "lucide-react";
-import Link from "next/link";
+import { db } from "@/server/db";
 import { redirect } from "next/navigation";
 
 export const metadata = {
@@ -16,6 +15,10 @@ export default async function SettingsPage() {
   if (!user) {
     redirect("/login");
   }
+
+  const userData = await db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.id, user.id),
+  });
 
   return (
     <div className="container mx-auto mt-5">
@@ -36,7 +39,16 @@ export default async function SettingsPage() {
             </p>
           </div>
           <Separator />
-          <ProfileForm />
+          <ProfileForm
+            userData={{
+              username: userData?.username ?? "",
+              name: userData?.name ?? "",
+              dob: userData?.dob ?? null,
+              sex: userData?.sex ?? null,
+              profession: userData?.profession ?? "",
+              image: userData?.image ?? null,
+            }}
+          />
         </div>
       </div>
     </div>
