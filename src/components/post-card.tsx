@@ -78,7 +78,9 @@ export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
             <p className="font-bold text-slate-400 dark:text-slate-500">·</p>
             <p>112 reads</p>
           </div>
-          <Badge variant="secondary">{post.category?.name}</Badge>
+          <Link href={`/category/${post.category?.id}`} className="cursor-pointer">
+            <Badge variant="secondary" className="hover:border-primary">{post.category?.name}</Badge>
+          </Link>
         </CardFooter>
       </Card>
     );
