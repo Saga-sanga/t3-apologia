@@ -19,7 +19,7 @@ export default function ExploreLayout({
               Explore Our Categories
             </CardTitle>
             <CardDescription className="text-pretty text-lg text-card-foreground/75">
-              Mizo Apologia a kan chhanna hrang hrangte olsam takin hetah hian i
+              Mizo Apologia a kan chhanna hrang hrangte awlsam takin hetah hian i
               zawng thei e. Kan chhanna leh category te hi regular taka update
               ani.
             </CardDescription>
