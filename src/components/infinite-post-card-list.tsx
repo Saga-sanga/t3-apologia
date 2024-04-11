@@ -7,12 +7,13 @@ import { Fragment, useEffect } from "react";
 
 type InfinitePostCardListProps = {
   cursor: string | null | undefined;
+  categoryId?: string;
 };
 
-export function InfinitePostCardList({ cursor }: InfinitePostCardListProps) {
+export function InfinitePostCardList({ cursor, categoryId }: InfinitePostCardListProps) {
   const { data, fetchNextPage, isFetchingNextPage, isLoading } =
     api.post.infinitePosts.useInfiniteQuery(
-      { limit: 3 },
+      { limit: 3, categoryId },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
         initialCursor: cursor,

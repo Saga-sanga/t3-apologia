@@ -90,9 +90,10 @@ export const postRouter = createTRPCRouter({
       z.object({
         limit: z.number().min(1).max(100).default(8),
         cursor: z.string().nullish(),
+        categoryId: z.string().nullish(),
       }),
     )
-    .query(async ({ ctx, input: { limit, cursor } }) => {
+    .query(async ({ ctx, input: { limit, cursor, categoryId } }) => {
       const items = cursor
         ? await ctx.db
             .select({
@@ -106,7 +107,11 @@ export const postRouter = createTRPCRouter({
             .from(posts)
             .leftJoin(categories, eq(posts.categoryId, categories.id))
             .where(
-              and(lt(posts.createdAt, new Date(cursor)), eq(posts.state, "published")),
+              and(
+                lt(posts.createdAt, new Date(cursor)),
+                eq(posts.state, "published"),
+                categoryId ? eq(posts.categoryId, categoryId) : undefined,
+              ),
             )
             .orderBy(desc(posts.createdAt))
             .limit(limit)

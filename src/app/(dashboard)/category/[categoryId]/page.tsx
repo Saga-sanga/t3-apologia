@@ -1,14 +1,18 @@
-import { PostCard } from "@/components/post-card";
-import { DashboardShell } from "@/components/shell";
-import { getServerAuthSession } from "@/server/auth";
 import { db } from "@/server/db";
 import { posts } from "@/server/db/schema";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
+
 import { InfinitePostCardList } from "@/components/infinite-post-card-list";
+import { PostCard } from "@/components/post-card";
+import { DashboardShell } from "@/components/shell";
 
-export default async function Home() {
-  // const session = await getServerAuthSession();
+type CategoryPageProps = {
+  params: {
+    categoryId: string;
+  };
+};
 
+export default async function CategoryPage({ params }: CategoryPageProps) {
   const postsData = await db.query.posts.findMany({
     columns: {
       id: true,
@@ -17,7 +21,10 @@ export default async function Home() {
       image: true,
       createdAt: true,
     },
-    where: eq(posts.state, "published"),
+    where: and(
+      eq(posts.state, "published"),
+      eq(posts.categoryId, params.categoryId),
+    ),
     orderBy: [desc(posts.createdAt)],
     with: {
       category: true,
@@ -35,7 +42,10 @@ export default async function Home() {
       {postsData.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
-      <InfinitePostCardList cursor={lastItem?.createdAt?.toISOString()} />
+      <InfinitePostCardList
+        cursor={lastItem?.createdAt?.toISOString()}
+        categoryId={params.categoryId}
+      />
     </DashboardShell>
   );
 }
