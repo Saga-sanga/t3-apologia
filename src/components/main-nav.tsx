@@ -20,7 +20,7 @@ export async function MainNav() {
         </p>
       </Link>
       <PageNav user={user} />
-      <div className="flex items-center justify-center space-x-6">
+      <div className="flex items-center justify-center space-x-4 md:space-x-6">
         {user ? (
           <>
             <AskDialog />

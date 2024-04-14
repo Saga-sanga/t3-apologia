@@ -31,7 +31,7 @@ export default async function Home() {
     postsData.length >= 3 ? postsData[postsData.length - 1] : undefined;
 
   return (
-    <DashboardShell>
+    <DashboardShell className="divide-y md:divide-y-0">
       {postsData.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
