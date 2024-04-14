@@ -17,7 +17,19 @@ const inter = Inter({
 export const metadata = {
   title: "Mizo Apologia",
   description: "Bible zawhna leh chhanna",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  keywords: ["bible", "zawhna", "chhanna", "apologia", "mizo"],
+  authors: [
+    {
+      name: "Reckson Zirsangzela Khiangte",
+      url: "https://recksonk.in",
+    },
+  ],
+  creator: "Reckson",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default async function RootLayout({
