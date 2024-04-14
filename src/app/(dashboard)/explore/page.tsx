@@ -16,7 +16,7 @@ function CategoryItem({ category }: CategoryItemProps) {
     >
       <Icons.tag className="m-1 h-8 w-8 shrink-0 text-primary" />
       <div className="flex flex-col overflow-hidden">
-        <h4 className="truncate font-bold">{category.name}</h4>
+        <h4 className="md:truncate font-bold">{category.name}</h4>
         <p className="text-sm text-muted-foreground">{category.count} posts</p>
       </div>
     </Link>
