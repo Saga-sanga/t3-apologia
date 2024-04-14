@@ -12,7 +12,7 @@ export async function MainNav() {
   const user = await getCurrentUser();
 
   return (
-    <div className="container flex h-16 items-center justify-between py-4">
+    <div className="container gap-2 flex h-16 items-center justify-between py-4">
       <Link href="/">
         <p className="flex items-center text-2xl font-bold">
           <FeatherIcon className="mr-2 h-8 w-8" />{" "}
@@ -33,7 +33,7 @@ export async function MainNav() {
             />
           </>
         ) : (
-          <>
+          <div className="flex space-x-3">
             <Link
               className={cn(buttonVariants({ variant: "outline" }))}
               href="/login"
@@ -46,7 +46,7 @@ export async function MainNav() {
             >
               Sign up
             </Link>
-          </>
+          </div>
         )}
       </div>
     </div>
