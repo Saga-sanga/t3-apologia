@@ -8,6 +8,9 @@ import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import { TRPCReactProvider } from "@/trpc/react";
 import { Analytics } from "@vercel/analytics/react";
+import { siteCofig } from "@/config/site";
+import { title } from "process";
+import { desc } from "drizzle-orm";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -15,8 +18,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Mizo Apologia",
-  description: "Bible zawhna leh chhanna",
+  title: siteCofig.name,
+  description: siteCofig.description,
   keywords: ["bible", "zawhna", "chhanna", "apologia", "mizo"],
   authors: [
     {
@@ -25,6 +28,21 @@ export const metadata = {
     },
   ],
   creator: "Reckson",
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: siteCofig.url,
+    title: siteCofig.name,
+    description: siteCofig.description,
+    siteName: siteCofig.name,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteCofig.name,
+    description: siteCofig.description,
+    images: [`${siteCofig.url}/og.jpeg`],
+    creator: "@RecksonKhiangte",
+  },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon-16x16.png",
