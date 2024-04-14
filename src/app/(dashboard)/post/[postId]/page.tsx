@@ -29,7 +29,7 @@ export default async function PostPage({ params }: PostPageProps) {
       <div className="mb-14 grid grid-cols-8">
         <div className="col-span-full lg:col-span-6 lg:col-start-2">
           {post.image && (
-            <div className="relative h-[38rem] w-full">
+            <div className="relative h-[380px] w-full md:h-[38rem]">
               <Image
                 className="object-contain"
                 src={post.image}
@@ -49,7 +49,7 @@ export default async function PostPage({ params }: PostPageProps) {
           )}
         </div>
       </div>
-      <div className="prose prose-lg xl:prose-xl prose-stone dark:prose-invert mx-auto w-full mb-20">
+      <div className="prose prose-lg prose-stone mx-auto mb-20 w-full text-pretty px-4 dark:prose-invert xl:prose-xl">
         <EditorTextParser data={post.content as OutputData} />
       </div>
     </main>
