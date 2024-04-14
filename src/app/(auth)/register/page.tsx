@@ -15,11 +15,9 @@ export default async function Page() {
         <div className="mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
-              &ldquo;This todo app has saved me countless hours of work and
-              helped me deliver stunning designs to my clients faster than ever
-              before.&rdquo;
+              &ldquo;I bible zawhna zawng zawngte chhanna i dawn theihna hmun.&rdquo;
             </p>
-            <footer className="text-sm">Mike Hawk</footer>
+            <footer className="text-sm">Mizo Apologia</footer>
           </blockquote>
         </div>
       </div>
