@@ -16,7 +16,7 @@ export function PageNav({ user }: PageNavProps) {
   const active = "text-primary hover:text-primary";
 
   return (
-    <div className="flex overflow-x-scroll items-center space-x-2 text-sm font-semibold">
+    <div className="flex items-center space-x-2 overflow-x-auto text-sm font-semibold">
       <Link
         className={cn(
           buttonVariants({ variant: "ghost" }),
