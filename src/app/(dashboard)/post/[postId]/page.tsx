@@ -1,6 +1,6 @@
 import EditorTextParser from "@/components/editor-parser";
 import { Icons } from "@/components/icons";
-import { PostComments } from "@/components/post-comments";
+import { CommentInput } from "@/components/comment-input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -73,7 +73,7 @@ export default async function PostPage({ params }: PostPageProps) {
       </div>
       <div className="prose prose-lg prose-stone mx-auto mb-20 w-full text-pretty px-4 dark:prose-invert xl:prose-xl">
         <EditorTextParser data={post.content as OutputData} />
-        <PostComments />
+        <CommentInput />
       </div>
     </main>
   );
