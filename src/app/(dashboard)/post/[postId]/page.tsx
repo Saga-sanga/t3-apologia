@@ -1,9 +1,7 @@
+import { CommentInput } from "@/components/comment-input";
+import { CommentList } from "@/components/comment-list";
 import EditorTextParser from "@/components/editor-parser";
 import { Icons } from "@/components/icons";
-import { CommentInput } from "@/components/comment-input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { formatTimestamp } from "@/lib/utils";
 import { getCurrentUser } from "@/server/auth";
 import { db } from "@/server/db";
@@ -35,7 +33,7 @@ export default async function PostPage({ params }: PostPageProps) {
   }
 
   return (
-    <main className="mx-auto w-full max-w-screen-xl">
+    <main className="mx-auto w-full max-w-screen-xl pb-10">
       <div className="mb-14 grid grid-cols-8">
         <div className="col-span-full lg:col-span-6 lg:col-start-2">
           {post.image && (
@@ -71,10 +69,13 @@ export default async function PostPage({ params }: PostPageProps) {
           )}
         </div>
       </div>
-      <div className="prose prose-lg prose-stone mx-auto mb-20 w-full text-pretty px-4 dark:prose-invert xl:prose-xl">
+      <div className="prose prose-lg prose-stone mx-auto mb-8 w-full text-pretty px-4 dark:prose-invert xl:prose-xl">
         <EditorTextParser data={post.content as OutputData} />
-        <CommentInput />
+        <CommentInput
+          user={{ name: user?.name ?? "", image: user?.image ?? "" }}
+        />
       </div>
+      <CommentList postId={params.postId} userId={user?.id}/>
     </main>
   );
 }

@@ -125,7 +125,17 @@ export const comments = pgTable("comment", {
     onDelete: "cascade",
   }),
   createdAt: timestamp("createdAt").defaultNow(),
+  // updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
+  //   () => new Date(),
+  // ),
 });
+
+export const commentRelations = relations(comments, ({one, many}) => ({
+  author: one(users, {
+    fields: [comments.userId],
+    references: [users.id]
+  }),
+}))
 
 export const likes = pgTable("like", {
   id: text("id")

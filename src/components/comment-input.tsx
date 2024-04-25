@@ -4,21 +4,31 @@ import { api } from "@/trpc/react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Icons } from "./icons";
+import { UserAvatar } from "./user-avatar";
+
+type CommentInputProps = {
+  user: {
+    image: string;
+    name: string;
+  };
+};
 
 // TODO: add dialog to prompt login if user is not logged in
-export function CommentInput() {
+export function CommentInput({ user }: CommentInputProps) {
   const [comment, setComment] = useState("");
 
+  const router = useRouter();
   const pathname = usePathname();
   const postId = pathname.split("/")[2];
 
   const commentMutation = api.comment.create.useMutation({
     onSuccess: () => {
       setComment("");
+      router.refresh();
       toast.success("Comment created successfully");
     },
     onError: () =>
@@ -37,12 +47,12 @@ export function CommentInput() {
   };
 
   return (
-    <div className="mt-12 border-t">
-      <h3 className="pb-3">Comments</h3>
+    <div className="not-prose mt-12 border-t">
+      <h3 className="mb-6 mt-10 text-2xl font-semibold" id="comments">
+        Comments
+      </h3>
       <div className="flex space-x-2">
-        <Avatar>
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <UserAvatar user={{ name: user.name, image: user.image }} />
         <div className="w-full space-y-3">
           <Textarea
             onChange={(e) => setComment(e.target.value)}
