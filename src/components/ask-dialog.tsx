@@ -48,8 +48,8 @@ export function AskDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="px-2.5 md:px-4 rounded-full">
-          <PencilLineIcon className="md:mr-2 h-5 w-5" />
+        <Button className="rounded-full px-2.5 md:px-4">
+          <PencilLineIcon className="h-5 w-5 md:mr-2" />
           <span className="hidden md:block">Zawt Rawh</span>
         </Button>
       </DialogTrigger>
@@ -57,7 +57,10 @@ export function AskDialog() {
         <DialogHeader>
           <DialogTitle>Zawhna Zawt Rawh</DialogTitle>
           <DialogDescription>
-            A hnuaiah hian i zawhna zawh duh chu chipchiar takin zawt rawh le
+            <p>
+              A hnuaiah hian i zawhna zawh duh chu chipchiar takin zawt rawh le.
+            </p>
+            <p>I phalna lovin I personal info engmah kan tilang ngai lovang.</p>
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
