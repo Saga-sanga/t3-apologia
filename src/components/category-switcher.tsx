@@ -60,10 +60,10 @@ export function CategorySwitcher({
   const [selectedCategory, setSelectedCategory] = useState<SelectCategory>();
   const [name, setName] = useState<string>();
 
-  useEffect(
-    () => console.log({ switcher: categories.data }),
-    [categories.data],
-  );
+  // useEffect(
+  //   () => console.log({ switcher: categories.data }),
+  //   [categories.data],
+  // );
 
   useEffect(() => {
     if (categories.data) {

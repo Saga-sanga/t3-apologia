@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Icons } from "./icons";
 import { UserAvatar } from "./user-avatar";
@@ -20,10 +20,18 @@ type CommentInputProps = {
 // TODO: add dialog to prompt login if user is not logged in
 export function CommentInput({ user }: CommentInputProps) {
   const [comment, setComment] = useState("");
+  const ref = useRef<HTMLTextAreaElement>(null);
 
   const router = useRouter();
   const pathname = usePathname();
   const postId = pathname.split("/")[2];
+
+  useEffect(() => {
+    if (window.location.hash === "#comments" && ref.current) {
+      ref.current.focus();
+      console.log("commentss");
+    }
+  }, []);
 
   const commentMutation = api.comment.create.useMutation({
     onSuccess: () => {
@@ -47,14 +55,16 @@ export function CommentInput({ user }: CommentInputProps) {
   };
 
   return (
-    <div className="not-prose mt-12 border-t">
-      <h3 className="mb-6 mt-10 text-2xl font-semibold" id="comments">
+    <div className="not-prose mt-20 border-t" id="comments">
+      <h3 className="mb-10 mt-14 text-2xl font-semibold text-foreground">
         Comments
       </h3>
       <div className="flex space-x-2">
         <UserAvatar user={{ name: user.name, image: user.image }} />
         <div className="w-full space-y-3">
           <Textarea
+            className="resize-none"
+            ref={ref}
             onChange={(e) => setComment(e.target.value)}
             value={comment}
             placeholder="Hetah hian I thil sawi duh te comment rawh le"

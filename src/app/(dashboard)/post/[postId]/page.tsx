@@ -75,7 +75,7 @@ export default async function PostPage({ params }: PostPageProps) {
           user={{ name: user?.name ?? "", image: user?.image ?? "" }}
         />
       </div>
-      <CommentList postId={params.postId} userId={user?.id}/>
+      <CommentList postId={params.postId} userId={user?.id} />
     </main>
   );
 }

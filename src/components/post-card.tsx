@@ -44,7 +44,7 @@ export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
         <Card className="border-0 shadow-none md:border md:shadow-sm" ref={ref}>
           <Link
             href={`/post/${post.id}`}
-            className="flex flex-col space-y-3 px-0 md:px-6 py-6"
+            className="flex flex-col space-y-3 px-0 py-6 md:px-6"
           >
             <div className="text-sm text-muted-foreground">{date && date}</div>
             <div className="flex flex-col justify-between gap-3 sm:gap-4 md:flex-row md:gap-6">
@@ -71,7 +71,10 @@ export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
           </Link>
           <CardFooter className="flex justify-between px-0 md:px-6">
             <div className="flex gap-2 text-sm">
-              <Link href="#" className={cn("group flex items-center")}>
+              <Link
+                href={`/post/${post.id}#comments`}
+                className={cn("group flex items-center")}
+              >
                 <MessageCircle className="mr-1.5 h-4 w-4" />{" "}
                 <span className="underline-offset-2 group-hover:underline">
                   Comment

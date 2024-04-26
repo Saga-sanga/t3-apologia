@@ -114,10 +114,6 @@ export const comments = pgTable("comment", {
   id: text("id")
     .$defaultFn(() => uuidv4())
     .primaryKey(),
-  parentCommentId: text("parentCommentId").references(
-    (): AnyPgColumn => comments.id,
-    { onDelete: "cascade" },
-  ),
   userId: text("userId").references(() => users.id),
   content: text("content"),
   postId: text("postId").references(() => posts.id),
@@ -130,12 +126,30 @@ export const comments = pgTable("comment", {
   // ),
 });
 
-export const commentRelations = relations(comments, ({one, many}) => ({
+export const replies = pgTable("reply", {
+  id: text("id")
+    .$defaultFn(() => uuidv4())
+    .primaryKey(),
+  userId: text("userId").references(() => users.id),
+  content: text("content"),
+  parentId: text("parentId").references(() => comments.id),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export const repliesRelations = relations(replies, ({ one }) => ({
+  parent: one(comments, {
+    fields: [replies.parentId],
+    references: [comments.id],
+  }),
+}));
+
+export const commentRelations = relations(comments, ({ one, many }) => ({
   author: one(users, {
     fields: [comments.userId],
-    references: [users.id]
+    references: [users.id],
   }),
-}))
+  replies: many(replies),
+}));
 
 export const likes = pgTable("like", {
   id: text("id")
@@ -196,3 +210,4 @@ export type SelectUser = typeof users.$inferSelect;
 export type SelectZawhna = typeof zawhna.$inferSelect;
 export type SelectPost = typeof posts.$inferSelect;
 export type SelectCategory = typeof categories.$inferSelect;
+export type SelectComment = typeof comments.$inferSelect;
