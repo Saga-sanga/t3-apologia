@@ -72,6 +72,7 @@ export default async function PostPage({ params }: PostPageProps) {
       <div className="prose prose-lg prose-stone mx-auto mb-8 w-full text-pretty px-4 dark:prose-invert xl:prose-xl">
         <EditorTextParser data={post.content as OutputData} />
         <CommentInput
+          isAuth={!!user}
           user={{ name: user?.name ?? "", image: user?.image ?? "" }}
         />
       </div>

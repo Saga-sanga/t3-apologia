@@ -5,6 +5,7 @@ import { Icons } from "./icons";
 import { Button } from "./ui/button";
 import { signIn } from "next-auth/react";
 import { Facebook } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 type OauthProps = {
   isLoading: boolean;
@@ -12,9 +13,15 @@ type OauthProps = {
 };
 
 export default function OAuthButtons({ isLoading, setIsLoading }: OauthProps) {
+  const searchParams = useSearchParams();
+  console.log({ searchParams: searchParams.get("redirect") });
+
   function handleOAuth(provider: "facebook" | "google") {
     setIsLoading(true);
-    signIn(provider, { callbackUrl: "/" });
+    signIn(provider, {
+      redirect: false,
+      callbackUrl: searchParams?.get("redirect") || "/",
+    });
   }
 
   return (
