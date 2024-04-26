@@ -1,23 +1,8 @@
-import { MoreHorizontal } from "lucide-react";
-import { Avatar, AvatarFallback } from "./ui/avatar";
-import { Button } from "./ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import { api } from "@/trpc/react";
-import { usePathname } from "next/navigation";
 import { db } from "@/server/db";
-import { desc } from "drizzle-orm";
 import { comments } from "@/server/db/schema";
-import { format } from "date-fns";
-import { UserAvatar } from "./user-avatar";
-import { CommentOptions } from "./comment-options";
-import { CommentCard } from "./comment-card";
+import { desc } from "drizzle-orm";
 import { Fragment } from "react";
+import { CommentCard } from "./comment-card";
 
 type CommentListProps = {
   postId: string;
@@ -41,13 +26,11 @@ export async function CommentList({ postId, userId }: CommentListProps) {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       {postComments.map((comment) => (
-        <Fragment>
-          <CommentCard
-            comment={comment}
-            isCurrentUser={userId === comment.author?.id}
-          />
-          {/* {JSON.stringify(comment.replies)} */}
-        </Fragment>
+        <CommentCard
+          key={comment.id}
+          comment={comment}
+          isCurrentUser={userId === comment.author?.id}
+        />
       ))}
     </div>
   );
