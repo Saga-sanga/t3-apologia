@@ -30,12 +30,14 @@ type CommentOptionsProps = {
   isCurrentUser: boolean;
   commentId: string;
   setIsEditing: (input: boolean) => void;
+  variant: "comment" | "reply";
 };
 
 export function CommentOptions({
   isCurrentUser,
   commentId,
   setIsEditing,
+  variant,
 }: CommentOptionsProps) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -44,18 +46,40 @@ export function CommentOptions({
     onSuccess: () => toast.success("Comment deleted successfully"),
   });
 
+  const deleteReply = api.reply.delete.useMutation({
+    onSuccess: () => toast.success("Reply deleted successfully"),
+  });
+
   const handleDelete = () => {
-    deleteComment.mutate(
-      { commentId },
-      {
-        onSuccess: () => {
-          router.refresh();
-          setOpen(false);
-          toast.success("Comment deleted successfully");
+    if (variant === "comment") {
+      deleteComment.mutate(
+        { commentId },
+        {
+          onSuccess: () => {
+            router.refresh();
+            setOpen(false);
+            toast.success("Comment deleted successfully");
+          },
+          onError: () =>
+            toast.error("Cannot delete comment. Please try again!"),
         },
-        onError: () => toast.error("Cannot delete comment. Please try again!"),
-      },
-    );
+      );
+    }
+
+    if (variant === "reply") {
+      deleteReply.mutate(
+        { replyId: commentId },
+        {
+          onSuccess: () => {
+            router.refresh();
+            setOpen(false);
+            toast.success("Comment deleted successfully");
+          },
+          onError: () =>
+            toast.error("Cannot delete comment. Please try again!"),
+        },
+      );
+    }
   };
 
   return (
@@ -74,9 +98,9 @@ export function CommentOptions({
             <Button
               variant="destructive"
               onClick={handleDelete}
-              disabled={deleteComment.isLoading}
+              disabled={deleteComment.isLoading || deleteReply.isLoading}
             >
-              {deleteComment.isLoading ? (
+              {deleteComment.isLoading || deleteReply.isLoading ? (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               ) : (
                 <Trash2 className="mr-2 h-4 w-4" />

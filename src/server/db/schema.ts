@@ -215,3 +215,4 @@ export type SelectZawhna = typeof zawhna.$inferSelect;
 export type SelectPost = typeof posts.$inferSelect;
 export type SelectCategory = typeof categories.$inferSelect;
 export type SelectComment = typeof comments.$inferSelect;
+export type SelectReply = typeof replies.$inferInsert;

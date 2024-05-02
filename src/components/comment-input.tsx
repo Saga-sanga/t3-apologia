@@ -29,8 +29,6 @@ export function CommentInput({ user, isAuth }: CommentInputProps) {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  // const ref = useRef<HTMLTextAreaElement>(null);
-
   const router = useRouter();
   const pathname = usePathname();
   const postId = pathname.split("/")[2];
