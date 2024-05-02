@@ -10,24 +10,34 @@ import { Icons } from "./icons";
 import { Button } from "./ui/button";
 
 type CommentEditProps = {
-  comment: {
-    postId: string;
+  postId: string;
+  comment?: {
     id: string;
     content: string | null;
   };
-  edit?: boolean;
   setIsEditing: (input: boolean) => void;
 };
 
-export function CommentEdit({
+export function CommentEditor({
+  postId,
   comment,
   setIsEditing,
-  edit = true,
 }: CommentEditProps) {
-  const editor = useTipTapCommentEditor(comment.content ?? "");
+  const edit = !!comment;
+  const editor = useTipTapCommentEditor(comment?.content ?? "");
 
   const editComment = api.comment.update.useMutation();
-  const createComment = api.comment.create.useMutation();
+  const createComment = api.comment.create.useMutation({
+    onSuccess: () => {
+      router.refresh();
+      setIsEditing(false);
+      toast.success("Comment created successfully");
+    },
+    onError: () =>
+      toast.error("Cannot create comment", {
+        description: "Please check your network and try again.",
+      }),
+  });
   const router = useRouter();
 
   useEffect(() => {
@@ -40,8 +50,8 @@ export function CommentEdit({
     console.log("editor content", editor?.getHTML());
     editComment.mutate(
       {
-        postId: comment.postId,
-        commentId: comment.id,
+        postId,
+        commentId: comment?.id ?? "",
         content: editor?.getHTML() ?? "",
       },
       {
@@ -57,6 +67,13 @@ export function CommentEdit({
     );
   };
 
+  const handleCreate = () => {
+    createComment.mutate({
+      postId,
+      content: editor?.getHTML() ?? "",
+    });
+  };
+
   return (
     <div className="w-full space-y-2 rounded-lg border p-4">
       <span className="text-sm text-muted-foreground">Markdown supported</span>
@@ -65,12 +82,29 @@ export function CommentEdit({
         <Button size="sm" variant="ghost" onClick={() => setIsEditing(false)}>
           Cancel
         </Button>
-        <Button size="sm" disabled={editComment.isLoading} onClick={handleEdit}>
-          {editComment.isLoading && (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-          )}
-          Save
-        </Button>
+        {edit ? (
+          <Button
+            size="sm"
+            disabled={editComment.isLoading}
+            onClick={handleEdit}
+          >
+            {editComment.isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Save
+          </Button>
+        ) : (
+          <Button
+            size="sm"
+            disabled={createComment.isLoading}
+            onClick={handleCreate}
+          >
+            {createComment.isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Comment
+          </Button>
+        )}
       </div>
     </div>
   );

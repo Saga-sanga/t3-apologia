@@ -3,7 +3,7 @@
 import { SelectComment, SelectUser } from "@/server/db/schema";
 import { format } from "date-fns";
 import { Fragment, useState } from "react";
-import { CommentEdit } from "./comment-edit";
+import { CommentEditor } from "./comment-editor";
 import { CommentOptions } from "./comment-options";
 import { Button } from "./ui/button";
 import {
@@ -29,9 +29,9 @@ export function CommentCard({ comment, isCurrentUser }: CommentCardProps) {
   return (
     <article className="flex w-full space-x-2" key={comment.id}>
       {isEditing ? (
-        <CommentEdit
+        <CommentEditor
+          postId={comment.postId ?? ""}
           comment={{
-            postId: comment.postId ?? "",
             id: comment.id,
             content: comment.content,
           }}

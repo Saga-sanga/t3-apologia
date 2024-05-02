@@ -18,6 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
+import { CommentEditor } from "./comment-editor";
 
 type CommentInputProps = {
   user: {
@@ -30,6 +31,7 @@ type CommentInputProps = {
 export function CommentInput({ user, isAuth }: CommentInputProps) {
   const [comment, setComment] = useState("");
   const [open, setOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const ref = useRef<HTMLTextAreaElement>(null);
 
@@ -55,18 +57,14 @@ export function CommentInput({ user, isAuth }: CommentInputProps) {
       }),
   });
 
-  const handleCreate = () => {
-    console.log({ isAuth });
+  const handleClick = () => {
     if (!isAuth) {
       setOpen(true);
       return;
     }
 
     if (postId) {
-      commentMutation.mutate({
-        postId,
-        content: comment,
-      });
+      setIsEditing(true);
     }
   };
 
@@ -74,7 +72,7 @@ export function CommentInput({ user, isAuth }: CommentInputProps) {
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Please Login first!</AlertDialogTitle>
+          <AlertDialogTitle>Login hmasa rawh!</AlertDialogTitle>
           <AlertDialogDescription>
             Comment siam tur chuan i login phawt a ngai. A hnuaia button hmang
             hian i login thei e.
@@ -99,7 +97,7 @@ export function CommentInput({ user, isAuth }: CommentInputProps) {
         <h3 className="mb-10 mt-14 text-2xl font-semibold text-foreground">
           Comments
         </h3>
-        <div className="flex space-x-2">
+        {/* <div className="flex space-x-2">
           <UserAvatar user={{ name: user.name, image: user.image }} />
           <div className="w-full space-y-3">
             <Textarea
@@ -120,7 +118,20 @@ export function CommentInput({ user, isAuth }: CommentInputProps) {
               Submit
             </Button>
           </div>
-        </div>
+        </div> */}
+        {isEditing ? (
+          <CommentEditor postId={postId ?? ""} setIsEditing={setIsEditing} />
+        ) : (
+          <button
+            onClick={handleClick}
+            className="not-prose flex w-full items-center space-x-3 rounded-lg border p-4"
+          >
+            <UserAvatar user={{ name: user.name, image: user.image }} />
+            <p className="text-base text-muted-foreground">
+              Comment tha tak hetah hian i ziak thei e
+            </p>
+          </button>
+        )}
       </div>
     </AlertDialog>
   );

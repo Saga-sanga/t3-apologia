@@ -14,7 +14,7 @@ export function useTipTapCommentEditor(defaultValue: string) {
     content: defaultValue,
     editorProps: {
       attributes: {
-        class: "focus:outline-none",
+        class: "text-base focus:outline-none",
       },
     },
   });
