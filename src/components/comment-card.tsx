@@ -68,11 +68,11 @@ export function CommentCard({ comment, isCurrentUser }: CommentCardProps) {
                 dangerouslySetInnerHTML={{ __html: comment.content ?? "" }}
               />
             </CardContent>
-            <CardFooter className="p-4 pt-0">
+            {/* <CardFooter className="p-4 pt-0">
               <Button className="px-0" variant="link">
                 Reply
               </Button>
-            </CardFooter>
+            </CardFooter> */}
           </Card>
         </Fragment>
       )}
