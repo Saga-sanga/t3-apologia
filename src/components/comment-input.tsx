@@ -94,7 +94,7 @@ export function CommentInput({ user, isAuth }: CommentInputProps) {
         </AlertDialogHeader>
       </AlertDialogContent>
       <div className="not-prose mt-20 border-t" id="comments">
-        <h3 className="mb-10 mt-14 text-2xl font-semibold text-foreground">
+        <h3 className="mb-8 mt-14 text-2xl font-semibold text-foreground">
           Comments
         </h3>
         {/* <div className="flex space-x-2">
