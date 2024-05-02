@@ -49,18 +49,18 @@ const resend = new Resend(env.RESEND_API_KEY);
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    signIn: async ({ user }) => {
-      const userInfo = await db.query.users.findFirst({
-        where: (users, { eq }) => eq(users.id, user.id),
-      });
+    // signIn: async ({ user }) => {
+    //   const userInfo = await db.query.users.findFirst({
+    //     where: (users, { eq }) => eq(users.id, user.id),
+    //   });
 
-      // Redirect to user onboarding page `/welcome` if onboarding is not completed
-      // if (!userInfo?.completedOnboarding) {
-      //   return "/welcome";
-      // }
+    //   // Redirect to user onboarding page `/welcome` if onboarding is not completed
+    //   // if (!userInfo?.completedOnboarding) {
+    //   //   return "/welcome";
+    //   // }
 
-      return true;
-    },
+    //   return true;
+    // },
     session: async ({ session, user }) => {
       // Add users id and role info in session object
       const userDbInfo = await db.query.users.findFirst({

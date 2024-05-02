@@ -40,7 +40,7 @@ export function useEditorJS(
         },
         placeholder: "Type here to start writing your post...",
         inlineToolbar: true,
-        // @ts-expect-error: Json object type is dynamic plus we let the Editor handle it
+        // @ts-expect-error: Json object type is unspecified, always changes with input
         data: post.content,
         tools: {
           header: Header,

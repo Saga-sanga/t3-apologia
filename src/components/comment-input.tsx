@@ -27,7 +27,6 @@ type CommentInputProps = {
   isAuth: boolean;
 };
 
-// TODO: add dialog to prompt login if user is not logged in
 export function CommentInput({ user, isAuth }: CommentInputProps) {
   const [comment, setComment] = useState("");
   const [open, setOpen] = useState(false);
@@ -108,7 +107,7 @@ export function CommentInput({ user, isAuth }: CommentInputProps) {
               ref={ref}
               onChange={(e) => setComment(e.target.value)}
               value={comment}
-              placeholder="Hetah hian I thil sawi duh te comment rawh le"
+              placeholder="Hetah hian I thil sawi duh te chu comment rawh le"
               rows={6}
             />
             <Button

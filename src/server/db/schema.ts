@@ -137,6 +137,10 @@ export const replies = pgTable("reply", {
 });
 
 export const repliesRelations = relations(replies, ({ one }) => ({
+  author: one(users, {
+    fields: [replies.userId],
+    references: [users.id],
+  }),
   parent: one(comments, {
     fields: [replies.parentId],
     references: [comments.id],

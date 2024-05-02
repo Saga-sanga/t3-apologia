@@ -1,7 +1,6 @@
 import { db } from "@/server/db";
 import { comments } from "@/server/db/schema";
 import { desc } from "drizzle-orm";
-import { Fragment } from "react";
 import { CommentCard } from "./comment-card";
 
 type CommentListProps = {
@@ -10,10 +9,6 @@ type CommentListProps = {
 };
 
 export async function CommentList({ postId, userId }: CommentListProps) {
-  // const pathname = usePathname();
-  // const postId = pathname.split("/")[2];
-  // const comments = api.comment.get.useQuery({ postId: postId! });
-
   const postComments = await db.query.comments.findMany({
     where: (comment, { eq }) => eq(comment.postId, postId),
     orderBy: desc(comments.createdAt),
