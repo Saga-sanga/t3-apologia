@@ -39,7 +39,7 @@ export async function CommentList({ postId, userId }: CommentListProps) {
   });
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
+    <div className="mx-auto space-y-8 px-4 md:max-w-3xl md:px-0">
       {postComments.length > 0 ? (
         postComments.map((comment) => (
           <Fragment key={comment.id}>
@@ -55,7 +55,7 @@ export async function CommentList({ postId, userId }: CommentListProps) {
           </Fragment>
         ))
       ) : (
-        <div className="flex flex-col items-center justify-center space-y-2 py-8 text-center">
+        <div className="flex flex-col items-center justify-center space-y-2 pb-14 pt-8 text-center">
           <span className="mb-1 rounded-full bg-accent p-3">
             <MessagesSquare className="h-5 w-5 text-muted-foreground" />
           </span>

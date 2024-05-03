@@ -87,7 +87,7 @@ export function CommentInput({ user, isAuth }: CommentInputProps) {
             className="not-prose flex w-full items-center space-x-3 rounded-lg border p-4"
           >
             <UserAvatar user={{ name: user.name, image: user.image }} />
-            <p className="text-base text-muted-foreground">
+            <p className="text-start text-base text-muted-foreground">
               Comment tha tak hetah hian i ziak thei e
             </p>
           </button>
