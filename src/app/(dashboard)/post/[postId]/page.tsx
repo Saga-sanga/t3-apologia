@@ -10,7 +10,7 @@ import { CalendarDaysIcon, DotIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Fragment } from "react";
+import { Fragment, Suspense } from "react";
 
 type PostPageProps = {
   params: {
@@ -76,7 +76,15 @@ export default async function PostPage({ params }: PostPageProps) {
           user={{ name: user?.name ?? "", image: user?.image ?? "" }}
         />
       </div>
-      <CommentList postId={params.postId} userId={user?.id} />
+      <Suspense
+        fallback={
+          <div className="w-full">
+            <Icons.spinner className="mx-auto h-8 w-8 animate-spin text-foreground/60" />
+          </div>
+        }
+      >
+        <CommentList postId={params.postId} userId={user?.id} />
+      </Suspense>
     </main>
   );
 }
