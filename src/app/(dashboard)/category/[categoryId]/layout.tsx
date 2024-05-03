@@ -1,3 +1,4 @@
+import { AsideInfo } from "@/components/aside-info";
 import {
   Card,
   CardDescription,
@@ -35,7 +36,7 @@ export default async function CategoryLayout({
         {children}
       </main>
       <aside className="hidden flex-col lg:col-span-4 lg:flex">
-        {/* <DashboardNav items={dashboardConfig.sidebarNav} /> */}
+        <AsideInfo />
       </aside>
     </div>
   );

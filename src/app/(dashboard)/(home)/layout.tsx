@@ -1,3 +1,9 @@
+import { AsideInfo } from "@/components/aside-info";
+import { Icons } from "@/components/icons";
+import { Separator } from "@/components/ui/separator";
+import { Mail } from "lucide-react";
+import Link from "next/link";
+
 export default function HomeLayout({
   children,
 }: {
@@ -9,7 +15,7 @@ export default function HomeLayout({
         {children}
       </main>
       <aside className="hidden flex-col lg:col-span-4 lg:flex">
-        {/* <DashboardNav items={dashboardConfig.sidebarNav} /> */}
+        <AsideInfo/> 
       </aside>
     </div>
   );
