@@ -15,7 +15,7 @@ export default function HomeLayout({
         {children}
       </main>
       <aside className="hidden flex-col lg:col-span-4 lg:flex">
-        <AsideInfo/> 
+        <AsideInfo />
       </aside>
     </div>
   );
