@@ -7,7 +7,7 @@ export function AsideInfo() {
   return (
     <div className="sticky top-[88px] space-y-8">
       <div className="rounded-lg border px-6 py-5">
-        <h3 className="text-2xl font-semibold">
+        <h3 className="text-xl font-semibold">
           Sign up lang zawhna zawt tan rawh le!
         </h3>
       </div>
