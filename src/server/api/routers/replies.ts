@@ -18,7 +18,7 @@ export const replyRouter = createTRPCRouter({
       await ctx.db
         .insert(replies)
         .values({ parentId, content, userId: ctx.session.user.id });
-      revalidatePath(`/posts/${postId}`);
+      revalidatePath(`/post/${postId}`);
     }),
 
   update: protectedProcedure

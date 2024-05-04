@@ -1,10 +1,10 @@
 import { db } from "@/server/db";
 import { comments } from "@/server/db/schema";
 import { desc } from "drizzle-orm";
-import { CommentCard } from "./comment-card";
+import { MessagesSquare } from "lucide-react";
 import { Fragment } from "react";
+import { CommentCard } from "./comment-card";
 import { RepliesList } from "./replies-list";
-import { MessageCircleDashed, MessagesSquare } from "lucide-react";
 
 type CommentListProps = {
   postId: string;
@@ -42,7 +42,7 @@ export async function CommentList({ postId, userId }: CommentListProps) {
     <div className="mx-auto space-y-8 px-4 md:max-w-3xl md:px-0">
       {postComments.length > 0 ? (
         postComments.map((comment) => (
-          <Fragment key={comment.id}>
+          <div key={comment.id}>
             <CommentCard
               comment={comment}
               isCurrentUser={userId === comment.author?.id}
@@ -52,7 +52,7 @@ export async function CommentList({ postId, userId }: CommentListProps) {
               replies={comment.replies}
               isCurrentUser={userId === comment.author?.id}
             />
-          </Fragment>
+          </div>
         ))
       ) : (
         <div className="flex flex-col items-center justify-center space-y-2 pb-14 pt-8 text-center">
