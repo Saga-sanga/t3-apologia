@@ -13,7 +13,7 @@ export function AsideInfo() {
         tihzauh a tum a ni.
       </p>
 
-      <h3 className="col-span-2 mt-2">Connect with us</h3>
+      <h3 className="col-span-2 mt-2">Contact us</h3>
       <div className="col-span-2 space-y-2">
         <div className="flex items-center">
           <Icons.whatsapp className="mr-2 h-4 w-4" />
