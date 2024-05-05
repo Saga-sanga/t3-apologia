@@ -1,3 +1,4 @@
+import { AccountDeleteSection } from "@/components/account-delete-section";
 import { ProfileForm } from "@/components/forms/profile-form";
 import { Separator } from "@/components/ui/separator";
 import { getCurrentUser } from "@/server/auth";
@@ -31,24 +32,27 @@ export default async function SettingsPage() {
             </p>
           </div>
         </div>
-        <div className="flex-1 space-y-6 rounded-lg border p-8">
-          <div>
-            <h3 className="text-lg font-medium">Profile</h3>
-            <p className="text-sm text-muted-foreground">
-              Heihi midangin website a an hmuh dan tur che ani.
-            </p>
+        <div className="flex-1 space-y-8">
+          <div className="space-y-6 rounded-lg border p-8">
+            <div>
+              <h3 className="text-lg font-medium">Profile</h3>
+              <p className="text-sm text-muted-foreground">
+                Heihi midangin website a an hmuh dan tur che ani.
+              </p>
+            </div>
+            <Separator />
+            <ProfileForm
+              userData={{
+                username: userData?.username ?? "",
+                name: userData?.name ?? "",
+                dob: userData?.dob ?? null,
+                sex: userData?.sex ?? null,
+                profession: userData?.profession ?? "",
+                image: userData?.image ?? null,
+              }}
+            />
           </div>
-          <Separator />
-          <ProfileForm
-            userData={{
-              username: userData?.username ?? "",
-              name: userData?.name ?? "",
-              dob: userData?.dob ?? null,
-              sex: userData?.sex ?? null,
-              profession: userData?.profession ?? "",
-              image: userData?.image ?? null,
-            }}
-          />
+          <AccountDeleteSection userId={user.id} />
         </div>
       </div>
     </div>

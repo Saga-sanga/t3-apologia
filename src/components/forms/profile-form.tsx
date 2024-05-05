@@ -90,7 +90,7 @@ export function ProfileForm({ userData }: ProfileFormProps) {
 
   return (
     <Form {...form}>
-      <form className="space-y-8">
+      <form className="flex flex-col space-y-8">
         <div className="space-y-6">
           <FormField
             control={form.control}
@@ -204,7 +204,12 @@ export function ProfileForm({ userData }: ProfileFormProps) {
             )}
           />
         </div>
-        <Button onClick={handleClick} type="submit" disabled={isLoading}>
+        <Button
+          className="ml-auto"
+          onClick={handleClick}
+          type="submit"
+          disabled={isLoading || !form.formState.isDirty}
+        >
           Update profile{" "}
           {isLoading && <Icons.spinner className="ml-2 h-4 w-4 animate-spin" />}
         </Button>

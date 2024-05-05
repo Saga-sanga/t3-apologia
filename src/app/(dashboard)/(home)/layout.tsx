@@ -1,8 +1,4 @@
 import { AsideInfo } from "@/components/aside-info";
-import { Icons } from "@/components/icons";
-import { Separator } from "@/components/ui/separator";
-import { Mail } from "lucide-react";
-import Link from "next/link";
 
 export default function HomeLayout({
   children,
