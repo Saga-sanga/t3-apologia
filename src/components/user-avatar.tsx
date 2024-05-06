@@ -13,7 +13,7 @@ export function UserAvatar({ user, ...props }: UserAvatarProps) {
       <AvatarImage alt="User Image" src={user.image ?? undefined} />
       <AvatarFallback>
         <span className="sr-only">{user.name}</span>
-        <UserRound className="h-4 w-4" />
+        <UserRound className="h-[60%] w-[60%]" />
       </AvatarFallback>
     </Avatar>
   );

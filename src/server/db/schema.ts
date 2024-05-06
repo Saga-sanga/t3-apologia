@@ -34,6 +34,7 @@ export const users = pgTable("user", {
   sex: sexEnum("sex"),
   profession: text("profession"),
   role: roleEnum("role").default("user").notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
 });
 
 export const follows = pgTable("follow", {

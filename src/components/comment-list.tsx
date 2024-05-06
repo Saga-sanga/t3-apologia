@@ -5,6 +5,7 @@ import { MessagesSquare } from "lucide-react";
 import { Fragment } from "react";
 import { CommentCard } from "./comment-card";
 import { RepliesList } from "./replies-list";
+import { getCurrentUser } from "@/server/auth";
 
 type CommentListProps = {
   postId: string;
@@ -38,12 +39,15 @@ export async function CommentList({ postId, userId }: CommentListProps) {
     },
   });
 
+  const user = await getCurrentUser();
+
   return (
     <div className="mx-auto space-y-8 px-4 md:max-w-3xl md:px-0">
       {postComments.length > 0 ? (
         postComments.map((comment) => (
           <div key={comment.id}>
             <CommentCard
+              isAuth={!!user}
               comment={comment}
               isCurrentUser={userId === comment.author?.id}
             />

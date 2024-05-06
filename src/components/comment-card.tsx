@@ -16,6 +16,8 @@ import {
   CardTitle,
 } from "./ui/card";
 import { UserAvatar } from "./user-avatar";
+import { ReplyDialog } from "./reply-dialog";
+import { useSession } from "next-auth/react";
 
 type CommentCardProps = {
   comment: SelectComment & {
@@ -23,9 +25,14 @@ type CommentCardProps = {
     replies: SelectReply[];
   };
   isCurrentUser: boolean;
+  isAuth: boolean;
 };
 
-export function CommentCard({ comment, isCurrentUser }: CommentCardProps) {
+export function CommentCard({
+  comment,
+  isCurrentUser,
+  isAuth,
+}: CommentCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isReply, setIsReply] = useState(false);
 
@@ -74,13 +81,17 @@ export function CommentCard({ comment, isCurrentUser }: CommentCardProps) {
                 />
               </CardContent>
               <CardFooter className="flex items-center space-x-2 p-4 pb-2 pt-0">
-                <Button
-                  onClick={() => setIsReply(!isReply)}
-                  className="px-0"
-                  variant="link"
-                >
-                  Reply
-                </Button>
+                {isAuth ? (
+                  <Button
+                    onClick={() => setIsReply(!isReply)}
+                    className="px-0"
+                    variant="link"
+                  >
+                    Reply
+                  </Button>
+                ) : (
+                  <ReplyDialog />
+                )}
                 {comment.replies.length > 0 && (
                   <Fragment>
                     <span className="h-1 w-1 rounded-full bg-muted-foreground"></span>

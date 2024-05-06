@@ -35,11 +35,13 @@ export function CommentInput({ user, isAuth }: CommentInputProps) {
 
   useEffect(() => {
     if (window.location.hash === "#comments") {
-      setIsEditing(true);
+      if (isAuth) {
+        setIsEditing(true);
+      }
     }
   }, []);
 
-  const handleClick = () => {
+  const handleComment = () => {
     if (!isAuth) {
       setOpen(true);
       return;
@@ -83,7 +85,7 @@ export function CommentInput({ user, isAuth }: CommentInputProps) {
           <CommentEditor postId={postId ?? ""} setIsEditing={setIsEditing} />
         ) : (
           <button
-            onClick={handleClick}
+            onClick={handleComment}
             className="not-prose flex w-full items-center space-x-3 rounded-lg border p-4"
           >
             <UserAvatar user={{ name: user.name, image: user.image }} />
