@@ -8,7 +8,7 @@ export function AsideInfo() {
     <div className="sticky top-[88px] space-y-8">
       <div className="rounded-lg border px-6 py-5">
         <h3 className="text-xl font-semibold">
-          Sign up lang <span className="text-primary">Zawhna Zawt</span> tan
+          Sign up langin <span className="text-primary">Zawhna Zawt</span> tan
           rawh le!
         </h3>
       </div>

@@ -1,11 +1,11 @@
-import { format } from "date-fns";
+import { format, formatDistanceToNowStrict } from "date-fns";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { UserAvatar } from "@/components/user-avatar";
 import { getCurrentUser } from "@/server/auth";
 import { db } from "@/server/db";
 import { users } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
-import { CalendarDays, Pencil, UserRound } from "lucide-react";
+import { CalendarDays, Clock, Pencil, UserRound } from "lucide-react";
 import { notFound } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -52,14 +52,18 @@ export default async function Page({ params }: PageProps) {
           )}
         </div>
       </div>
-      <div className="flex items-center justify-center space-x-10 rounded-lg border px-2 py-5 capitalize text-foreground/80">
-        <span className="flex">
+      <div className="flex items-center justify-center space-x-10 rounded-lg border px-2 py-5 text-foreground/80">
+        <span className="flex capitalize">
           <UserRound className="mr-2 h-5 w-5" />
           {userData.sex}
         </span>
-        <span className="flex">
+        {/* <span className="flex">
           <CalendarDays className="mr-2 h-5 w-5" />
           Born on {format(userData?.dob ?? "", "MMM dd, yyyy")}
+        </span> */}
+        <span className="flex">
+          <Clock className="mr-2 h-5 w-5" />
+          {formatDistanceToNowStrict(userData?.dob ?? "")} old
         </span>
       </div>
       <div className="rounded-lg border px-10 py-5">
