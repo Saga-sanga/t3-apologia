@@ -7,6 +7,7 @@ import { getCurrentUser } from "@/server/auth";
 import { db } from "@/server/db";
 import { OutputData } from "@editorjs/editorjs";
 import { CalendarDaysIcon, DotIcon } from "lucide-react";
+import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -17,6 +18,25 @@ type PostPageProps = {
     postId: string;
   };
 };
+
+export async function generateMetadata(
+  { params }: PostPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const post = await db.query.posts.findFirst({
+    where: (posts, { eq }) => eq(posts.id, params.postId),
+  });
+
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: post?.title,
+    description: post?.description,
+    openGraph: {
+      images: [post?.image ?? "", ...previousImages],
+    },
+  };
+}
 
 export default async function PostPage({ params }: PostPageProps) {
   const post = await db.query.posts.findFirst({

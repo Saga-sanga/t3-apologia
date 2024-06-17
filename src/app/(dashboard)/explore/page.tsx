@@ -4,6 +4,9 @@ import { categories, posts, SelectCategory } from "@/server/db/schema";
 import { count, desc, eq } from "drizzle-orm";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 type CategoryItemProps = {
   category: SelectCategory & { count: number };
 };
@@ -16,7 +19,7 @@ function CategoryItem({ category }: CategoryItemProps) {
     >
       <Icons.tag className="m-1 h-8 w-8 shrink-0 text-primary" />
       <div className="flex flex-col overflow-hidden">
-        <h4 className="md:truncate font-bold">{category.name}</h4>
+        <h4 className="font-bold md:truncate">{category.name}</h4>
         <p className="text-sm text-muted-foreground">{category.count} posts</p>
       </div>
     </Link>
@@ -44,7 +47,7 @@ export default async function Page() {
       </div>
       <div className="flex flex-wrap">
         {categoriesWithCount.map((category) => (
-          <div className="w-full md:w-1/2 p-2" key={category.id}>
+          <div className="w-full p-2 md:w-1/2" key={category.id}>
             <CategoryItem category={category} />
           </div>
         ))}

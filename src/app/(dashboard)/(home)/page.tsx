@@ -1,10 +1,12 @@
+import { InfinitePostCardList } from "@/components/infinite-post-card-list";
 import { PostCard } from "@/components/post-card";
 import { DashboardShell } from "@/components/shell";
-import { getServerAuthSession } from "@/server/auth";
 import { db } from "@/server/db";
 import { posts } from "@/server/db/schema";
 import { desc, eq } from "drizzle-orm";
-import { InfinitePostCardList } from "@/components/infinite-post-card-list";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function Home() {
   // const session = await getServerAuthSession();

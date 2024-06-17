@@ -63,7 +63,7 @@ export const postRouter = createTRPCRouter({
           .set({ title, description, content, image, questionId })
           .where(eq(posts.id, id));
 
-        revalidatePath("/dashboard/posts");
+        revalidatePath("/", "layout");
       },
     ),
 

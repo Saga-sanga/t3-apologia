@@ -4,6 +4,8 @@ import { db } from "@/server/db";
 import { notFound, redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // TODO: Fix caching
 interface EditorPageProps {
   params: {
