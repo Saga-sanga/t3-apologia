@@ -27,13 +27,22 @@ export async function generateMetadata(
     where: (posts, { eq }) => eq(posts.id, params.postId),
   });
 
-  // const previousImages = (await parent).openGraph?.images || [];
+  const previousImages = (await parent).openGraph?.images || [];
+
+  console.log({
+    post,
+  });
 
   return {
     title: { default: post?.title ?? "Post", template: "%s | Mizo Apologia" },
     description: post?.description,
     openGraph: {
-      images: [post?.image ?? ""],
+      images: [post?.image ?? "", ...previousImages],
+    },
+    twitter: {
+      title: { default: post?.title ?? "Post", template: "%s | Mizo Apologia" },
+      description: post?.description ?? "",
+      images: [post?.image ?? "", ...previousImages],
     },
   };
 }
