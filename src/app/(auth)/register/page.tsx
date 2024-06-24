@@ -15,13 +15,14 @@ export default async function Page() {
         <div className="mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
-              &ldquo;I bible zawhna zawng zawngte chhanna i dawn theihna hmun.&rdquo;
+              &ldquo;I bible zawhna zawng zawngte chhanna i dawn theihna
+              hmun.&rdquo;
             </p>
             <footer className="text-sm">Mizo Apologia</footer>
           </blockquote>
         </div>
       </div>
-      <div className="relative col-span-1 grid place-content-center space-y-6">
+      <div className="relative col-span-1 grid place-items-center space-y-6">
         <Link
           className={cn(
             "absolute right-4 top-4 md:right-8 md:top-8",
