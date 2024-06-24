@@ -91,8 +91,7 @@ export function QuestionTableRowActions({
         rowData.status === "unanswered"
           ? "duplicate"
           : rowData.status === "duplicate"
-            ? "unanswered"
-            : "unanswered",
+            ? "unanswered" : "unanswered",
     });
   };
 

@@ -63,5 +63,6 @@ export const questionRouter = createTRPCRouter({
     .mutation(async ({ ctx, input: { questionId } }) => {
       await ctx.db.delete(zawhna).where(eq(zawhna.id, questionId));
       revalidatePath("/dashboard");
+      revalidatePath("/[username]");
     }),
 });

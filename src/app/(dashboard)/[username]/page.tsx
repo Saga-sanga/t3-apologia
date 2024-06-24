@@ -9,6 +9,7 @@ import { CalendarDays, Clock, Pencil, UserRound } from "lucide-react";
 import { notFound } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { UserQuestions } from "@/components/user-questions";
 
 type PageProps = {
   params: {
@@ -57,18 +58,16 @@ export default async function Page({ params }: PageProps) {
           <UserRound className="mr-2 h-5 w-5" />
           {userData.sex}
         </span>
-        {/* <span className="flex">
-          <CalendarDays className="mr-2 h-5 w-5" />
-          Born on {format(userData?.dob ?? "", "MMM dd, yyyy")}
-        </span> */}
         <span className="flex">
           <Clock className="mr-2 h-5 w-5" />
           {formatDistanceToNowStrict(userData?.dob ?? "")} old
         </span>
+        <span className="flex">
+          <CalendarDays className="mr-2 h-5 w-5" />
+          Member since {format(userData?.createdAt ?? "", "MMM, yyyy")}
+        </span>
       </div>
-      <div className="rounded-lg border px-10 py-5">
-        <h3 className="text-xl font-bold">Recent Questions</h3>
-      </div>
+      <UserQuestions userId={user?.id ?? userData.id} />
     </main>
   );
 }

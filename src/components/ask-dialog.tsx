@@ -60,7 +60,7 @@ export function AskDialog() {
             <p>
               A hnuaiah hian i zawhna zawh duh chu chipchiar takin zawt rawh le.
             </p>
-            <p>I phalna lovin I personal info engmah kan tilang ngai lovang.</p>
+            <p>I phalna lovin I zawhna zawh te hi kan tlangzarh ngai lo ang.</p>
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
