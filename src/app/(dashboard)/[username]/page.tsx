@@ -67,7 +67,9 @@ export default async function Page({ params }: PageProps) {
           Member since {format(userData?.createdAt ?? "", "MMM, yyyy")}
         </span>
       </div>
-      <UserQuestions userId={user?.id ?? userData.id} />
+      {user?.id === userData.id && (
+        <UserQuestions userId={user?.id ?? userData.id} />
+      )}
     </main>
   );
 }
