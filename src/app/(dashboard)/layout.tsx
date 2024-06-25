@@ -7,7 +7,7 @@ type LayoutProps = {
 };
 
 export default async function Layout({ children }: LayoutProps) {
-    const user = await getCurrentUser();
+  const user = await getCurrentUser();
 
   if (user && !user?.completedOnboarding) {
     redirect("/welcome");

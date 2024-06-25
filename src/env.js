@@ -40,6 +40,8 @@ export const env = createEnv({
     EDGE_STORE_SECRET_KEY: z.string(),
     RESEND_API_KEY: z.string(),
     RESEND_FROM: z.string(),
+    ORAMA_PRIVATE_API_KEY: z.string(),
+    ORAMA_BASE_URL: z.string(),
   },
 
   /**
@@ -72,6 +74,8 @@ export const env = createEnv({
     EDGE_STORE_SECRET_KEY: process.env.EDGE_STORE_SECRET_KEY,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_FROM: process.env.RESEND_FROM,
+    ORAMA_PRIVATE_API_KEY: process.env.ORAMA_PRIVATE_API_KEY,
+    ORAMA_BASE_URL: process.env.ORAMA_BASE_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

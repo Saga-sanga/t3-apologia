@@ -2,11 +2,12 @@ import { cn } from "@/lib/utils";
 import { getCurrentUser } from "@/server/auth";
 import { FeatherIcon } from "lucide-react";
 import Link from "next/link";
-import { NavButtons } from "./nav-buttons";
+import { AskDialog } from "./ask-dialog";
 import { PageNav } from "./page-nav";
 import { buttonVariants } from "./ui/button";
 import { UserAccountNav } from "./user-account-nav";
-import { AskDialog } from "./ask-dialog";
+import { OramaSearchBox } from "./orama-search-box";
+import { SearchButton } from "@orama/searchbox";
 
 export async function MainNav() {
   const user = await getCurrentUser();
@@ -16,11 +17,12 @@ export async function MainNav() {
       <Link href="/">
         <p className="flex items-center text-2xl font-bold">
           <FeatherIcon className="mr-2 h-8 w-8" />{" "}
-          <span className="hidden md:block">Mizo Apologia</span>
+          <span className="hidden text-nowrap md:block">Mizo Apologia</span>
         </p>
       </Link>
       <PageNav user={user} />
       <div className="flex items-center justify-center space-x-4 md:space-x-6">
+        <OramaSearchBox />
         {user ? (
           <>
             <AskDialog />

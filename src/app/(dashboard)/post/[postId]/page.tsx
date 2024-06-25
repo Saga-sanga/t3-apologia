@@ -29,10 +29,6 @@ export async function generateMetadata(
 
   const previousImages = (await parent).openGraph?.images || [];
 
-  console.log({
-    post,
-  });
-
   return {
     title: { default: post?.title ?? "Post", template: "%s | Mizo Apologia" },
     description: post?.description,

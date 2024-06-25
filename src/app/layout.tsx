@@ -9,8 +9,6 @@ import { EdgeStoreProvider } from "@/lib/edgestore";
 import { TRPCReactProvider } from "@/trpc/react";
 import { Analytics } from "@vercel/analytics/react";
 import { siteCofig } from "@/config/site";
-import { title } from "process";
-import { desc } from "drizzle-orm";
 
 const inter = Inter({
   subsets: ["latin"],

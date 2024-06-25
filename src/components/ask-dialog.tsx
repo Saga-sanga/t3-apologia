@@ -48,9 +48,9 @@ export function AskDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-full px-2.5 md:px-4">
-          <PencilLineIcon className="h-5 w-5 md:mr-2" />
-          <span className="hidden md:block">Zawt Rawh</span>
+        <Button className="rounded-full px-2.5 lg:px-4">
+          <PencilLineIcon className="h-5 w-5 lg:mr-2" />
+          <span className="hidden lg:block">Zawt Rawh</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">

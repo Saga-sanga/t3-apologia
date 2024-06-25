@@ -8,6 +8,8 @@ import {
 import { categories, posts } from "@/server/db/schema";
 import { and, desc, eq, lt } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { env } from "@/env";
+import { createOramaIndex } from "@/scripts/createOramaIndex";
 
 export const postRouter = createTRPCRouter({
   create: protectedProcedure
@@ -21,6 +23,7 @@ export const postRouter = createTRPCRouter({
         .insert(posts)
         .values({ title, authorId: ctx.session.user.id })
         .returning({ postId: posts.id });
+
       return data;
     }),
 
