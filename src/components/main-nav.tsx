@@ -8,19 +8,31 @@ import { buttonVariants } from "./ui/button";
 import { UserAccountNav } from "./user-account-nav";
 import { OramaSearchBox } from "./orama-search-box";
 import { SearchButton } from "@orama/searchbox";
+import { MobileNav } from "./mobile-nav";
 
 export async function MainNav() {
   const user = await getCurrentUser();
 
   return (
-    <div className="container flex h-16 items-center justify-between gap-2 py-4">
-      <Link href="/">
-        <p className="flex items-center text-2xl font-bold">
-          <FeatherIcon className="mr-2 h-8 w-8" />{" "}
-          <span className="hidden text-nowrap md:block">Mizo Apologia</span>
-        </p>
-      </Link>
-      <PageNav user={user} />
+    <div className="container flex h-16 items-center justify-between gap-2 px-2 py-4 md:px-8">
+      <div className="flex items-center space-x-4">
+        <MobileNav>
+          <PageNav
+            className="flex flex-col space-y-2 text-left text-sm font-semibold"
+            user={user}
+          />
+        </MobileNav>
+        <Link href="/">
+          <p className="flex items-center text-2xl font-bold">
+            <FeatherIcon className="mr-2 h-8 w-8" />{" "}
+            <span className="hidden text-nowrap md:block">Mizo Apologia</span>
+          </p>
+        </Link>
+      </div>
+      <PageNav
+        className="hidden items-center space-x-2 overflow-x-auto text-sm font-semibold md:flex"
+        user={user}
+      />
       <div className="flex items-center justify-center space-x-4 md:space-x-6">
         <OramaSearchBox />
         {user ? (

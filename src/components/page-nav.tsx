@@ -9,44 +9,43 @@ import { ShieldIcon } from "lucide-react";
 
 type PageNavProps = {
   user: Session["user"] | undefined;
+  className?: string;
 };
 
-export function PageNav({ user }: PageNavProps) {
+export function PageNav({ user, className }: PageNavProps) {
+  return (
+    <div className={className}>
+      <SheetLink link="/">Home</SheetLink>
+      <SheetLink link="/explore">Explore</SheetLink>
+      {(user?.role === "writer" || user?.role === "admin") && (
+        <SheetLink link="/dashboard">
+          <ShieldIcon className="mr-1 h-4 w-4" />
+          Dashboard
+        </SheetLink>
+      )}
+    </div>
+  );
+}
+
+type SheetLinkProps = {
+  children: React.ReactNode;
+  link: string;
+};
+
+function SheetLink({ children, link }: SheetLinkProps) {
   const path = usePathname();
   const active = "text-primary hover:text-primary";
 
   return (
-    <div className="flex items-center space-x-2 overflow-x-auto text-sm font-semibold">
-      <Link
-        className={cn(
-          buttonVariants({ variant: "ghost" }),
-          path === "/" && active,
-        )}
-        href="/"
-      >
-        Home
-      </Link>
-      <Link
-        className={cn(
-          buttonVariants({ variant: "ghost" }),
-          path === "/explore" && active,
-        )}
-        href="/explore"
-      >
-        Explore
-      </Link>
-      {(user?.role === "writer" || user?.role === "admin") && (
-        <Link
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            path.includes("/dashboard") && active,
-          )}
-          href="/dashboard"
-        >
-          <ShieldIcon className="mr-1 h-4 w-4" />
-          Dashboard
-        </Link>
+    <Link
+      className={cn(
+        buttonVariants({ variant: "ghost" }),
+        path.includes(link) && active,
+        "justify-start md:justify-center",
       )}
-    </div>
+      href={link}
+    >
+      {children}
+    </Link>
   );
 }
