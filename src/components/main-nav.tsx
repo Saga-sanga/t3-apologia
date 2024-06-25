@@ -56,7 +56,10 @@ export async function MainNav() {
               Log in
             </Link>
             <Link
-              className={cn(buttonVariants({ variant: "default" }))}
+              className={cn(
+                buttonVariants({ variant: "default" }),
+                "hidden sm:block",
+              )}
               href="/register"
             >
               Sign up
