@@ -13,9 +13,19 @@ type PageNavProps = {
 };
 
 export function PageNav({ user, className }: PageNavProps) {
+  const path = usePathname();
   return (
     <div className={className}>
-      <SheetLink link="/">Home</SheetLink>
+      <Link
+        href="/"
+        className={cn(
+          buttonVariants({ variant: "ghost" }),
+          path === "/" && "text-primary hover:text-primary",
+          "justify-start md:justify-center",
+        )}
+      >
+        Home
+      </Link>
       <SheetLink link="/explore">Explore</SheetLink>
       {(user?.role === "writer" || user?.role === "admin") && (
         <SheetLink link="/dashboard">
@@ -40,7 +50,7 @@ function SheetLink({ children, link }: SheetLinkProps) {
     <Link
       className={cn(
         buttonVariants({ variant: "ghost" }),
-        path.includes(link) && active,
+        path.includes(link) && "text-primary hover:text-primary",
         "justify-start md:justify-center",
       )}
       href={link}
