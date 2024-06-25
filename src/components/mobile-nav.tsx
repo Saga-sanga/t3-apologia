@@ -1,20 +1,19 @@
 "use client";
 
-import { FeatherIcon, MenuIcon } from "lucide-react";
-import { Button } from "./ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { useRouter } from "next/navigation";
-import Link, { LinkProps } from "next/link";
 import { cn } from "@/lib/utils";
+import { FeatherIcon } from "lucide-react";
+import Link, { LinkProps } from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
-import { PageNav } from "./page-nav";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
 export function MobileNav({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button
           variant="ghost"

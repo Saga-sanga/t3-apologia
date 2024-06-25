@@ -25,7 +25,7 @@ const config = {
     "@typescript-eslint/no-unsafe-assignment": "warn",
     "@typescript-eslint/consistent-indexed-object-style": "warn",
     "@typescript-eslint/restrict-template-expressions": "warn",
-
+    "@typescript-eslint/no-base-to-string": "warn",
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {
