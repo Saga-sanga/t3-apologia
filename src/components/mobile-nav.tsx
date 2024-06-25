@@ -8,8 +8,14 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { PageNav } from "./page-nav";
+import { Session } from "next-auth";
 
-export function MobileNav({ children }: { children: React.ReactNode }) {
+type MobileNavProps = {
+  user: Session["user"] | undefined;
+};
+
+export function MobileNav({ user }: MobileNavProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -61,7 +67,11 @@ export function MobileNav({ children }: { children: React.ReactNode }) {
           <span className="text-lg font-bold">Mizo Apologia</span>
         </MobileLink>
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
-          {children}
+          <PageNav
+            user={user}
+            onOpenChange={setOpen}
+            className="flex flex-col space-y-2 text-left text-sm font-semibold"
+          />
         </ScrollArea>
       </SheetContent>
     </Sheet>

@@ -16,12 +16,7 @@ export async function MainNav() {
   return (
     <div className="container flex h-16 items-center justify-between gap-2 px-2 py-4 md:px-8">
       <div className="flex items-center space-x-2">
-        <MobileNav>
-          <PageNav
-            className="flex flex-col space-y-2 text-left text-sm font-semibold"
-            user={user}
-          />
-        </MobileNav>
+        <MobileNav user={user} />
         <Link href="/">
           <p className="flex items-center text-2xl font-bold">
             <FeatherIcon className="mr-2 h-8 w-8" />{" "}
