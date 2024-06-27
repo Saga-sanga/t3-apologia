@@ -28,7 +28,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { SelectCategory } from "@/server/db/schema";
+import type { SelectCategory } from "@/server/db/schema";
 import { api } from "@/trpc/react";
 import { ChevronsUpDownIcon, PlusCircleIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
@@ -60,17 +60,12 @@ export function CategorySwitcher({
   const [selectedCategory, setSelectedCategory] = useState<SelectCategory>();
   const [name, setName] = useState<string>();
 
-  // useEffect(
-  //   () => console.log({ switcher: categories.data }),
-  //   [categories.data],
-  // );
-
   useEffect(() => {
     if (categories.data) {
       const category = categories.data.find((ele) => ele.id === categoryId);
       setSelectedCategory(category);
     }
-  }, [categories.data]);
+  }, [categories.data, categoryId]);
 
   const handleSubmitCategory = () => {
     if (name) {

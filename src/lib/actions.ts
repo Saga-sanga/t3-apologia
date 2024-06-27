@@ -18,8 +18,6 @@ export async function createQuestion(formData: FormData) {
     const rawFormData = Object.fromEntries(formData.entries());
     const { question } = QuestionSchema.parse(rawFormData);
 
-    console.log({ question, user });
-
     await db
       .insert(zawhna)
       .values({ userId: user.id, content: question, status: "unanswered" });

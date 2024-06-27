@@ -8,7 +8,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { deleteOramaItem } from "@/scripts/createOramaIndex";
 import { api } from "@/trpc/react";
 import {
   LucideCopy,
@@ -46,6 +47,7 @@ export function PostTableRowAction({ postId }: PostTableRowActionProps) {
       { postId },
       {
         onSuccess: () => {
+          deleteOramaItem(`post/${postId}`);
           setIsLoading(false);
           setShowDeleteAlert(false);
           router.refresh();

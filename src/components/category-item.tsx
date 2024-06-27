@@ -8,6 +8,7 @@ import { Input } from "./ui/input";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
+import { upsertOramaIndex } from "@/scripts/createOramaIndex";
 
 type CategoryItemProps = {
   category: SelectCategory;
@@ -60,7 +61,18 @@ export function CategoryItem({
   const handleChange = () => {
     if (postId) {
       setSelectedCategory(category);
-      updatePostCategory.mutate({ categoryId: category.id, postId });
+      updatePostCategory.mutate(
+        { categoryId: category.id, postId },
+        {
+          onSuccess: () => {
+            // Update Orama Index
+            upsertOramaIndex({
+              id: `post/${postId}`,
+              category: { name: category.name },
+            });
+          },
+        },
+      );
     }
   };
 

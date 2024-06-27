@@ -1,7 +1,7 @@
-import { EditorProps } from "@/components/editor";
+import type { EditorProps } from "@/components/editor";
 import { useEdgeStore } from "@/lib/edgestore";
 import type EditorJS from "@editorjs/editorjs";
-import { OutputData } from "@editorjs/editorjs";
+import type { OutputData } from "@editorjs/editorjs";
 import { useCallback } from "react";
 
 export function useEditorJS(
@@ -33,7 +33,7 @@ export function useEditorJS(
         onReady() {
           ref.current = editor;
         },
-        async onChange(api, event) {
+        async onChange(api) {
           const blocks = await api.saver.save();
 
           saveBlocks(blocks);

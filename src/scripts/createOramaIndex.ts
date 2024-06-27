@@ -1,6 +1,6 @@
 import { env } from "@/env";
 import { db } from "@/server/db";
-import { inspect } from "node:util";
+// import { inspect } from "node:util";
 
 type IndexSchema = {
   id: string;
@@ -9,6 +9,73 @@ type IndexSchema = {
   category: string;
   description: string;
 };
+
+type Post = {
+  id: string;
+  content?: unknown;
+  title?: string | null;
+  description?: string | null;
+  category?: {
+    name: string | null;
+  } | null;
+};
+
+export async function upsertOramaIndex(post: Post, batch = false) {
+  const resp = await fetch(`${env.ORAMA_BASE_URL}/notify`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${env.ORAMA_PRIVATE_API_KEY}`,
+    },
+    method: "POST",
+    body: JSON.stringify({
+      upsert: [
+        {
+          id: `post/${post.id}`,
+          category: post.category?.name ?? "",
+          title: post.title ?? "",
+          description: post.description ?? "",
+          content: JSON.stringify(post.content),
+        } satisfies IndexSchema,
+      ],
+    }),
+  });
+
+  console.log(post.title, resp.status);
+  if (!batch) {
+    await deployOramaIndex();
+  }
+}
+
+export async function deleteOramaItem(id: string) {
+  const resp = await fetch(`${env.ORAMA_BASE_URL}/notify`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${env.ORAMA_PRIVATE_API_KEY}`,
+    },
+    method: "POST",
+    body: JSON.stringify({
+      remove: [id],
+    }),
+  });
+
+  console.log("Deleted ", id, resp.status);
+  await deployOramaIndex();
+}
+
+export async function deployOramaIndex() {
+  const deployRes = await fetch(`${env.ORAMA_BASE_URL}/deploy`, {
+    headers: {
+      Authorization: `Bearer ${env.ORAMA_PRIVATE_API_KEY}`,
+    },
+    method: "POST",
+  });
+
+  if (deployRes.ok) {
+    console.log("Orama Search index deployed");
+  } else {
+    console.log(deployRes);
+  }
+}
 
 async function uploadToOrama() {
   console.log("Starting Indexing...");
@@ -49,26 +116,7 @@ async function uploadToOrama() {
   // console.log(inspect(posts, true, null, true));
 
   const promises = posts.map(async (post) => {
-    const resp = await fetch(`${env.ORAMA_BASE_URL}/notify`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${env.ORAMA_PRIVATE_API_KEY}`,
-      },
-      method: "POST",
-      body: JSON.stringify({
-        upsert: [
-          {
-            id: `post/${post.id}`,
-            category: post.category?.name ?? "",
-            title: post.title ?? "",
-            description: post.description ?? "",
-            content: JSON.stringify(post.content),
-          } satisfies IndexSchema,
-        ],
-      }),
-    });
-
-    console.log(post.title, resp.status);
+    upsertOramaIndex(post, true);
   });
 
   await Promise.all(promises);
@@ -77,18 +125,7 @@ async function uploadToOrama() {
 export async function createOramaIndex() {
   await uploadToOrama();
 
-  const deployRes = await fetch(`${env.ORAMA_BASE_URL}/deploy`, {
-    headers: {
-      Authorization: `Bearer ${env.ORAMA_PRIVATE_API_KEY}`,
-    },
-    method: "POST",
-  });
-
-  if (deployRes.ok) {
-    console.log("Orama Search index deployed");
-  } else {
-    console.log(deployRes);
-  }
+  await deployOramaIndex();
 }
 
 createOramaIndex();

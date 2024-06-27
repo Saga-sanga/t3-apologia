@@ -26,6 +26,7 @@ import { useDebounce } from "use-debounce";
 import type { OutputData } from "@editorjs/editorjs";
 import { CategorySwitcher } from "@/components/category-switcher";
 import { QuestionSelector } from "./question-selector";
+import { upsertOramaIndex } from "@/scripts/createOramaIndex";
 
 export interface EditorProps {
   post: Pick<
@@ -72,6 +73,11 @@ export function Editor({ post }: EditorProps) {
         },
         {
           onSuccess: () => {
+            upsertOramaIndex({
+              id: `post/${post.id}`,
+              title: debouncedTitle,
+              description: debouncedDescription,
+            });
             router.refresh();
           },
           onError: () => {
@@ -94,6 +100,10 @@ export function Editor({ post }: EditorProps) {
       },
       {
         onSuccess: () => {
+          upsertOramaIndex({
+            id: `post/${post.id}`,
+            content: blocks,
+          });
           router.refresh();
         },
         onError: () => {
