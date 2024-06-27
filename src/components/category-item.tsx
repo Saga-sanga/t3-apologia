@@ -2,7 +2,7 @@ import { CheckIcon } from "lucide-react";
 import { CommandItem } from "./ui/command";
 import { cn } from "@/lib/utils";
 import { CategoryDrowdown } from "./category-dropdown";
-import { SelectCategory } from "@/server/db/schema";
+import type { SelectCategory } from "@/server/db/schema";
 import { useState } from "react";
 import { Input } from "./ui/input";
 import { api } from "@/trpc/react";
@@ -55,7 +55,7 @@ export function CategoryItem({
 
   const handleEdit = () => {
     setEditing(false);
-    editCategory.mutate({ name: content as string, id: category.id });
+    editCategory.mutate({ name: content!, id: category.id });
   };
 
   const handleChange = () => {
