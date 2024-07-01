@@ -42,6 +42,7 @@ export const env = createEnv({
     RESEND_FROM: z.string(),
     ORAMA_PRIVATE_API_KEY: z.string(),
     ORAMA_BASE_URL: z.string(),
+    QSTASH_TOKEN: z.string()
   },
 
   /**
@@ -76,6 +77,7 @@ export const env = createEnv({
     RESEND_FROM: process.env.RESEND_FROM,
     ORAMA_PRIVATE_API_KEY: process.env.ORAMA_PRIVATE_API_KEY,
     ORAMA_BASE_URL: process.env.ORAMA_BASE_URL,
+    QSTASH_TOKEN: process.env.QSTASH_TOKEN,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

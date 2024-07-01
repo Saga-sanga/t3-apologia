@@ -1,5 +1,5 @@
 import { format, formatDistanceToNowStrict } from "date-fns";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { UserAvatar } from "@/components/user-avatar";
 import { getCurrentUser } from "@/server/auth";
 import { db } from "@/server/db";
