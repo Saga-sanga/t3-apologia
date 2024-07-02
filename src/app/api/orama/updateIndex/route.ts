@@ -1,14 +1,16 @@
 import { db } from "@/server/db";
-import { verifySignatureAppRouter } from "@upstash/qstash/nextjs";
 import { Client } from "@upstash/qstash";
 import { env } from "@/env";
 import type { NextRequest } from "next/server";
 
 const client = new Client({ token: env.QSTASH_TOKEN });
 
+const queue = client.queue({
+  queueName: "oramaUpdate",
+});
+
 async function handler(request: NextRequest) {
-  // Create a huge payload i.e. the upsert object
-  const callbackUrl = new URL("api/orama/deploy", request.nextUrl.origin);
+  const currentBaseUrl = new URL("api/orama/", request.nextUrl.origin);
 
   const posts = await db.query.posts.findMany({
     columns: {
@@ -35,21 +37,35 @@ async function handler(request: NextRequest) {
     content: JSON.stringify(post.content),
   }));
 
-  // Send paylod to Orama using qstash
-  const res = await client.publishJSON({
-    url: `${env.ORAMA_BASE_URL}/notify`,
-    body: JSON.stringify({ upsert: formattedData }),
-    callback: callbackUrl.href,
+  // Use qstash queue to update Orama Index
+  await Promise.all(
+    formattedData.map(async (post) => {
+      const response = await queue.enqueueJSON({
+        url: `${currentBaseUrl.href}/upsert`,
+        body: post,
+      });
+
+      if (response.messageId) {
+        console.log("starting job with messageID: ", response.messageId);
+      } else {
+        console.log("Cannot start QStash job");
+      }
+    }),
+  );
+
+  //use qstash to deploy
+  const res = await queue.enqueueJSON({
+    url: `${currentBaseUrl.href}/deploy`,
   });
 
   if (res.messageId) {
-    console.log(`Starting job with messageID: ${res.messageId}`);
-    return Response.json({ success: true });
+    console.log("starting deploy job with messageID: ", res.messageId);
   } else {
-    console.log("Failed to start Qstash process");
+    console.log("Cannot start depolyment job");
+    return Response.json({ success: false }, { status: 500 });
   }
 
-  return Response.json({ success: false });
+  return Response.json({ success: true });
 }
 
-export const GET = verifySignatureAppRouter(handler);
+export { handler as POST, handler as GET };

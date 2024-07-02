@@ -62,3 +62,11 @@ export const welcomeFormSchema = z.object({
 export const profileFormSchema = welcomeFormSchema.extend({
   image: z.string().trim().nullish(),
 });
+
+export const postSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  content: z.string(),
+  category: z.string().nullish(),
+  description: z.string(),
+});
