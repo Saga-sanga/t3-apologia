@@ -12,13 +12,6 @@ const queue = client.queue({
 });
 
 async function handler(request: NextRequest) {
-  const session = await getServerAuthSession();
-
-  // @ts-expect-error session type not including user for some reason
-  if (!session && session?.user.role !== "admin") {
-    return Response.json({ message: "UNAUTHORISED" });
-  }
-
   // const currentBaseUrl = new URL("api/orama/", request.nextUrl.origin);
 
   const posts = await db.query.posts.findMany({
