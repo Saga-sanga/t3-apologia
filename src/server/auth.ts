@@ -15,7 +15,7 @@ import { eq } from "drizzle-orm";
 import { Resend } from "resend";
 import { EmailTemplate } from "@/components/email/email-template";
 import { LoginTemplate } from "@/components/email/login-template";
-import React from "react";
+import React, { cache } from "react";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
