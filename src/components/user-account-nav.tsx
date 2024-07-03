@@ -1,6 +1,6 @@
 "use client";
 
-import { SelectUser } from "@/server/db/schema";
+import type { SelectUser } from "@/server/db/schema";
 import { LogOutIcon, UserRoundCogIcon } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";

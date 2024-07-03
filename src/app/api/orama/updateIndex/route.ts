@@ -2,6 +2,8 @@ import { db } from "@/server/db";
 import { Client } from "@upstash/qstash";
 import { env } from "@/env";
 import type { NextRequest } from "next/server";
+import { getServerAuthSession } from "@/server/auth";
+import { verifySignatureAppRouter } from "@upstash/qstash/nextjs";
 
 const client = new Client({ token: env.QSTASH_TOKEN });
 
@@ -10,7 +12,14 @@ const queue = client.queue({
 });
 
 async function handler(request: NextRequest) {
-  const currentBaseUrl = new URL("api/orama/", request.nextUrl.origin);
+  const session = await getServerAuthSession();
+
+  // @ts-expect-error session type not including user for some reason
+  if (!session && session?.user.role !== "admin") {
+    return Response.json({ message: "UNAUTHORISED" });
+  }
+
+  // const currentBaseUrl = new URL("api/orama/", request.nextUrl.origin);
 
   const posts = await db.query.posts.findMany({
     columns: {
@@ -41,8 +50,11 @@ async function handler(request: NextRequest) {
   await Promise.all(
     formattedData.map(async (post) => {
       const response = await queue.enqueueJSON({
-        url: `${currentBaseUrl.href}/upsert`,
-        body: post,
+        url: `${env.ORAMA_BASE_URL}/notify`,
+        headers: {
+          Authorization: `Bearer ${env.ORAMA_PRIVATE_API_KEY}`,
+        },
+        body: { upsert: [post] },
       });
 
       if (response.messageId) {
@@ -55,7 +67,10 @@ async function handler(request: NextRequest) {
 
   //use qstash to deploy
   const res = await queue.enqueueJSON({
-    url: `${currentBaseUrl.href}/deploy`,
+    url: `${env.ORAMA_BASE_URL}/deploy`,
+    headers: {
+      Authorization: `Bearer ${env.ORAMA_PRIVATE_API_KEY}`,
+    },
   });
 
   if (res.messageId) {
@@ -68,4 +83,5 @@ async function handler(request: NextRequest) {
   return Response.json({ success: true });
 }
 
-export { handler as POST, handler as GET };
+// export { handler as POST, handler as GET };
+export const POST = verifySignatureAppRouter(handler);

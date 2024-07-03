@@ -7,7 +7,6 @@ import { PageNav } from "./page-nav";
 import { buttonVariants } from "./ui/button";
 import { UserAccountNav } from "./user-account-nav";
 import { OramaSearchBox } from "./orama-search-box";
-import { SearchButton } from "@orama/searchbox";
 import { MobileNav } from "./mobile-nav";
 
 export async function MainNav() {
