@@ -1,8 +1,6 @@
 import { db } from "@/server/db";
 import { Client } from "@upstash/qstash";
 import { env } from "@/env";
-import type { NextRequest } from "next/server";
-import { getServerAuthSession } from "@/server/auth";
 import { verifySignatureAppRouter } from "@upstash/qstash/nextjs";
 
 const client = new Client({ token: env.QSTASH_TOKEN });
@@ -11,7 +9,7 @@ const queue = client.queue({
   queueName: "oramaUpdate",
 });
 
-async function handler(request: NextRequest) {
+async function handler() {
   // const currentBaseUrl = new URL("api/orama/", request.nextUrl.origin);
 
   const posts = await db.query.posts.findMany({
@@ -76,5 +74,4 @@ async function handler(request: NextRequest) {
   return Response.json({ success: true });
 }
 
-// export { handler as POST, handler as GET };
 export const POST = verifySignatureAppRouter(handler);
